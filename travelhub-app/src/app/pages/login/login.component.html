@@ -1,0 +1,68 @@
+<div class="login-container">
+  <div class="left-section">
+    <div>
+      <div class="logo">TravelHub</div>
+      <div class="hero-text">
+        <h1>Tu próxima aventura comienza aquí</h1>
+        <p>Accede a ofertas exclusivas, gestiona tus reservas</p>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🏨</div>
+        <div class="feature-content">
+          <h3>Miles de hoteles</h3>
+          <p>Encuentra el alojamiento perfecto en más de 100 países</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <div class="feature-content">
+          <h3>Mejores precios</h3>
+          <p>Garantizamos las tarifas más competitivas del mercado</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-content">
+          <h3>Experiencias únicas</h3>
+          <p>Lee reseñas reales y reserva con confianza</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <div class="login-form">
+      <h2>Bienvenido de nuevo</h2>
+      <p class="subtitle">Inicia sesión para continuar con tu reserva</p>
+
+      <form>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="tu@email.com" [(ngModel)]="email" name="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" [(ngModel)]="password" name="password" />
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" />
+            <span>Recordarme</span>
+          </label>
+          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="button" (click)="onLogin()">Iniciar sesión</button>
+      </form>
+
+      <p class="register-link">¿No tienes cuenta? <a (click)="goToRegister()">Regístrate</a></p>
+    </div>
+  </div>
+</div>

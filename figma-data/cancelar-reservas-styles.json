@@ -1,0 +1,736 @@
+{
+  "colors": {
+    "1": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "2": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "3": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "4": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "5": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Cancelar reservas": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "MyBookings": {
+      "hex": "#f9fafb",
+      "opacity": 1
+    },
+    "Header": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "TH": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "TravelHub": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Home": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Hotels": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Link": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Mis Reservas": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Habitaciones": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "juan.perez": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Salir": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "Gestiona y visualiza el estado de tus reservas": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Container": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Total de Reservas": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Confirmadas": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Pendientes de Pago": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Canceladas": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Dropdown": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Text Input": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Buscar por número de confirmación, hotel o ubicación...": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Hotel Paraíso del Caribe": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Cartagena, Colombia": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Suite Premium Ocean View": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Text": {
+      "hex": "#ffe2e2",
+      "opacity": 1
+    },
+    "Confirmada": {
+      "hex": "#008236",
+      "opacity": 1
+    },
+    "N° TH-847392": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "Check-in": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "2026-03-25": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Check-out": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "2026-03-30": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Noches": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Huéspedes": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Total": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "$2,250": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Método de pago": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Visa **** 4242": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Button": {
+      "hex": "#e7000b",
+      "opacity": 1
+    },
+    "Imprimir": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "Cancelar Reserva": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Hotel Costa Azul": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Santa Marta, Colombia": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Habitación Deluxe Doble": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Pendiente de pago": {
+      "hex": "#a65f00",
+      "opacity": 1
+    },
+    "N° TH-847393": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "2026-04-10": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "2026-04-15": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "$1,500": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Pagado": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "$750": {
+      "hex": "#00a63e",
+      "opacity": 1
+    },
+    "MasterCard **** 5555": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Hotel Plaza Mayor": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Bogotá, Colombia": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Suite Junior": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Completada": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "N° TH-847391": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "2026-02-15": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "2026-02-18": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "$900": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Hotel Boutique Centro": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Medellín, Colombia": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Habitación Estándar": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Cancelada": {
+      "hex": "#c10007",
+      "opacity": 1
+    },
+    "N° TH-847390": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "2026-01-20": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "2026-01-23": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "$450": {
+      "hex": "#101828",
+      "opacity": 1
+    }
+  },
+  "typography": {
+    "1": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "1"
+    },
+    "2": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2"
+    },
+    "3": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "3"
+    },
+    "4": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "4"
+    },
+    "5": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "5"
+    },
+    "TH": {
+      "fontFamily": "Inter",
+      "fontSize": 20,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "TH"
+    },
+    "TravelHub": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "TravelHub"
+    },
+    "Home": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Home"
+    },
+    "Hotels": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Hotels"
+    },
+    "Mis Reservas": {
+      "fontFamily": "Inter",
+      "fontSize": 20,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "Mis Reservas"
+    },
+    "Habitaciones": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Habitaciones"
+    },
+    "juan.perez": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "juan.perez"
+    },
+    "Salir": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "text": "Salir"
+    },
+    "Gestiona y visualiza el estado de tus reservas": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Gestiona y visualiza el estado de tus reservas"
+    },
+    "Total de Reservas": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Total de Reservas"
+    },
+    "Confirmadas": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Confirmadas"
+    },
+    "Pendientes de Pago": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Pendientes de Pago"
+    },
+    "Canceladas": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Canceladas"
+    },
+    "Buscar por número de confirmación, hotel o ubicación...": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 16.94318199157715,
+      "text": "Buscar por número de confirmación, hotel o ubicación..."
+    },
+    "Hotel Paraíso del Caribe": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Hotel Paraíso del Caribe"
+    },
+    "Cartagena, Colombia": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "Cartagena, Colombia"
+    },
+    "Suite Premium Ocean View": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Suite Premium Ocean View"
+    },
+    "Confirmada": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Confirmada"
+    },
+    "N° TH-847392": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "N° TH-847392"
+    },
+    "Check-in": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Check-in"
+    },
+    "2026-03-25": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-03-25"
+    },
+    "Check-out": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Check-out"
+    },
+    "2026-03-30": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-03-30"
+    },
+    "Noches": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Noches"
+    },
+    "Huéspedes": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Huéspedes"
+    },
+    "Total": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Total"
+    },
+    "$2,250": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "$2,250"
+    },
+    "Método de pago": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Método de pago"
+    },
+    "Visa **** 4242": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Visa **** 4242"
+    },
+    "Imprimir": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Imprimir"
+    },
+    "Cancelar Reserva": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 700,
+      "lineHeight": 20,
+      "text": "Cancelar Reserva"
+    },
+    "Hotel Costa Azul": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Hotel Costa Azul"
+    },
+    "Santa Marta, Colombia": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "Santa Marta, Colombia"
+    },
+    "Habitación Deluxe Doble": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Habitación Deluxe Doble"
+    },
+    "Pendiente de pago": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Pendiente de pago"
+    },
+    "N° TH-847393": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "N° TH-847393"
+    },
+    "2026-04-10": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-04-10"
+    },
+    "2026-04-15": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-04-15"
+    },
+    "$1,500": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "$1,500"
+    },
+    "Pagado": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "Pagado"
+    },
+    "$750": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "$750"
+    },
+    "MasterCard **** 5555": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "MasterCard **** 5555"
+    },
+    "Hotel Plaza Mayor": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Hotel Plaza Mayor"
+    },
+    "Bogotá, Colombia": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "Bogotá, Colombia"
+    },
+    "Suite Junior": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Suite Junior"
+    },
+    "Completada": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Completada"
+    },
+    "N° TH-847391": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "N° TH-847391"
+    },
+    "2026-02-15": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-02-15"
+    },
+    "2026-02-18": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-02-18"
+    },
+    "$900": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "$900"
+    },
+    "Hotel Boutique Centro": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Hotel Boutique Centro"
+    },
+    "Medellín, Colombia": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "Medellín, Colombia"
+    },
+    "Habitación Estándar": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Habitación Estándar"
+    },
+    "Cancelada": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "Cancelada"
+    },
+    "N° TH-847390": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "N° TH-847390"
+    },
+    "2026-01-20": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-01-20"
+    },
+    "2026-01-23": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "2026-01-23"
+    },
+    "$450": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "$450"
+    }
+  },
+  "elements": []
+}

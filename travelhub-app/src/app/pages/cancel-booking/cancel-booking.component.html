@@ -1,0 +1,68 @@
+<div class="page-container">
+  <header>
+    <div class="header-left">
+      <div class="logo-icon">TH</div>
+      <span class="logo-text">TravelHub</span>
+    </div>
+    <nav>
+      <a (click)="navigate('/home')">Home</a>
+      <a (click)="navigate('/search')">Hotels</a>
+      <a class="active" (click)="navigate('/cancel-booking')">Habitaciones</a>
+    </nav>
+    <div class="header-right">
+      <span class="user">juan.perez</span>
+      <a class="logout" (click)="navigate('/login')">Salir</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Mis Reservas</h1>
+      <p>Gestiona y visualiza el estado de tus reservas</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card"><span class="stat-label">Total de Reservas</span><span class="stat-value">4</span></div>
+      <div class="stat-card"><span class="stat-label">Confirmadas</span><span class="stat-value">1</span></div>
+      <div class="stat-card"><span class="stat-label">Pendientes de Pago</span><span class="stat-value">1</span></div>
+      <div class="stat-card"><span class="stat-label">Canceladas</span><span class="stat-value">1</span></div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar por número de confirmación, hotel o ubicación..." />
+    </div>
+
+    <div class="bookings-list">
+      <div class="booking-card" *ngFor="let b of bookings">
+        <div class="booking-header">
+          <div>
+            <h3>{{ b.hotel }}</h3>
+            <p class="location">{{ b.location }}</p>
+            <p class="room">{{ b.room }}</p>
+          </div>
+          <div>
+            <span class="status" [ngClass]="b.statusClass">{{ b.status }}</span>
+            <p class="booking-id">N° {{ b.id }}</p>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail"><span class="detail-label">Check-in</span><span class="detail-value">{{ b.checkIn }}</span></div>
+          <div class="detail"><span class="detail-label">Check-out</span><span class="detail-value">{{ b.checkOut }}</span></div>
+          <div class="detail"><span class="detail-label">Noches</span><span class="detail-value">{{ b.nights }}</span></div>
+          <div class="detail"><span class="detail-label">Huéspedes</span><span class="detail-value">{{ b.guests }}</span></div>
+          <div class="detail">
+            <span class="detail-label">Total</span>
+            <span class="detail-total">${{ b.total | number }}</span>
+          </div>
+          <div class="detail"><span class="detail-label">Método de pago</span><span class="detail-value">{{ b.payment }}</span></div>
+        </div>
+
+        <div class="booking-actions" *ngIf="b.canCancel">
+          <a class="btn-print" (click)="navigate('/print-booking')">Imprimir</a>
+          <button class="btn-cancel">Cancelar Reserva</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

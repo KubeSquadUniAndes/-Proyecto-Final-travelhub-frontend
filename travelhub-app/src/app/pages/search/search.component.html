@@ -1,0 +1,19 @@
+<div class="search-container">
+  <header>
+    <div class="logo">TravelHub</div>
+    <button (click)="goBack()">Volver</button>
+  </header>
+  
+  <main>
+    <h1>Buscar Hoteles</h1>
+    
+    <div class="hotels-list">
+      <div class="hotel-card" *ngFor="let hotel of hotels">
+        <h3>{{ hotel.name }}</h3>
+        <p>Precio: ${{ hotel.price }} / noche</p>
+        <p>Rating: {{ hotel.rating }} ⭐</p>
+        <button (click)="goToCheckout(hotel.id)">Reservar</button>
+      </div>
+    </div>
+  </main>
+</div>

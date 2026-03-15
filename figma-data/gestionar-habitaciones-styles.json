@@ -1,0 +1,589 @@
+{
+  "colors": {
+    "1": {
+      "hex": "#9810fa",
+      "opacity": 1
+    },
+    "3": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "4": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Gestionar habitaciones": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "MediaGallery": {
+      "hex": "#f9fafb",
+      "opacity": 1
+    },
+    "Header": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "TH": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "TravelHub": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Home": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Hotels": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Dashboard": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Habitaciones": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Solicitudes": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Galería": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Link": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "Iniciar sesión": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Galería Multimedia": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Gestiona las fotos y videos de tus habitaciones": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Dropdown": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Container": {
+      "hex": "#f0b100",
+      "opacity": 1
+    },
+    "Total de Archivos": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Imágenes": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Videos": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Tamaño Total": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "12.90 MB": {
+      "hex": "#00a63e",
+      "opacity": 1
+    },
+    "Arrastra y suelta tus archivos": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "o haz clic para seleccionar": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "JPG, PNG, WebP": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "MP4, MOV": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Máximo 20MB por archivo": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "ℹ️ Información": {
+      "hex": "#1c398e",
+      "opacity": 1
+    },
+    "• Las imágenes se optimizan automáticamente": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "• Se generan thumbnails para carga rápida": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "• CDN global con latencia <300ms": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "• Arrastra para reordenar la galería": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "• Primera imagen = imagen principal": {
+      "hex": "#1447e6",
+      "opacity": 1
+    },
+    "Galería Actual (4 archivos)": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Arrastra para reordenar, haz clic en la estrella p": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "IMG": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Vector": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "PRINCIPAL": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "suite-ocean-view-1.jpg": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "2.40 MB": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "jpg": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "CDN: 145ms": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "suite-ocean-view-2.jpg": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "3.10 MB": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "CDN: 178ms": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "Button": {
+      "hex": "#f3f4f6",
+      "opacity": 1
+    },
+    "Marcar como principal": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "suite-bathroom.jpg": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "1.80 MB": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "CDN: 162ms": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "VIDEO": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "suite-tour-video.mp4": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "5.60 MB": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "mp4": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "CDN: 234ms": {
+      "hex": "#6a7282",
+      "opacity": 1
+    }
+  },
+  "typography": {
+    "1": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "1"
+    },
+    "3": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "3"
+    },
+    "4": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "4"
+    },
+    "TH": {
+      "fontFamily": "Inter",
+      "fontSize": 20,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "TH"
+    },
+    "TravelHub": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "TravelHub"
+    },
+    "Home": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Home"
+    },
+    "Hotels": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Hotels"
+    },
+    "Dashboard": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Dashboard"
+    },
+    "Habitaciones": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Habitaciones"
+    },
+    "Solicitudes": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Solicitudes"
+    },
+    "Galería": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Galería"
+    },
+    "Iniciar sesión": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 500,
+      "lineHeight": 24,
+      "text": "Iniciar sesión"
+    },
+    "Galería Multimedia": {
+      "fontFamily": "Inter",
+      "fontSize": 20,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "Galería Multimedia"
+    },
+    "Gestiona las fotos y videos de tus habitaciones": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Gestiona las fotos y videos de tus habitaciones"
+    },
+    "Total de Archivos": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Total de Archivos"
+    },
+    "Imágenes": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Imágenes"
+    },
+    "Videos": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Videos"
+    },
+    "Tamaño Total": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Tamaño Total"
+    },
+    "12.90 MB": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 32,
+      "text": "12.90 MB"
+    },
+    "Arrastra y suelta tus archivos": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "text": "Arrastra y suelta tus archivos"
+    },
+    "o haz clic para seleccionar": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "o haz clic para seleccionar"
+    },
+    "JPG, PNG, WebP": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "JPG, PNG, WebP"
+    },
+    "MP4, MOV": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "MP4, MOV"
+    },
+    "Máximo 20MB por archivo": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Máximo 20MB por archivo"
+    },
+    "ℹ️ Información": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 700,
+      "lineHeight": 16,
+      "text": "ℹ️ Información"
+    },
+    "• Las imágenes se optimizan automáticamente": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "• Las imágenes se optimizan automáticamente"
+    },
+    "• Se generan thumbnails para carga rápida": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "• Se generan thumbnails para carga rápida"
+    },
+    "• CDN global con latencia <300ms": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "• CDN global con latencia <300ms"
+    },
+    "• Arrastra para reordenar la galería": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "• Arrastra para reordenar la galería"
+    },
+    "• Primera imagen = imagen principal": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "• Primera imagen = imagen principal"
+    },
+    "Galería Actual (4 archivos)": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 700,
+      "lineHeight": 20,
+      "text": "Galería Actual (4 archivos)"
+    },
+    "Arrastra para reordenar, haz clic en la estrella p": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 16,
+      "text": "Arrastra para reordenar, haz clic en la estrella para marcar como principal"
+    },
+    "IMG": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 500,
+      "lineHeight": 15,
+      "text": "IMG"
+    },
+    "PRINCIPAL": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 700,
+      "lineHeight": 15,
+      "text": "PRINCIPAL"
+    },
+    "suite-ocean-view-1.jpg": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "suite-ocean-view-1.jpg"
+    },
+    "2.40 MB": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "2.40 MB"
+    },
+    "jpg": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "jpg"
+    },
+    "CDN: 145ms": {
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "fontWeight": 400,
+      "lineHeight": 13.5,
+      "text": "CDN: 145ms"
+    },
+    "suite-ocean-view-2.jpg": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "suite-ocean-view-2.jpg"
+    },
+    "3.10 MB": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "3.10 MB"
+    },
+    "CDN: 178ms": {
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "fontWeight": 400,
+      "lineHeight": 13.5,
+      "text": "CDN: 178ms"
+    },
+    "Marcar como principal": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 500,
+      "lineHeight": 15,
+      "text": "Marcar como principal"
+    },
+    "suite-bathroom.jpg": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "suite-bathroom.jpg"
+    },
+    "1.80 MB": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "1.80 MB"
+    },
+    "CDN: 162ms": {
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "fontWeight": 400,
+      "lineHeight": 13.5,
+      "text": "CDN: 162ms"
+    },
+    "VIDEO": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 500,
+      "lineHeight": 15,
+      "text": "VIDEO"
+    },
+    "suite-tour-video.mp4": {
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "fontWeight": 500,
+      "lineHeight": 16,
+      "text": "suite-tour-video.mp4"
+    },
+    "5.60 MB": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "5.60 MB"
+    },
+    "mp4": {
+      "fontFamily": "Inter",
+      "fontSize": 10,
+      "fontWeight": 400,
+      "lineHeight": 15,
+      "text": "mp4"
+    },
+    "CDN: 234ms": {
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "fontWeight": 400,
+      "lineHeight": 13.5,
+      "text": "CDN: 234ms"
+    }
+  },
+  "elements": []
+}

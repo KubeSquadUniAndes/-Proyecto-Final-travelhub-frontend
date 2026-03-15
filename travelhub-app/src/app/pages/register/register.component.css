@@ -1,0 +1,162 @@
+.register-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.left-section {
+  flex: 1;
+  background: linear-gradient(135deg, #155dfc 0%, #0a3d9f 100%);
+  padding: 60px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 24px;
+  line-height: 32px;
+  color: rgba(255,255,255,0.9);
+}
+
+.benefits h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.benefit {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.benefit-icon { font-size: 24px; }
+
+.benefit h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.benefit p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.85);
+}
+
+.right-section {
+  flex: 1;
+  background: white;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 480px;
+}
+
+.steps {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  background: #f3f4f6;
+  color: #6a7282;
+}
+
+.step.active {
+  background: #155dfc;
+  color: white;
+}
+
+.register-form h2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #101828;
+  margin-bottom: 8px;
+}
+
+.form-subtitle {
+  font-size: 16px;
+  color: #4a5565;
+  margin-bottom: 24px;
+}
+
+form { display: flex; flex-direction: column; gap: 16px; }
+
+.form-row { display: flex; gap: 16px; }
+.form-row .form-group { flex: 1; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #364153;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+input:focus {
+  outline: none;
+  border-color: #155dfc;
+  box-shadow: 0 0 0 3px rgba(21,93,252,0.1);
+}
+
+button {
+  padding: 12px;
+  background: #155dfc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+button:hover { background: #0a3d9f; }
+
+.login-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 16px;
+  color: #4a5565;
+}
+
+.login-link a {
+  color: #155dfc;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}

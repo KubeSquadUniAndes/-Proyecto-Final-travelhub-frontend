@@ -1,0 +1,88 @@
+<div class="register-container">
+  <div class="left-section">
+    <div>
+      <div class="logo">Únete a TravelHub</div>
+      <p class="subtitle">Crea tu cuenta y descubre un mundo de posibilidades</p>
+    </div>
+
+    <div class="benefits">
+      <h3>Beneficios exclusivos:</h3>
+      <div class="benefit">
+        <span class="benefit-icon">🎁</span>
+        <div>
+          <h4>Descuentos especiales</h4>
+          <p>Hasta 30% OFF en tu primera reserva</p>
+        </div>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">⚡</span>
+        <div>
+          <h4>Check-in rápido</h4>
+          <p>Ahorra tiempo con tu perfil guardado</p>
+        </div>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">📱</span>
+        <div>
+          <h4>Gestión fácil</h4>
+          <p>Todas tus reservas en un solo lugar</p>
+        </div>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🌟</span>
+        <div>
+          <h4>Programa de puntos</h4>
+          <p>Acumula puntos y obtén noches gratis</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <div class="register-form">
+      <div class="steps">
+        <div class="step active">1</div>
+        <div class="step">2</div>
+      </div>
+      <h2>Información personal</h2>
+      <p class="form-subtitle">Completa tus datos para continuar</p>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" placeholder="Juan" [(ngModel)]="nombre" name="nombre" required />
+          </div>
+          <div class="form-group">
+            <label>Apellido *</label>
+            <input type="text" placeholder="Pérez" [(ngModel)]="apellido" name="apellido" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="tel" placeholder="+57 300 123 4567" [(ngModel)]="telefono" name="telefono" required />
+        </div>
+
+        <div class="form-group">
+          <label>Ciudad</label>
+          <input type="text" placeholder="Bogotá" [(ngModel)]="ciudad" name="ciudad" />
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de nacimiento</label>
+          <input type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" />
+        </div>
+
+        <button type="submit">Continuar</button>
+      </form>
+
+      <p class="login-link">¿Ya tienes una cuenta? <a (click)="goToLogin()">Inicia sesión</a></p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="checkout-container">
+  <header>
+    <div class="logo">TravelHub</div>
+    <button (click)="goBack()">Volver</button>
+  </header>
+  
+  <main>
+    <h1>Checkout - Paso 1</h1>
+    <p>Hotel ID: {{ hotelId }}</p>
+    
+    <div class="checkout-form">
+      <h2>Información Personal</h2>
+      <form>
+        <input type="text" placeholder="Nombre completo" />
+        <input type="email" placeholder="Email" />
+        <input type="tel" placeholder="Teléfono" />
+        <button type="button" (click)="goToStep2()">Continuar</button>
+      </form>
+    </div>
+  </main>
+</div>
