@@ -1,3 +1,50 @@
-.print-booking-container {
-  padding: 20px;
+.print-page { max-width: 800px; margin: 0 auto; padding: 40px 24px; font-family: 'Inter', sans-serif; }
+
+.print-header { text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #2563eb; }
+.print-header h1 { font-size: 36px; font-weight: 700; color: #2563eb; }
+.print-header p { font-size: 16px; color: #6a7282; }
+
+.print-content { background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+.success-section { text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #f3f4f6; }
+.success-icon { width: 48px; height: 48px; background: #00c950; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+.success-section h1 { font-size: 24px; font-weight: 700; color: #101828; margin-bottom: 4px; }
+.success-section > p { font-size: 14px; color: #6a7282; margin-bottom: 16px; }
+.booking-number { background: #eff6ff; border-radius: 8px; padding: 16px; display: inline-block; }
+.booking-number .label { font-size: 12px; color: #6a7282; }
+.booking-number .number { font-size: 20px; font-weight: 700; color: #2563eb; letter-spacing: 2px; }
+.booking-number .hint { font-size: 11px; color: #6a7282; }
+
+.section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #f3f4f6; }
+.section h3 { font-size: 16px; font-weight: 700; color: #101828; margin-bottom: 12px; }
+.details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.detail { display: flex; flex-direction: column; gap: 4px; }
+.detail-label { font-size: 12px; color: #6a7282; }
+.detail span:nth-child(2) { font-size: 14px; font-weight: 600; color: #101828; }
+.detail-sub { font-size: 12px; color: #6a7282; }
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.info-label { font-size: 12px; color: #6a7282; margin-bottom: 2px; }
+.info-value { font-size: 14px; color: #101828; font-weight: 500; }
+
+.payment-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+.payment-row span:first-child { color: #6a7282; }
+.payment-row span:last-child { color: #364153; }
+.payment-row.total { border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 12px; font-weight: 700; }
+.payment-row.total span:last-child { color: #2563eb; font-size: 18px; }
+
+.info-section { background: #eff6ff; border-radius: 8px; padding: 16px; border: 1px solid #dbeafe; }
+.info-section ul { list-style: none; padding: 0; }
+.info-section li { font-size: 13px; color: #364153; padding: 4px 0 4px 16px; position: relative; }
+.info-section li::before { content: '•'; position: absolute; left: 0; color: #2563eb; }
+
+.emission { display: flex; justify-content: space-between; font-size: 14px; color: #6a7282; }
+
+.actions { display: flex; gap: 12px; margin-top: 24px; justify-content: center; }
+.btn-primary { padding: 12px 32px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.btn-secondary { padding: 12px 32px; background: #fff; color: #364153; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+
+@media print {
+  .no-print { display: none !important; }
+  .print-page { padding: 0; }
+  .print-content { box-shadow: none; }
 }

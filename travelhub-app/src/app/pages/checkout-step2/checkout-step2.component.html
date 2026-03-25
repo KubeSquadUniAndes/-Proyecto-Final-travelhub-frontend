@@ -1,23 +1,61 @@
-<div class="checkout-container">
+<div class="checkout-page">
   <header>
-    <div class="logo">TravelHub</div>
-    <button (click)="goBack()">Volver</button>
-  </header>
-  
-  <main>
-    <h1>Checkout - Paso 2</h1>
-    
-    <div class="checkout-form">
-      <h2>Información de Pago</h2>
-      <form>
-        <input type="text" placeholder="Número de tarjeta" />
-        <input type="text" placeholder="Nombre en la tarjeta" />
-        <div style="display: flex; gap: 16px;">
-          <input type="text" placeholder="MM/AA" style="flex: 1;" />
-          <input type="text" placeholder="CVV" style="flex: 1;" />
-        </div>
-        <button type="button" (click)="confirmBooking()">Confirmar Reserva</button>
-      </form>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <nav>
+        <a (click)="navigate('/home')">Home</a>
+        <a (click)="navigate('/search')">Hotels</a>
+        <a (click)="navigate('/dashboard')">Dashboard</a>
+      </nav>
     </div>
-  </main>
+  </header>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a (click)="navigate('/home')">Home</a><span>/</span>
+      <a (click)="navigate('/search')">Hoteles</a><span>/</span>
+      <a>Grand Seaside Resort</a><span>/</span>
+      <span class="current">Checkout</span>
+    </div>
+
+    <h1>Completar reserva</h1>
+
+    <div class="checkout-content">
+      <form class="checkout-form">
+        <h2>Método de pago</h2>
+        <div class="form-group">
+          <label>Número de tarjeta *</label>
+          <input type="text" placeholder="1234 5678 9012 3456" [(ngModel)]="cardNumber" name="cardNumber" />
+        </div>
+        <div class="form-group">
+          <label>Nombre en la tarjeta *</label>
+          <input type="text" placeholder="JUAN PEREZ" [(ngModel)]="cardName" name="cardName" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha de expiración *</label>
+            <input type="text" placeholder="MM/AA" [(ngModel)]="expiry" name="expiry" />
+          </div>
+          <div class="form-group">
+            <label>CVV *</label>
+            <input type="text" placeholder="123" [(ngModel)]="cvv" name="cvv" />
+          </div>
+        </div>
+        <button type="button" class="btn-next" (click)="confirmBooking()">Confirmar reserva</button>
+      </form>
+
+      <div class="summary">
+        <h2>Resumen de reserva</h2>
+        <h3>Grand Seaside Resort</h3>
+        <p class="location">📍 Cartagena, Colombia</p>
+        <div class="summary-detail"><span>Check-in</span><span>01 Mar 2026</span></div>
+        <div class="summary-detail"><span>Check-out</span><span>05 Mar 2026</span></div>
+        <div class="summary-detail"><span>Huéspedes</span><span>2 adultos</span></div>
+        <hr style="border:none;border-top:1px solid #e5e7eb;margin:12px 0" />
+        <div class="summary-row"><span>$ 450.000 x 4 noches</span><span>$ 1.800.000</span></div>
+        <div class="summary-row"><span>Impuestos y tasas</span><span>$ 342.000</span></div>
+        <div class="summary-row total"><span>Total</span><span>$ 2.142.000</span></div>
+      </div>
+    </div>
+  </div>
 </div>

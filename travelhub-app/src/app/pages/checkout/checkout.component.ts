@@ -1,31 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit {
-  hotelId: string | null = null;
+export class CheckoutComponent {
+  nombre = ''; apellido = ''; email = ''; telefono = ''; direccion = '';
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
-
-  ngOnInit() {
-    this.hotelId = this.route.snapshot.queryParamMap.get('hotelId');
-  }
-
-  goToStep2() {
-    this.router.navigate(['/checkout/step2'], { queryParams: { hotelId: this.hotelId } });
-  }
-
-  goBack() {
-    this.router.navigate(['/search']);
-  }
+  constructor(private router: Router) {}
+  navigate(path: string) { this.router.navigate([path]); }
+  goToStep2() { this.router.navigate(['/checkout/step2']); }
 }

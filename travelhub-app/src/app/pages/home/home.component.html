@@ -1,15 +1,79 @@
-<div class="home-container">
+<div class="home">
+  <!-- Header -->
   <header>
-    <div class="logo">TravelHub</div>
-    <nav>
-      <button (click)="goToSearch()">Buscar</button>
-      <button (click)="logout()">Cerrar Sesión</button>
-    </nav>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a class="active" (click)="navigate('/home')">Home</a>
+        <a (click)="navigate('/search')">Hotels</a>
+        <a (click)="navigate('/dashboard')">Dashboard</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-outline" (click)="navigate('/login')">Iniciar sesión</button>
+      </div>
+    </div>
   </header>
-  
-  <main>
-    <h1>Bienvenido a TravelHub</h1>
-    <p>Encuentra tu próximo destino</p>
-    <button class="cta-button" (click)="goToSearch()">Buscar Hoteles</button>
-  </main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Encuentra tu hotel ideal</h1>
+        <p>Descubre los mejores hospedajes en Colombia y el mundo</p>
+      </div>
+      <form class="search-form" (ngSubmit)="search()">
+        <div class="form-fields">
+          <div class="form-group">
+            <label>Destino</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📍</span>
+              <input type="text" placeholder="¿A dónde quieres ir?" [(ngModel)]="destino" name="destino" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Check-in</label>
+            <input type="date" [(ngModel)]="checkIn" name="checkIn" />
+          </div>
+          <div class="form-group">
+            <label>Check-out</label>
+            <input type="date" [(ngModel)]="checkOut" name="checkOut" />
+          </div>
+          <div class="form-group">
+            <label>Huéspedes</label>
+            <input type="number" min="1" max="10" [(ngModel)]="huespedes" name="huespedes" />
+          </div>
+        </div>
+        <button type="submit" class="btn-search">Buscar hoteles</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <h3>Búsqueda fácil</h3>
+      <p>Compara precios y encuentra las mejores ofertas en segundos</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <h3>Miles de destinos</h3>
+      <p>Encuentra hoteles en los mejores destinos de Colombia y el mundo</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>Mejor precio garantizado</h3>
+      <p>Reserva con confianza al mejor precio del mercado</p>
+    </div>
+  </section>
 </div>

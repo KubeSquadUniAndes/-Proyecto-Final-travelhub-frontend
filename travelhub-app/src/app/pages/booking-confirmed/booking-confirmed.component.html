@@ -1,17 +1,78 @@
-<div class="confirmed-container">
+<div class="confirmed-page">
   <header>
-    <div class="logo">TravelHub</div>
-  </header>
-  
-  <main>
-    <div class="success-icon">✓</div>
-    <h1>¡Reserva Confirmada!</h1>
-    <p>Tu reserva ha sido procesada exitosamente</p>
-    
-    <div class="actions">
-      <button class="primary" (click)="goToDashboard()">Ver Dashboard</button>
-      <button class="secondary" (click)="printBooking()">Imprimir Reserva</button>
-      <button class="secondary" (click)="goToHome()">Volver al Inicio</button>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <nav>
+        <a (click)="navigate('/home')">Home</a>
+        <a (click)="navigate('/search')">Hotels</a>
+        <a (click)="navigate('/dashboard')">Dashboard</a>
+      </nav>
     </div>
-  </main>
+  </header>
+
+  <div class="container">
+    <!-- Success Header -->
+    <div class="success-header">
+      <div class="success-icon">✓</div>
+      <h1>¡Reserva confirmada!</h1>
+      <p>Tu reserva ha sido procesada exitosamente</p>
+      <div class="booking-number">
+        <p class="label">Número de reserva</p>
+        <p class="number">MWXVYII7</p>
+        <p class="hint">Guarda este número para consultar tu reserva</p>
+      </div>
+    </div>
+
+    <!-- Booking Summary -->
+    <div class="card">
+      <h2>Resumen de la reserva</h2>
+      <div class="hotel-info">
+        <div>
+          <h3>Grand Seaside Resort</h3>
+          <p class="location">📍 Cartagena, Colombia</p>
+          <p class="stars">⭐⭐⭐⭐⭐ 5 estrellas</p>
+        </div>
+      </div>
+      <div class="details-grid">
+        <div class="detail"><span class="detail-label">Check-in</span><span>01 Mar 2026</span><span class="detail-sub">15:00</span></div>
+        <div class="detail"><span class="detail-label">Check-out</span><span>05 Mar 2026</span><span class="detail-sub">12:00</span></div>
+        <div class="detail"><span class="detail-label">Huéspedes</span><span>2 adultos</span><span class="detail-sub">4 noches</span></div>
+      </div>
+    </div>
+
+    <!-- Guest Info -->
+    <div class="card">
+      <h3>Información del huésped</h3>
+      <div class="info-grid">
+        <div><p class="info-label">Nombre completo</p><p class="info-value">Daniel Felipe Zapata</p></div>
+        <div><p class="info-label">Email</p><p class="info-value">user&#64;email.com</p></div>
+        <div><p class="info-label">Teléfono</p><p class="info-value">+57 300 123 4567</p></div>
+      </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="card">
+      <h3>Detalles del pago</h3>
+      <div class="payment-row"><span>$ 450.000 x 4 noches</span><span>$ 1.800.000</span></div>
+      <div class="payment-row"><span>Impuestos y tasas</span><span>$ 342.000</span></div>
+      <div class="payment-row total"><span>Total pagado</span><span>$ 2.142.000</span></div>
+    </div>
+
+    <!-- Important Info -->
+    <div class="card info-card">
+      <h3>Información importante</h3>
+      <ul>
+        <li>Se ha enviado un correo de confirmación a tu email</li>
+        <li>Recuerda llevar un documento de identidad válido</li>
+        <li>Cancela sin cargo hasta 24 horas antes del check-in</li>
+        <li>El hotel se pondrá en contacto contigo si necesita información adicional</li>
+      </ul>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn-primary" (click)="navigate('/home')">Volver al inicio</button>
+      <button class="btn-secondary" (click)="navigate('/print-booking')">Imprimir confirmación</button>
+    </div>
+  </div>
 </div>

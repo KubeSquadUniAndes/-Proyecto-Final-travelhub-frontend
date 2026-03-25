@@ -1,4 +1,62 @@
-<div class="print-booking-container">
-  <h1>PrintBooking</h1>
-  <!-- TODO: Implementar según wireframe -->
+<div class="print-page">
+  <div class="print-header">
+    <h1>TravelHub</h1>
+    <p>Confirmación de Reserva</p>
+  </div>
+
+  <div class="print-content">
+    <div class="success-section">
+      <div class="success-icon">✓</div>
+      <h1>¡Reserva confirmada!</h1>
+      <p>Tu reserva ha sido procesada exitosamente</p>
+      <div class="booking-number">
+        <p class="label">Número de reserva</p>
+        <p class="number">MWXVYII7</p>
+        <p class="hint">Guarda este número para consultar tu reserva</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="details-grid">
+        <div class="detail"><span class="detail-label">Check-in</span><span>01 Mar 2026</span><span class="detail-sub">15:00</span></div>
+        <div class="detail"><span class="detail-label">Check-out</span><span>05 Mar 2026</span><span class="detail-sub">12:00</span></div>
+        <div class="detail"><span class="detail-label">Huéspedes</span><span>2 adultos</span><span class="detail-sub">4 noches</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Información del huésped</h3>
+      <div class="info-grid">
+        <div><p class="info-label">Nombre completo</p><p class="info-value">Daniel Felipe Zapata</p></div>
+        <div><p class="info-label">Email</p><p class="info-value">user&#64;email.com</p></div>
+        <div><p class="info-label">Teléfono</p><p class="info-value">+57 300 123 4567</p></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Detalles del pago</h3>
+      <div class="payment-row"><span>$ 450.000 x 4 noches</span><span>$ 1.800.000</span></div>
+      <div class="payment-row"><span>Impuestos y tasas</span><span>$ 342.000</span></div>
+      <div class="payment-row total"><span>Total pagado</span><span>$ 2.142.000</span></div>
+    </div>
+
+    <div class="section info-section">
+      <h3>Información importante</h3>
+      <ul>
+        <li>Se ha enviado un correo de confirmación a tu email</li>
+        <li>Recuerda llevar un documento de identidad válido</li>
+        <li>Cancela sin cargo hasta 24 horas antes del check-in</li>
+        <li>El hotel se pondrá en contacto contigo si necesita información adicional</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p class="emission"><span>Fecha de emisión</span><span>01 Marzo 2026</span></p>
+    </div>
+  </div>
+
+  <div class="actions no-print">
+    <button class="btn-secondary" (click)="navigate('/booking-confirmed')">Volver</button>
+    <button class="btn-primary" (click)="print()">Imprimir</button>
+  </div>
 </div>
