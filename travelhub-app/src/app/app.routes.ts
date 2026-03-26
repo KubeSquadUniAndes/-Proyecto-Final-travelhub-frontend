@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SearchComponent } from './pages/search/search.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
@@ -13,7 +14,7 @@ import { BookingRequestsComponent } from './pages/booking-requests/booking-reque
 import { CancelBookingComponent } from './pages/cancel-booking/cancel-booking.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },

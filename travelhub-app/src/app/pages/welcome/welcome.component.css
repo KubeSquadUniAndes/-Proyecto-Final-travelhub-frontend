@@ -1,0 +1,54 @@
+.welcome { display: flex; min-height: 100vh; }
+
+/* Left */
+.welcome-left {
+  flex: 1; background: linear-gradient(135deg, #1c398e 0%, #2563eb 50%, #3b82f6 100%);
+  padding: 60px; color: #fff; display: flex; flex-direction: column; justify-content: center;
+}
+.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.logo-icon { width: 48px; height: 48px; background: rgba(255,255,255,.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
+.brand h1 { font-size: 36px; font-weight: 700; }
+.tagline { font-size: 20px; color: rgba(255,255,255,.85); margin-bottom: 48px; }
+.features { display: flex; flex-direction: column; gap: 24px; }
+.feature { display: flex; align-items: center; gap: 12px; }
+.feature span { font-size: 24px; }
+.feature p { font-size: 16px; color: rgba(255,255,255,.9); }
+
+/* Right */
+.welcome-right {
+  flex: 1; background: #f9fafb; display: flex; align-items: center; justify-content: center; padding: 40px;
+}
+.welcome-card { width: 100%; max-width: 420px; }
+.welcome-card h2 { font-size: 30px; font-weight: 700; color: #101828; margin-bottom: 8px; }
+.subtitle { font-size: 16px; color: #6a7282; margin-bottom: 32px; }
+
+.actions { display: flex; flex-direction: column; gap: 12px; }
+.btn-primary {
+  padding: 14px; background: #2563eb; color: #fff; border: none; border-radius: 8px;
+  font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background .2s;
+}
+.btn-primary:hover { background: #1c398e; }
+.btn-secondary {
+  padding: 14px; background: #fff; color: #2563eb; border: 2px solid #2563eb; border-radius: 8px;
+  font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+}
+.btn-secondary:hover { background: #eff6ff; }
+.btn-outline {
+  padding: 14px; background: #fff; color: #364153; border: 1px solid #d0d5dd; border-radius: 8px;
+  font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+}
+.btn-outline:hover { border-color: #2563eb; color: #2563eb; }
+
+.divider {
+  display: flex; align-items: center; gap: 12px; margin: 8px 0;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+.divider span { font-size: 14px; color: #6a7282; white-space: nowrap; }
+
+@media (max-width: 768px) {
+  .welcome { flex-direction: column; }
+  .welcome-left { padding: 40px 24px; }
+  .welcome-right { padding: 32px 24px; }
+  .brand h1 { font-size: 28px; }
+  .tagline { font-size: 16px; margin-bottom: 32px; }
+}

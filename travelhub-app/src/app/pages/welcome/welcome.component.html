@@ -1,0 +1,33 @@
+<div class="welcome">
+  <div class="welcome-left">
+    <div class="brand">
+      <div class="logo-icon">TH</div>
+      <h1>TravelHub</h1>
+    </div>
+    <p class="tagline">Tu próxima aventura comienza aquí</p>
+    <div class="features">
+      <div class="feature"><span>🏨</span><p>Miles de hoteles en Colombia y el mundo</p></div>
+      <div class="feature"><span>💰</span><p>Mejores precios garantizados</p></div>
+      <div class="feature"><span>⭐</span><p>Experiencias únicas y reseñas reales</p></div>
+    </div>
+  </div>
+
+  <div class="welcome-right">
+    <div class="welcome-card">
+      <h2>Bienvenido</h2>
+      <p class="subtitle">Selecciona una opción para continuar</p>
+
+      <div class="actions">
+        <button class="btn-primary" (click)="goToLogin()">Iniciar sesión</button>
+
+        <div class="divider"><span>o regístrate</span></div>
+
+        <button class="btn-secondary" (click)="goToRegisterTraveler()">Registrarme como viajero</button>
+
+        @if (!isMobile()) {
+          <button class="btn-outline" (click)="goToRegisterHotel()">Registrarme como hotel</button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
