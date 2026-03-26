@@ -11,6 +11,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ManageRoomsComponent } from './pages/manage-rooms/manage-rooms.component';
 import { BookingRequestsComponent } from './pages/booking-requests/booking-requests.component';
 import { CancelBookingComponent } from './pages/cancel-booking/cancel-booking.component';
+import { HotelHomeComponent } from './pages/hotel-home/hotel-home.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'manage-rooms', component: ManageRoomsComponent },
   { path: 'booking-requests', component: BookingRequestsComponent },
-  { path: 'cancel-booking', component: CancelBookingComponent }
+  { path: 'cancel-booking', component: CancelBookingComponent },
+  { path: 'hotel-home', component: HotelHomeComponent }
 ];
