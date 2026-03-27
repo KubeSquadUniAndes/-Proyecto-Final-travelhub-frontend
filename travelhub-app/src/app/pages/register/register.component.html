@@ -50,39 +50,39 @@
       <form (ngSubmit)="onSubmit()">
         <div class="form-row">
           <div class="form-group">
-            <label>Nombre *</label>
-            <input type="text" placeholder="Juan" [(ngModel)]="nombre" name="nombre" required />
+            <label for="nombre">Nombre *</label>
+            <input id="nombre" type="text" placeholder="Juan" [(ngModel)]="nombre" name="nombre" required />
           </div>
           <div class="form-group">
-            <label>Apellido *</label>
-            <input type="text" placeholder="Pérez" [(ngModel)]="apellido" name="apellido" required />
+            <label for="apellido">Apellido *</label>
+            <input id="apellido" type="text" placeholder="Pérez" [(ngModel)]="apellido" name="apellido" required />
           </div>
         </div>
 
         <div class="form-group">
-          <label>Email *</label>
-          <input type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email" required />
+          <label for="email">Email *</label>
+          <input id="email" type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email" required />
         </div>
 
         <div class="form-group">
-          <label>Teléfono *</label>
-          <input type="tel" placeholder="+57 300 123 4567" [(ngModel)]="telefono" name="telefono" required />
+          <label for="telefono">Teléfono *</label>
+          <input id="telefono" type="tel" placeholder="+57 300 123 4567" [(ngModel)]="telefono" name="telefono" required />
         </div>
 
         <div class="form-group">
-          <label>Ciudad</label>
-          <input type="text" placeholder="Bogotá" [(ngModel)]="ciudad" name="ciudad" />
+          <label for="ciudad">Ciudad</label>
+          <input id="ciudad" type="text" placeholder="Bogotá" [(ngModel)]="ciudad" name="ciudad" />
         </div>
 
         <div class="form-group">
-          <label>Fecha de nacimiento</label>
-          <input type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" />
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <input id="fechaNacimiento" type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" />
         </div>
 
         <button type="submit">Continuar</button>
       </form>
 
-      <p class="login-link">¿Ya tienes una cuenta? <a (click)="goToLogin()">Inicia sesión</a></p>
+      <p class="register-link">¿Ya tienes una cuenta? <button class="link-btn" (click)="goToLogin()">Inicia sesión</button></p>
     </div>
   </div>
 </div>

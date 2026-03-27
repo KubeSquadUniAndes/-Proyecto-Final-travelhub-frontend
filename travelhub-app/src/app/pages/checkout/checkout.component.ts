@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.css']
+  styleUrls: ['./checkout.component.css'],
 })
 export class CheckoutComponent implements OnInit {
-  hotelId: string | null = null;
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  hotelId: string | null = null;
 
   ngOnInit() {
     this.hotelId = this.route.snapshot.queryParamMap.get('hotelId');

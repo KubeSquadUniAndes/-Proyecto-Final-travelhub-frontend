@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -7,17 +7,17 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
+  private router = inject(Router);
+
   nombre = '';
   apellido = '';
   email = '';
   telefono = '';
   ciudad = '';
   fechaNacimiento = '';
-
-  constructor(private router: Router) {}
 
   onSubmit() {
     this.router.navigate(['/login']);

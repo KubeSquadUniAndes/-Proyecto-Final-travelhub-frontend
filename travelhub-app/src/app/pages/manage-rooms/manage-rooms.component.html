@@ -5,12 +5,12 @@
       <span class="logo-text">TravelHub</span>
     </div>
     <nav>
-      <a (click)="navigate('/home')">Home</a>
-      <a (click)="navigate('/search')">Hotels</a>
-      <a (click)="navigate('/dashboard')">Dashboard</a>
-      <a class="active" (click)="navigate('/manage-rooms')">Habitaciones</a>
-      <a (click)="navigate('/booking-requests')">Solicitudes</a>
-      <a (click)="navigate('/gallery')">Galería</a>
+      <button class="nav-link" (click)="navigate('/home')">Home</button>
+      <button class="nav-link" (click)="navigate('/search')">Hotels</button>
+      <button class="nav-link" (click)="navigate('/dashboard')">Dashboard</button>
+      <button class="nav-link active" (click)="navigate('/manage-rooms')">Habitaciones</button>
+      <button class="nav-link" (click)="navigate('/booking-requests')">Solicitudes</button>
+      <button class="nav-link" (click)="navigate('/gallery')">Galería</button>
     </nav>
     <div class="header-right">
       <button class="btn-login" (click)="navigate('/login')">Iniciar sesión</button>
@@ -24,10 +24,18 @@
     </div>
 
     <div class="stats">
-      <div class="stat-card"><span class="stat-label">Total de Archivos</span><span class="stat-value">4</span></div>
-      <div class="stat-card"><span class="stat-label">Imágenes</span><span class="stat-value">3</span></div>
-      <div class="stat-card"><span class="stat-label">Videos</span><span class="stat-value">1</span></div>
-      <div class="stat-card"><span class="stat-label">Tamaño Total</span><span class="stat-value green">12.90 MB</span></div>
+      <div class="stat-card">
+        <span class="stat-label">Total de Archivos</span><span class="stat-value">4</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Imágenes</span><span class="stat-value">3</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Videos</span><span class="stat-value">1</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Tamaño Total</span><span class="stat-value green">12.90 MB</span>
+      </div>
     </div>
 
     <div class="upload-zone">
@@ -55,24 +63,34 @@
 
     <div class="gallery-section">
       <h2>Galería Actual (4 archivos)</h2>
-      <p class="gallery-sub">Arrastra para reordenar, haz clic en la estrella para marcar como principal</p>
+      <p class="gallery-sub">
+        Arrastra para reordenar, haz clic en la estrella para marcar como principal
+      </p>
 
       <div class="gallery-grid">
-        <div class="gallery-item" *ngFor="let item of galleryItems">
-          <div class="item-preview">
-            <span class="item-badge" [ngClass]="item.type === 'video' ? 'video' : 'img'">{{ item.type === 'video' ? 'VIDEO' : 'IMG' }}</span>
-            <span class="item-badge principal" *ngIf="item.principal">PRINCIPAL</span>
-          </div>
-          <div class="item-info">
-            <p class="item-name">{{ item.name }}</p>
-            <div class="item-meta">
-              <span>{{ item.size }}</span>
-              <span>{{ item.format }}</span>
-              <span>CDN: {{ item.cdn }}</span>
+        @for (item of galleryItems; track item) {
+          <div class="gallery-item">
+            <div class="item-preview">
+              <span class="item-badge" [ngClass]="item.type === 'video' ? 'video' : 'img'">{{
+                item.type === 'video' ? 'VIDEO' : 'IMG'
+              }}</span>
+              @if (item.principal) {
+                <span class="item-badge principal">PRINCIPAL</span>
+              }
             </div>
-            <button class="btn-mark" *ngIf="!item.principal">Marcar como principal</button>
+            <div class="item-info">
+              <p class="item-name">{{ item.name }}</p>
+              <div class="item-meta">
+                <span>{{ item.size }}</span>
+                <span>{{ item.format }}</span>
+                <span>CDN: {{ item.cdn }}</span>
+              </div>
+              @if (!item.principal) {
+                <button class="btn-mark">Marcar como principal</button>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   </main>

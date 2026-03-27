@@ -1,16 +1,16 @@
 <div class="hotel-home">
   <header>
     <div class="header-content">
-      <a class="logo" (click)="navigate('/home')"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <a class="logo" (click)="navigate('/home')" (keyup.enter)="navigate('/home')" role="button" tabindex="0"><div class="logo-icon">TH</div><span>TravelHub</span></a>
       <nav>
         <a class="active">Inicio</a>
-        <a (click)="navigate('/hotel-dashboard')">Dashboard</a>
-        <a (click)="navigate('/manage-rooms')">Habitaciones</a>
-        <a (click)="navigate('/booking-requests')">Solicitudes</a>
+        <button class="nav-link" (click)="navigate('/hotel-dashboard')">Dashboard</button>
+        <button class="nav-link" (click)="navigate('/manage-rooms')">Habitaciones</button>
+        <button class="nav-link" (click)="navigate('/booking-requests')">Solicitudes</button>
       </nav>
       <div class="header-right">
         <span class="hotel-badge">🏨 {{ hotelName }}</span>
-        <a class="btn-link" (click)="navigate('/login')">Cerrar sesión</a>
+        <button class="btn-link" (click)="navigate('/login')">Cerrar sesión</button>
       </div>
     </div>
   </header>

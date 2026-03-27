@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './print-booking.component.html',
   styleUrls: ['./print-booking.component.css']
 })
-export class PrintBookingComponent {
-  constructor() {}
-}
+export class PrintBookingComponent {}
