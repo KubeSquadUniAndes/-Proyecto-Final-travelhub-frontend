@@ -4,82 +4,166 @@
       <div class="logo">Únete a TravelHub</div>
       <p class="subtitle">Crea tu cuenta y descubre un mundo de posibilidades</p>
     </div>
-
     <div class="benefits">
       <h3>Beneficios exclusivos:</h3>
       <div class="benefit">
         <span class="benefit-icon">🎁</span>
-        <div>
-          <h4>Descuentos especiales</h4>
-          <p>Hasta 30% OFF en tu primera reserva</p>
-        </div>
+        <div><h4>Descuentos especiales</h4><p>Hasta 30% OFF en tu primera reserva</p></div>
       </div>
       <div class="benefit">
         <span class="benefit-icon">⚡</span>
-        <div>
-          <h4>Check-in rápido</h4>
-          <p>Ahorra tiempo con tu perfil guardado</p>
-        </div>
+        <div><h4>Check-in rápido</h4><p>Ahorra tiempo con tu perfil guardado</p></div>
       </div>
       <div class="benefit">
         <span class="benefit-icon">📱</span>
-        <div>
-          <h4>Gestión fácil</h4>
-          <p>Todas tus reservas en un solo lugar</p>
-        </div>
+        <div><h4>Gestión fácil</h4><p>Todas tus reservas en un solo lugar</p></div>
       </div>
       <div class="benefit">
         <span class="benefit-icon">🌟</span>
-        <div>
-          <h4>Programa de puntos</h4>
-          <p>Acumula puntos y obtén noches gratis</p>
-        </div>
+        <div><h4>Programa de puntos</h4><p>Acumula puntos y obtén noches gratis</p></div>
       </div>
     </div>
   </div>
 
   <div class="right-section">
     <div class="register-form">
-      <div class="steps">
-        <div class="step active">1</div>
-        <div class="step">2</div>
-      </div>
       <h2>Información personal</h2>
       <p class="form-subtitle">Completa tus datos para continuar</p>
 
-      <form (ngSubmit)="onSubmit()">
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          @for (line of errorMessage().split('\n'); track line) {
+            <div>{{ line }}</div>
+          }
+        </div>
+      }
+      @if (successMessage()) {
+        <div class="alert alert-success">{{ successMessage() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-row">
           <div class="form-group">
-            <label for="nombre">Nombre *</label>
-            <input id="nombre" type="text" placeholder="Juan" [(ngModel)]="nombre" name="nombre" required />
+            <label for="first_name">Nombre *</label>
+            <input id="first_name" type="text" placeholder="Juan" formControlName="first_name"
+              [class.input-error]="hasError('first_name', 'required')" />
+            @if (hasError('first_name', 'required')) {
+              <span class="field-error">El nombre es obligatorio.</span>
+            }
           </div>
           <div class="form-group">
-            <label for="apellido">Apellido *</label>
-            <input id="apellido" type="text" placeholder="Pérez" [(ngModel)]="apellido" name="apellido" required />
+            <label for="last_name">Apellido *</label>
+            <input id="last_name" type="text" placeholder="Pérez" formControlName="last_name"
+              [class.input-error]="hasError('last_name', 'required')" />
+            @if (hasError('last_name', 'required')) {
+              <span class="field-error">El apellido es obligatorio.</span>
+            }
           </div>
         </div>
 
         <div class="form-group">
           <label for="email">Email *</label>
-          <input id="email" type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email" required />
+          <input id="email" type="email" placeholder="tu@email.com" formControlName="email"
+            [class.input-error]="field('email')?.invalid && field('email')?.touched" />
+          @if (hasError('email', 'required')) {
+            <span class="field-error">El correo es obligatorio.</span>
+          }
+          @if (hasError('email', 'email')) {
+            <span class="field-error">Ingresa un correo electrónico válido.</span>
+          }
         </div>
 
         <div class="form-group">
-          <label for="telefono">Teléfono *</label>
-          <input id="telefono" type="tel" placeholder="+57 300 123 4567" [(ngModel)]="telefono" name="telefono" required />
+          <label for="phone">Teléfono *</label>
+          <input id="phone" type="tel" placeholder="+57 300 123 4567" formControlName="phone"
+            [class.input-error]="field('phone')?.invalid && field('phone')?.touched" />
+          @if (hasError('phone', 'required')) {
+            <span class="field-error">El teléfono es obligatorio.</span>
+          }
+          @if (hasError('phone', 'minlength')) {
+            <span class="field-error">El teléfono debe tener al menos 7 caracteres.</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="country">País *</label>
+            <input id="country" type="text" placeholder="Colombia" formControlName="country"
+              [class.input-error]="hasError('country', 'required')" />
+            @if (hasError('country', 'required')) {
+              <span class="field-error">El país es obligatorio.</span>
+            }
+          </div>
+          <div class="form-group">
+            <label for="city">Ciudad *</label>
+            <input id="city" type="text" placeholder="Bogotá" formControlName="city"
+              [class.input-error]="hasError('city', 'required')" />
+            @if (hasError('city', 'required')) {
+              <span class="field-error">La ciudad es obligatoria.</span>
+            }
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="ciudad">Ciudad</label>
-          <input id="ciudad" type="text" placeholder="Bogotá" [(ngModel)]="ciudad" name="ciudad" />
+          <label for="birth_date">Fecha de nacimiento *</label>
+          <input id="birth_date" type="date" formControlName="birth_date"
+            [class.input-error]="hasError('birth_date', 'required')" />
+          @if (hasError('birth_date', 'required')) {
+            <span class="field-error">La fecha de nacimiento es obligatoria.</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="identification_type">Tipo de ID *</label>
+            <select id="identification_type" formControlName="identification_type">
+              <option value="CC">Cédula (CC)</option>
+              <option value="CE">Cédula Extranjería (CE)</option>
+              <option value="PASSPORT">Pasaporte</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="identification_number">Número de ID *</label>
+            <input id="identification_number" type="text" placeholder="1234567890" formControlName="identification_number"
+              [class.input-error]="hasError('identification_number', 'required')" />
+            @if (hasError('identification_number', 'required')) {
+              <span class="field-error">El número de identificación es obligatorio.</span>
+            }
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="fechaNacimiento">Fecha de nacimiento</label>
-          <input id="fechaNacimiento" type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" />
+          <label for="user_type">Tipo de cuenta *</label>
+          <select id="user_type" formControlName="user_type">
+            <option value="traveler">Viajero</option>
+            <option value="hotel_admin">Administrador de hotel</option>
+          </select>
         </div>
 
-        <button type="submit">Continuar</button>
+        <div class="form-group">
+          <label for="password">Contraseña *</label>
+          <input id="password" type="password" placeholder="Mínimo 8 caracteres" formControlName="password"
+            [class.input-error]="field('password')?.invalid && field('password')?.touched" />
+          @if (hasError('password', 'required')) {
+            <span class="field-error">La contraseña es obligatoria.</span>
+          }
+          @if (hasError('password', 'minlength')) {
+            <span class="field-error">La contraseña debe tener al menos 8 caracteres.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar contraseña *</label>
+          <input id="confirmPassword" type="password" placeholder="Repite tu contraseña" formControlName="confirmPassword"
+            [class.input-error]="form.hasError('passwordsMismatch') && field('confirmPassword')?.touched" />
+          @if (form.hasError('passwordsMismatch') && field('confirmPassword')?.touched) {
+            <span class="field-error">Las contraseñas no coinciden.</span>
+          }
+        </div>
+
+        <button type="submit" [disabled]="isLoading()">
+          {{ isLoading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+        </button>
       </form>
 
       <p class="register-link">¿Ya tienes una cuenta? <button class="link-btn" (click)="goToLogin()">Inicia sesión</button></p>
