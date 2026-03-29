@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +11,13 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   goToSearch() {
     this.router.navigate(['/search']);
   }
 
   logout() {
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

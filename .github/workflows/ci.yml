@@ -45,7 +45,13 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
-        run: npx ng test --coverage
+        run: npx ng test --watch=false --coverage
+
+      - name: Check coverage threshold
+        run: |
+          LINES=$(node -e "const c=require('./coverage/travelhub-app/coverage-final.json'); const files=Object.values(c); const s=files.reduce((a,f)=>({s:a.s+Object.values(f.s).filter(Boolean).length,t:a.t+Object.values(f.s).length}),{s:0,t:0}); console.log(Math.round(s.s/s.t*100))")
+          echo "Line coverage: $LINES%"
+          if [ "$LINES" -lt 70 ]; then echo "Coverage $LINES% is below 70% threshold" && exit 1; fi
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v7
