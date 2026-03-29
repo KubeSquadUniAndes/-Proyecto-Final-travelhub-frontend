@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { provideRouter, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { authGuard, guestGuard } from './auth.guard';
@@ -16,9 +16,6 @@ const testRoutes = [
 ];
 
 describe('authGuard', () => {
-  let router: Router;
-  let authService: AuthService;
-
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({

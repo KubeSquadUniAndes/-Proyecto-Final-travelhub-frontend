@@ -22,9 +22,9 @@ function fieldLabel(loc: string[]): string {
   return FIELD_MAP[field] ?? field;
 }
 
-function translateMsg(e: any): string {
+function translateMsg(e: { type: string; loc: string[]; msg: string; ctx?: Record<string, unknown> }): string {
   if (e.type === 'string_too_short') {
-    return `${fieldLabel(e.loc)} debe tener al menos ${e.ctx?.min_length} caracter(es).`;
+    return `${fieldLabel(e.loc)} debe tener al menos ${e.ctx?.['min_length']} caracter(es).`;
   }
   if (e.type === 'value_error' || e.type === 'date_from_datetime_parsing') {
     return `${fieldLabel(e.loc)} no es válido.`;
@@ -32,7 +32,7 @@ function translateMsg(e: any): string {
   return MSG_MAP[e.msg] ?? `${fieldLabel(e.loc)}: ${e.msg}`;
 }
 
-export function parseApiError(err: any, fallback: string): string {
+export function parseApiError(err: { error?: { detail?: unknown } }, fallback: string): string {
   const detail = err?.error?.detail;
 
   if (Array.isArray(detail)) {
