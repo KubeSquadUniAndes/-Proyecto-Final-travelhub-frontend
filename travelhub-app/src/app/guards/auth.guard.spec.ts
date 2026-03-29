@@ -26,8 +26,6 @@ describe('authGuard', () => {
         AuthService,
       ],
     });
-    router = TestBed.inject(Router);
-    authService = TestBed.inject(AuthService);
   });
 
   it('bloquea acceso si no está autenticado', () => {
