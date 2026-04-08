@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -7,9 +7,20 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './booking-confirmed.component.html',
-  styleUrls: ['./booking-confirmed.component.css']
+  styleUrls: ['./booking-confirmed.component.css'],
 })
 export class BookingConfirmedComponent {
-  constructor(private router: Router) {}
-  navigate(path: string) { this.router.navigate([path]); }
+  private router = inject(Router);
+
+  goToHome() {
+    this.router.navigate(['/home']);
+  }
+
+  printBooking() {
+    this.router.navigate(['/print-booking']);
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
 }

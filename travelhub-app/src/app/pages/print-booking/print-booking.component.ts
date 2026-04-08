@@ -9,8 +9,4 @@ import { CommonModule } from '@angular/common';
   templateUrl: './print-booking.component.html',
   styleUrls: ['./print-booking.component.css']
 })
-export class PrintBookingComponent {
-  constructor(private router: Router) {}
-  navigate(path: string) { this.router.navigate([path]); }
-  print() { window.print(); }
-}
+export class PrintBookingComponent {}

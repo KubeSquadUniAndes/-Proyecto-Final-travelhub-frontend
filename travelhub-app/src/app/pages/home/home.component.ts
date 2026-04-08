@@ -1,28 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  destino = '';
-  checkIn = '';
-  checkOut = '';
-  huespedes = 1;
-
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   search() {
-    this.router.navigate(['/search'], { queryParams: { destino: this.destino, checkIn: this.checkIn, checkOut: this.checkOut, huespedes: this.huespedes } });
+    this.router.navigate(['/search']);
   }
 
-  navigate(path: string) {
-    this.router.navigate([path]);
+  logout() {
+    this.authService.logout();
   }
 }

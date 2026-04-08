@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,12 +8,16 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './checkout-step2.component.html',
-  styleUrls: ['./checkout-step2.component.css']
+  styleUrls: ['./checkout-step2.component.css'],
 })
 export class CheckoutStep2Component {
-  cardNumber = ''; cardName = ''; expiry = ''; cvv = '';
+  private router = inject(Router);
 
-  constructor(private router: Router) {}
-  navigate(path: string) { this.router.navigate([path]); }
-  confirmBooking() { this.router.navigate(['/booking-confirmed']); }
+  confirmBooking() {
+    this.router.navigate(['/booking-confirmed']);
+  }
+
+  goBack() {
+    this.router.navigate(['/checkout']);
+  }
 }
