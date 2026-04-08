@@ -5,15 +5,15 @@
       <span class="logo-text">TravelHub</span>
     </div>
     <nav>
-      <a (click)="navigate('/home')">Home</a>
-      <a (click)="navigate('/search')">Hotels</a>
-      <a (click)="navigate('/dashboard')">Dashboard</a>
-      <a (click)="navigate('/manage-rooms')">Habitaciones</a>
-      <a class="active" (click)="navigate('/booking-requests')">Solicitudes</a>
+      <button class="nav-link" (click)="navigate('/home')">Home</button>
+      <button class="nav-link" (click)="navigate('/search')">Hotels</button>
+      <button class="nav-link" (click)="navigate('/dashboard')">Dashboard</button>
+      <button class="nav-link" (click)="navigate('/manage-rooms')">Habitaciones</button>
+      <button class="nav-link active" (click)="navigate('/booking-requests')">Solicitudes</button>
     </nav>
     <div class="header-right">
       <span class="user">user</span>
-      <a class="logout" (click)="navigate('/login')">Salir</a>
+      <button class="logout" (click)="navigate('/login')">Salir</button>
     </div>
   </header>
 
@@ -45,7 +45,11 @@
 
     <div class="table-container">
       <div class="table-header">
-        <input type="text" placeholder="Buscar por nombre, email o ID de reserva..." class="search-input" />
+        <input
+          type="text"
+          placeholder="Buscar por nombre, email o ID de reserva..."
+          class="search-input"
+        />
       </div>
 
       <table>
@@ -63,36 +67,40 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let req of requests">
-            <td class="id-link">{{ req.id }}</td>
-            <td>
-              <div class="guest-name">{{ req.guest }}</div>
-              <div class="guest-detail">{{ req.email }}</div>
-              <div class="guest-detail">{{ req.phone }}</div>
-            </td>
-            <td>
-              <div class="room-name">{{ req.room }}</div>
-              <div class="guest-detail">{{ req.type }}</div>
-            </td>
-            <td>
-              <div>{{ req.checkIn }}</div>
-              <div>{{ req.checkOut }}</div>
-              <div class="guest-detail">{{ req.nights }} noches</div>
-            </td>
-            <td>{{ req.guests }}</td>
-            <td class="amount">${{ req.total | number }}</td>
-            <td>{{ req.requested }}</td>
-            <td>
-              <span [class]="req.expired ? 'time-expired' : 'time-warning'">{{ req.timeLeft }}</span>
-            </td>
-            <td>
-              <div class="actions">
-                <button class="btn-approve" [disabled]="req.expired">Aprobar</button>
-                <button class="btn-reject" [disabled]="req.expired">Rechazar</button>
-              </div>
-              <a class="special-req">Req. especiales</a>
-            </td>
-          </tr>
+          @for (req of requests; track req) {
+            <tr>
+              <td class="id-link">{{ req.id }}</td>
+              <td>
+                <div class="guest-name">{{ req.guest }}</div>
+                <div class="guest-detail">{{ req.email }}</div>
+                <div class="guest-detail">{{ req.phone }}</div>
+              </td>
+              <td>
+                <div class="room-name">{{ req.room }}</div>
+                <div class="guest-detail">{{ req.type }}</div>
+              </td>
+              <td>
+                <div>{{ req.checkIn }}</div>
+                <div>{{ req.checkOut }}</div>
+                <div class="guest-detail">{{ req.nights }} noches</div>
+              </td>
+              <td>{{ req.guests }}</td>
+              <td class="amount">${{ req.total | number }}</td>
+              <td>{{ req.requested }}</td>
+              <td>
+                <span [class]="req.expired ? 'time-expired' : 'time-warning'">{{
+                  req.timeLeft
+                }}</span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-approve" [disabled]="req.expired">Aprobar</button>
+                  <button class="btn-reject" [disabled]="req.expired">Rechazar</button>
+                </div>
+                <button class="special-req" (click)="null">Req. especiales</button>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
 
