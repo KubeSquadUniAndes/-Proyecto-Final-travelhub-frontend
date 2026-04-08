@@ -1,14 +1,14 @@
 <div class="dashboard">
   <header>
     <div class="header-content">
-      <a class="logo" (click)="navigate('/home')"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0"><div class="logo-icon">TH</div><span>TravelHub</span></a>
       <nav>
-        <a (click)="navigate('/home')">Home</a>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
         <a class="active">Dashboard</a>
       </nav>
       <div class="header-right">
         <span class="hotel-badge">🏨 {{ hotelName }}</span>
-        <a class="btn-link" (click)="navigate('/login')">Cerrar sesión</a>
+        <a class="btn-link" (click)="navigate('/login')" (keydown.enter)="navigate('/login')" tabindex="0">Cerrar sesión</a>
       </div>
     </div>
   </header>
