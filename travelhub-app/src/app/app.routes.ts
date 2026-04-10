@@ -16,4 +16,5 @@ export const routes: Routes = [
   { path: 'booking-requests', loadComponent: () => import('./pages/booking-requests/booking-requests.component').then(m => m.BookingRequestsComponent), canActivate: [authGuard] },
   { path: 'cancel-booking', loadComponent: () => import('./pages/cancel-booking/cancel-booking.component').then(m => m.CancelBookingComponent), canActivate: [authGuard] },
   { path: 'hotel-home', loadComponent: () => import('./pages/hotel-home/hotel-home.component').then(m => m.HotelHomeComponent), canActivate: [authGuard] },
+  { path: 'hotel-dashboard', loadComponent: () => import('./pages/hotel-dashboard/hotel-dashboard.component').then(m => m.HotelDashboardComponent), canActivate: [authGuard] },
 ];
