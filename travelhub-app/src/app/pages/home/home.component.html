@@ -1,15 +1,113 @@
 <div class="home-container">
+  <!-- Header -->
   <header>
-    <div class="logo">TravelHub</div>
-    <nav>
-      <button (click)="goToSearch()">Buscar</button>
-      <button (click)="logout()">Cerrar Sesión</button>
-    </nav>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a class="active" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hotels</a>
+        <a (click)="navigate('/dashboard')" (keydown.enter)="navigate('/dashboard')" tabindex="0">Dashboard</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-reservas" (click)="navigate('/dashboard')">Mis Reservas</button>
+        <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
-  
-  <main>
-    <h1>Bienvenido a TravelHub</h1>
-    <p>Encuentra tu próximo destino</p>
-    <button class="cta-button" (click)="goToSearch()">Buscar Hoteles</button>
-  </main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Encuentra tu hotel ideal</h1>
+        <p>Descubre los mejores hospedajes en Colombia y el mundo</p>
+      </div>
+      <form class="search-form" (ngSubmit)="search()">
+        <div class="form-group">
+          <label for="destino">Destino</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📍</span>
+            <input id="destino" type="text" [(ngModel)]="destino" name="destino" placeholder="¿A dónde quieres ir?" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="checkIn">Check-in</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📅</span>
+            <input id="checkIn" type="date" [(ngModel)]="checkIn" name="checkIn" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="checkOut">Check-out</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📅</span>
+            <input id="checkOut" type="date" [(ngModel)]="checkOut" name="checkOut" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="huespedes">Huéspedes</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input id="huespedes" type="number" [(ngModel)]="huespedes" name="huespedes" min="1" max="20" />
+          </div>
+        </div>
+        <button type="submit" class="btn-search">🔍 Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Feature Cards -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Mejor precio garantizado</h3>
+        <p>Reserva con confianza al mejor precio del mercado</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <h3>Miles de destinos</h3>
+        <p>Encuentra hoteles en los mejores destinos de Colombia y el mundo</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Búsqueda fácil</h3>
+        <p>Compara precios y encuentra las mejores ofertas en segundos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hotel Listing -->
+  <section class="hotels-section">
+    <div class="section-header">
+      <h2>Hospedajes disponibles</h2>
+      <p>{{ hospedajes.length }} hospedajes ordenados por popularidad</p>
+    </div>
+    <div class="hotels-grid">
+      @for (hotel of hospedajes; track hotel.id) {
+        <div class="hotel-card">
+          <div class="hotel-image">
+            <img [src]="hotel.image" [alt]="hotel.name" loading="lazy" />
+            <span class="hotel-rating">⭐ {{ hotel.rating }}</span>
+          </div>
+          <div class="hotel-info">
+            <h3>{{ hotel.name }}</h3>
+            <p class="hotel-location">📍 {{ hotel.location }}</p>
+            <div class="hotel-footer">
+              <div class="hotel-price">
+                <span class="price-label">Desde</span>
+                <span class="price-value">$ {{ hotel.price | number }}</span>
+                <span class="price-label">/ noche</span>
+              </div>
+              <button class="btn-reservar" (click)="goToCheckout(hotel.id)">Reservar</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
 </div>
