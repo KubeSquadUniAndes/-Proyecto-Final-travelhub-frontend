@@ -1,0 +1,49 @@
+.page-container { min-height: 100vh; background: #f9fafb; font-family: 'Inter', sans-serif; }
+
+header { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.header-left { display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 36px; height: 36px; background: #155dfc; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+.logo-text { font-size: 24px; font-weight: 700; color: #101828; }
+nav { display: flex; gap: 24px; }
+nav a { font-size: 16px; color: #364153; cursor: pointer; text-decoration: none; }
+nav a.active { color: #155dfc; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.btn-login { padding: 8px 20px; background: #155dfc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; }
+
+main { padding: 32px 40px; }
+.page-header h1 { font-size: 20px; font-weight: 700; color: #101828; margin-bottom: 4px; }
+.page-header p { font-size: 12px; color: #4a5565; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+.stat-card { background: white; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; }
+.stat-label { font-size: 12px; color: #4a5565; display: block; margin-bottom: 8px; }
+.stat-value { font-size: 24px; font-weight: 700; color: #101828; }
+.stat-value.green { color: #00a63e; }
+
+.upload-zone { border: 2px dashed #d0d5dd; border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 16px; cursor: pointer; transition: border-color 0.2s; }
+.upload-zone:hover { border-color: #155dfc; }
+.upload-title { font-size: 14px; font-weight: 500; color: #101828; margin-bottom: 4px; }
+.upload-sub { font-size: 12px; color: #6a7282; margin-bottom: 12px; }
+.upload-formats { display: flex; justify-content: center; gap: 16px; font-size: 12px; color: #4a5565; margin-bottom: 8px; }
+.upload-limit { font-size: 12px; color: #6a7282; }
+
+.info-box { background: #e8f0fe; border: 1px solid #bdd3fe; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+.info-title { font-size: 12px; font-weight: 700; color: #1c398e; margin-bottom: 8px; }
+.info-box ul { list-style: none; padding: 0; margin: 0; }
+.info-box li { font-size: 12px; color: #1447e6; margin-bottom: 4px; }
+
+.gallery-section h2 { font-size: 14px; font-weight: 700; color: #101828; margin-bottom: 4px; }
+.gallery-sub { font-size: 12px; color: #4a5565; margin-bottom: 16px; }
+
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+.gallery-item { background: white; border-radius: 8px; border: 1px solid #e5e7eb; overflow: hidden; }
+.item-preview { height: 120px; background: #f3f4f6; position: relative; display: flex; align-items: flex-start; padding: 8px; gap: 4px; }
+.item-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+.item-badge.img { background: #155dfc; color: white; }
+.item-badge.video { background: #9810fa; color: white; }
+.item-badge.principal { background: #f0b100; color: white; font-weight: 700; }
+.item-info { padding: 12px; }
+.item-name { font-size: 12px; font-weight: 500; color: #101828; margin-bottom: 4px; }
+.item-meta { display: flex; gap: 8px; font-size: 10px; color: #6a7282; margin-bottom: 8px; }
+.btn-mark { font-size: 10px; font-weight: 500; color: #364153; background: #f3f4f6; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }

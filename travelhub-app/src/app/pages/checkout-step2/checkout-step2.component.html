@@ -1,0 +1,23 @@
+<div class="checkout-container">
+  <header>
+    <div class="logo">TravelHub</div>
+    <button (click)="goBack()">Volver</button>
+  </header>
+  
+  <main>
+    <h1>Checkout - Paso 2</h1>
+    
+    <div class="checkout-form">
+      <h2>Información de Pago</h2>
+      <form>
+        <input type="text" placeholder="Número de tarjeta" />
+        <input type="text" placeholder="Nombre en la tarjeta" />
+        <div style="display: flex; gap: 16px;">
+          <input type="text" placeholder="MM/AA" style="flex: 1;" />
+          <input type="text" placeholder="CVV" style="flex: 1;" />
+        </div>
+        <button type="button" (click)="confirmBooking()">Confirmar Reserva</button>
+      </form>
+    </div>
+  </main>
+</div>

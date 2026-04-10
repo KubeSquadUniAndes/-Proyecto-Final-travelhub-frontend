@@ -1,0 +1,419 @@
+{
+  "colors": {
+    "1": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "2": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "Registro": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Volver al inicio": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Únete a TravelHub": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "Crea tu cuenta y descubre un mundo de posibilidade": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Container": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Información personal": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Crear contraseña": {
+      "hex": "#6a7282",
+      "opacity": 1
+    },
+    "Beneficios exclusivos:": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "🎁": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Descuentos especiales": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Hasta 30% OFF en tu primera reserva": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "⚡": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Check-in rápido": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Ahorra tiempo con tu perfil guardado": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "📱": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Gestión fácil": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Todas tus reservas en un solo lugar": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "🌟": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Programa de puntos": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Acumula puntos y obtén noches gratis": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Completa tus datos para continuar": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Nombre *": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Juan": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Apellido *": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Pérez": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Email *": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "tu@email.com": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Teléfono *": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "+57 300 123 4567": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "País": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Dropdown": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "Ciudad": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Bogotá": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Fecha de nacimiento": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Button": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "Continuar": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "¿Ya tienes una cuenta? ": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Inicia sesión": {
+      "hex": "#155dfc",
+      "opacity": 1
+    }
+  },
+  "typography": {
+    "1": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "1"
+    },
+    "2": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "2"
+    },
+    "Volver al inicio": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 500,
+      "lineHeight": 24,
+      "text": "Volver al inicio"
+    },
+    "Únete a TravelHub": {
+      "fontFamily": "Inter",
+      "fontSize": 48,
+      "fontWeight": 700,
+      "lineHeight": 48,
+      "text": "Únete a TravelHub"
+    },
+    "Crea tu cuenta y descubre un mundo de posibilidade": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "text": "Crea tu cuenta y descubre un mundo de posibilidades"
+    },
+    "Información personal": {
+      "fontFamily": "Inter",
+      "fontSize": 30,
+      "fontWeight": 700,
+      "lineHeight": 36,
+      "text": "Información personal"
+    },
+    "Crear contraseña": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "text": "Crear contraseña"
+    },
+    "Beneficios exclusivos:": {
+      "fontFamily": "Inter",
+      "fontSize": 20,
+      "fontWeight": 700,
+      "lineHeight": 28,
+      "text": "Beneficios exclusivos:"
+    },
+    "🎁": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "text": "🎁"
+    },
+    "Descuentos especiales": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Descuentos especiales"
+    },
+    "Hasta 30% OFF en tu primera reserva": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Hasta 30% OFF en tu primera reserva"
+    },
+    "⚡": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "text": "⚡"
+    },
+    "Check-in rápido": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Check-in rápido"
+    },
+    "Ahorra tiempo con tu perfil guardado": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Ahorra tiempo con tu perfil guardado"
+    },
+    "📱": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "text": "📱"
+    },
+    "Gestión fácil": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Gestión fácil"
+    },
+    "Todas tus reservas en un solo lugar": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Todas tus reservas en un solo lugar"
+    },
+    "🌟": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "text": "🌟"
+    },
+    "Programa de puntos": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 700,
+      "lineHeight": 24,
+      "text": "Programa de puntos"
+    },
+    "Acumula puntos y obtén noches gratis": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Acumula puntos y obtén noches gratis"
+    },
+    "Completa tus datos para continuar": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "Completa tus datos para continuar"
+    },
+    "Nombre *": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Nombre *"
+    },
+    "Juan": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "text": "Juan"
+    },
+    "Apellido *": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Apellido *"
+    },
+    "Pérez": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "text": "Pérez"
+    },
+    "Email *": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Email *"
+    },
+    "tu@email.com": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "text": "tu@email.com"
+    },
+    "Teléfono *": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Teléfono *"
+    },
+    "+57 300 123 4567": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "text": "+57 300 123 4567"
+    },
+    "País": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "País"
+    },
+    "Ciudad": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Ciudad"
+    },
+    "Bogotá": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "text": "Bogotá"
+    },
+    "Fecha de nacimiento": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "text": "Fecha de nacimiento"
+    },
+    "Continuar": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 600,
+      "lineHeight": 24,
+      "text": "Continuar"
+    },
+    "¿Ya tienes una cuenta? ": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "text": "¿Ya tienes una cuenta? "
+    },
+    "Inicia sesión": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 600,
+      "lineHeight": 24,
+      "text": "Inicia sesión"
+    }
+  },
+  "elements": []
+}

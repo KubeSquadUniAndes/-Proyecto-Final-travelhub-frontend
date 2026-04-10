@@ -1,4 +1,10 @@
 node_modules/
-dist/
 .env
+dist/
 .angular/
+
+# Terraform
+infra/.terraform/
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/*.tfvars

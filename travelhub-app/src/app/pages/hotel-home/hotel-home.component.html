@@ -1,0 +1,95 @@
+<div class="hotel-home">
+  <header>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keyup.enter)="navigate('/home')" role="button" tabindex="0"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <nav>
+        <a class="active">Inicio</a>
+        <button class="nav-link" (click)="navigate('/hotel-dashboard')">Dashboard</button>
+        <button class="nav-link" (click)="navigate('/manage-rooms')">Habitaciones</button>
+        <button class="nav-link" (click)="navigate('/booking-requests')">Solicitudes</button>
+      </nav>
+      <div class="header-right">
+        <span class="hotel-badge">🏨 {{ hotelName }}</span>
+        <button class="btn-link" (click)="navigate('/login')">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+      <h3>Gestión</h3>
+      <div class="menu">
+        @for (item of menuItems; track item.action) {
+          <button class="menu-item" (click)="onMenuAction(item.action)">
+            <span class="menu-icon">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+          </button>
+        }
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <div class="page-header">
+        <h1>Reservas de {{ hotelName }}</h1>
+        <p>Gestiona las reservas activas de tu hotel</p>
+      </div>
+
+      @if (hasReservas()) {
+        <div class="reservas-list">
+          @for (r of reservas(); track r.id) {
+            <div class="reserva-card" [class.selected]="selectedReserva() === r">
+              <div class="reserva-main">
+                <div class="reserva-info">
+                  <div class="reserva-top">
+                    <span class="reserva-id">{{ r.id }}</span>
+                    <span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span>
+                  </div>
+                  <h3>{{ r.huesped }}</h3>
+                  <p class="room-type">{{ r.tipoHabitacion }}</p>
+                </div>
+                <div class="reserva-dates">
+                  <div class="date-item">
+                    <span class="date-label">Check-in</span>
+                    <span class="date-value">{{ r.checkIn }}</span>
+                  </div>
+                  <div class="date-item">
+                    <span class="date-label">Check-out</span>
+                    <span class="date-value">{{ r.checkOut }}</span>
+                  </div>
+                </div>
+                <div class="reserva-actions">
+                  <button class="btn-icon" title="Ver detalle" (click)="onMenuAction('detail', r)">📋</button>
+                  @if (r.estado === 'Pendiente') {
+                    <button class="btn-icon" title="Aprobar" (click)="onMenuAction('approve', r)">✅</button>
+                  }
+                  @if (r.estado !== 'Completada' && r.estado !== 'Cancelada') {
+                    <button class="btn-icon" title="Cancelar" (click)="onMenuAction('cancel', r)">❌</button>
+                  }
+                </div>
+              </div>
+
+              @if (selectedReserva() === r) {
+                <div class="reserva-detail">
+                  <div class="detail-row"><span>ID Reserva</span><span>{{ r.id }}</span></div>
+                  <div class="detail-row"><span>Huésped</span><span>{{ r.huesped }}</span></div>
+                  <div class="detail-row"><span>Tipo de habitación</span><span>{{ r.tipoHabitacion }}</span></div>
+                  <div class="detail-row"><span>Check-in</span><span>{{ r.checkIn }}</span></div>
+                  <div class="detail-row"><span>Check-out</span><span>{{ r.checkOut }}</span></div>
+                  <div class="detail-row"><span>Estado</span><span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span></div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <div class="empty-icon">🏨</div>
+          <h2>No hay reservas disponibles</h2>
+          <p>Tu hotel aún no tiene reservas registradas. Las nuevas reservas aparecerán aquí automáticamente.</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+.search-container {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: #f9fafb;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #155dfc;
+}
+
+header button {
+  padding: 10px 20px;
+  border: 1px solid #d0d5dd;
+  background: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+header button:hover {
+  background: #f9fafb;
+  border-color: #155dfc;
+}
+
+main {
+  padding: 40px 60px;
+}
+
+main h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #101828;
+  margin-bottom: 32px;
+}
+
+.hotels-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.hotel-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hotel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.hotel-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #101828;
+  margin-bottom: 12px;
+}
+
+.hotel-card p {
+  font-size: 16px;
+  color: #4a5565;
+  margin-bottom: 8px;
+}
+
+.hotel-card button {
+  width: 100%;
+  padding: 12px;
+  background: #155dfc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background 0.2s;
+}
+
+.hotel-card button:hover {
+  background: #0a3d9f;
+}

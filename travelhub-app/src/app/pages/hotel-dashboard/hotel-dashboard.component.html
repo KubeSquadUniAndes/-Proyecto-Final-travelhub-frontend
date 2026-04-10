@@ -1,0 +1,92 @@
+<div class="dashboard">
+  <header>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0"><div class="logo-icon">TH</div><span>TravelHub</span></a>
+      <nav>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a class="active">Dashboard</a>
+      </nav>
+      <div class="header-right">
+        <span class="hotel-badge">🏨 {{ hotelName }}</span>
+        <a class="btn-link" (click)="navigate('/login')" (keydown.enter)="navigate('/login')" tabindex="0">Cerrar sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Dashboard de Reservas</h1>
+        <p>Control centralizado de tu operación diaria — últimos 30 días</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <p class="stat-label">Total Reservas</p>
+        <p class="stat-value">{{ stats().total }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Confirmadas</p>
+        <p class="stat-value green">{{ stats().confirmadas }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Pendientes</p>
+        <p class="stat-value yellow">{{ stats().pendientes }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Ingresos</p>
+        <p class="stat-value blue">$ {{ stats().ingresos | number }}</p>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-top">
+        <h2>Reservas</h2>
+        <input type="text" placeholder="Buscar por huésped o ID..." (input)="onSearch($any($event.target).value)" />
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Huésped</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Huéspedes</th>
+              <th>Monto</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of paginatedReservas(); track r.id) {
+              <tr>
+                <td class="id-cell">{{ r.id }}</td>
+                <td>{{ r.huesped }}</td>
+                <td>{{ r.checkIn | date:'dd MMM yyyy' }}</td>
+                <td>{{ r.checkOut | date:'dd MMM yyyy' }}</td>
+                <td>{{ r.huespedes }}</td>
+                <td>$ {{ r.monto | number }}</td>
+                <td><span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <p>{{ paginationLabel() }}</p>
+        <div class="pagination">
+          <button [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">Anterior</button>
+          @for (p of getPages(); track p) {
+            <button [class.active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          <button [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+{
+  "app": {
+    "components": [
+      {
+        "name": "home",
+        "path": "src/app/pages/home",
+        "files": [
+          "home.component.ts",
+          "home.component.html",
+          "home.component.css",
+          "home.component.spec.ts"
+        ]
+      },
+      {
+        "name": "search",
+        "path": "src/app/pages/search",
+        "files": [
+          "search.component.ts",
+          "search.component.html",
+          "search.component.css",
+          "search.component.spec.ts"
+        ]
+      },
+      {
+        "name": "checkout",
+        "path": "src/app/pages/checkout",
+        "files": [
+          "checkout.component.ts",
+          "checkout.component.html",
+          "checkout.component.css",
+          "checkout.component.spec.ts"
+        ]
+      },
+      {
+        "name": "checkout-step2",
+        "path": "src/app/pages/checkout-step2",
+        "files": [
+          "checkout-step2.component.ts",
+          "checkout-step2.component.html",
+          "checkout-step2.component.css",
+          "checkout-step2.component.spec.ts"
+        ]
+      },
+      {
+        "name": "booking-confirmed",
+        "path": "src/app/pages/booking-confirmed",
+        "files": [
+          "booking-confirmed.component.ts",
+          "booking-confirmed.component.html",
+          "booking-confirmed.component.css",
+          "booking-confirmed.component.spec.ts"
+        ]
+      },
+      {
+        "name": "print-booking",
+        "path": "src/app/pages/print-booking",
+        "files": [
+          "print-booking.component.ts",
+          "print-booking.component.html",
+          "print-booking.component.css",
+          "print-booking.component.spec.ts"
+        ]
+      },
+      {
+        "name": "login",
+        "path": "src/app/pages/login",
+        "files": [
+          "login.component.ts",
+          "login.component.html",
+          "login.component.css",
+          "login.component.spec.ts"
+        ]
+      },
+      {
+        "name": "dashboard",
+        "path": "src/app/pages/dashboard",
+        "files": [
+          "dashboard.component.ts",
+          "dashboard.component.html",
+          "dashboard.component.css",
+          "dashboard.component.spec.ts"
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "path": "",
+        "component": "home"
+      },
+      {
+        "path": "search",
+        "component": "search"
+      },
+      {
+        "path": "checkout",
+        "component": "checkout"
+      },
+      {
+        "path": "checkout/step2",
+        "component": "checkout-step2"
+      },
+      {
+        "path": "booking-confirmed",
+        "component": "booking-confirmed"
+      },
+      {
+        "path": "print-booking",
+        "component": "print-booking"
+      },
+      {
+        "path": "login",
+        "component": "login"
+      },
+      {
+        "path": "dashboard",
+        "component": "dashboard"
+      }
+    ],
+    "modules": []
+  }
+}

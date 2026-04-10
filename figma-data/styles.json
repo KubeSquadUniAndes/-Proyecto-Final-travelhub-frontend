@@ -1,0 +1,260 @@
+{
+  "colors": {
+    "Login": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "TravelHub": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "Tu próxima aventura comienza aquí": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "Accede a ofertas exclusivas, gestiona tus reservas": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Container": {
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    "🏨": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Miles de hoteles": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Encuentra el alojamiento perfecto en más de 100 pa": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "💰": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Mejores precios": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Garantizamos las tarifas más competitivas del merc": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "⭐": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Experiencias únicas": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Lee reseñas reales y reserva con confianza": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Bienvenido de nuevo": {
+      "hex": "#101828",
+      "opacity": 1
+    },
+    "Inicia sesión para continuar con tu reserva": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "Email": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "tu@email.com": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Contraseña": {
+      "hex": "#364153",
+      "opacity": 1
+    },
+    "••••••••": {
+      "hex": "#0a0a0a",
+      "opacity": 1
+    },
+    "Recordarme": {
+      "hex": "#4a5565",
+      "opacity": 1
+    },
+    "¿Olvidaste tu contraseña?": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "button": {
+      "hex": "#155dfc",
+      "opacity": 1
+    },
+    "Iniciar sesión": {
+      "hex": "#ffffff",
+      "opacity": 1
+    }
+  },
+  "typography": {
+    "TravelHub": {
+      "fontFamily": "Inter",
+      "fontSize": 48,
+      "fontWeight": 700,
+      "lineHeight": 48,
+      "letterSpacing": 0.3515625
+    },
+    "Tu próxima aventura comienza aquí": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "letterSpacing": 0.0703125
+    },
+    "Accede a ofertas exclusivas, gestiona tus reservas": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "lineHeight": 28,
+      "letterSpacing": -0.439453125
+    },
+    "🏨": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "letterSpacing": 0.0703125
+    },
+    "Miles de hoteles": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 27,
+      "letterSpacing": -0.439453125
+    },
+    "Encuentra el alojamiento perfecto en más de 100 pa": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "💰": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "letterSpacing": 0.0703125
+    },
+    "Mejores precios": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 27,
+      "letterSpacing": -0.439453125
+    },
+    "Garantizamos las tarifas más competitivas del merc": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "⭐": {
+      "fontFamily": "Inter",
+      "fontSize": 24,
+      "fontWeight": 400,
+      "lineHeight": 32,
+      "letterSpacing": 0.0703125
+    },
+    "Experiencias únicas": {
+      "fontFamily": "Inter",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 27,
+      "letterSpacing": -0.439453125
+    },
+    "Lee reseñas reales y reserva con confianza": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Bienvenido de nuevo": {
+      "fontFamily": "Inter",
+      "fontSize": 30,
+      "fontWeight": 700,
+      "lineHeight": 36,
+      "letterSpacing": 0.3955078125
+    },
+    "Inicia sesión para continuar con tu reserva": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Email": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "tu@email.com": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "letterSpacing": -0.3125
+    },
+    "Contraseña": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "••••••••": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 19.363636016845703,
+      "letterSpacing": -0.3125
+    },
+    "Recordarme": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "¿Olvidaste tu contraseña?": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "Iniciar sesión": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 600,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    }
+  },
+  "spacing": {},
+  "loginStyles": {
+    "width": 1440,
+    "height": 900,
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    }
+  }
+}

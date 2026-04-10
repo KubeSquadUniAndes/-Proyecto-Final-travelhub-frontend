@@ -1,0 +1,86 @@
+.checkout-container {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: #f9fafb;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #155dfc;
+}
+
+header button {
+  padding: 10px 20px;
+  border: 1px solid #d0d5dd;
+  background: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+main {
+  padding: 40px 60px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+main h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #101828;
+  margin-bottom: 32px;
+}
+
+.checkout-form {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.checkout-form h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #101828;
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px;
+  background: #155dfc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+button:hover {
+  background: #0a3d9f;
+}
