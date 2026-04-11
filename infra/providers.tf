@@ -9,13 +9,11 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.aws_region
-  profile = "universidad"
+  region = var.aws_region
 }
 
 # CloudFront requiere que los certificados ACM estén en us-east-1
 provider "aws" {
-  alias   = "us_east_1"
-  region  = "us-east-1"
-  profile = "universidad"
+  alias  = "us_east_1"
+  region = "us-east-1"
 }
