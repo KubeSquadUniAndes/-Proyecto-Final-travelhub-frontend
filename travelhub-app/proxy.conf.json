@@ -6,7 +6,7 @@
       "Host": "api.travelhub.com"
     }
   },
-  "/login-handler": {
+  "/auth": {
     "target": "http://ac579e79af7f644ea9a28fcf0b880a47-b476310f4eeda9e2.elb.us-east-1.amazonaws.com",
     "changeOrigin": true,
     "headers": {
