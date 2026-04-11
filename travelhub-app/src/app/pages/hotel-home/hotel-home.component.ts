@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 export interface HotelReserva {
   id: string;
@@ -20,6 +21,7 @@ export interface HotelReserva {
 })
 export class HotelHomeComponent implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   readonly hotelName = 'Grand Seaside Resort';
   reservas = signal<HotelReserva[]>([]);
@@ -110,5 +112,9 @@ export class HotelHomeComponent implements OnInit {
 
   navigate(path: string) {
     this.router.navigate([path]);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

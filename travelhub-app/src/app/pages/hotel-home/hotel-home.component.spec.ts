@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { faker } from '@faker-js/faker';
 import { HotelHomeComponent, HotelReserva } from './hotel-home.component';
+import { AuthService } from '../../services/auth.service';
 
 function buildFakeReserva(overrides: Partial<HotelReserva> = {}): HotelReserva {
   const estados: HotelReserva['estado'][] = ['Pendiente', 'Confirmada', 'En curso', 'Completada', 'Cancelada'];
@@ -24,7 +25,10 @@ describe('HotelHomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HotelHomeComponent],
-      providers: [{ provide: Router, useValue: { navigate: vi.fn() } }],
+      providers: [
+        { provide: Router, useValue: { navigate: vi.fn() } },
+        { provide: AuthService, useValue: { logout: vi.fn() } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HotelHomeComponent);
@@ -209,7 +213,7 @@ describe('HotelHomeComponent', () => {
 
     it('should render navigation links', () => {
       const navLinks = fixture.nativeElement.querySelectorAll('nav a, nav button');
-      expect(navLinks.length).toBe(4);
+      expect(navLinks.length).toBe(2);
     });
 
     it('should render sidebar menu items', () => {

@@ -21,7 +21,7 @@ export const travelerGuard: CanActivateFn = () => {
     return false;
   }
 
-  if (auth.userType() === 'hotel_admin') {
+  if (auth.userType() === 'hotel') {
     router.navigate(['/hotel-home']);
     return false;
   }
@@ -38,7 +38,7 @@ export const hotelAdminGuard: CanActivateFn = () => {
     return false;
   }
 
-  if (auth.userType() !== 'hotel_admin') {
+  if (auth.userType() !== 'hotel') {
     router.navigate(['/home']);
     return false;
   }
@@ -52,7 +52,7 @@ export const guestGuard: CanActivateFn = () => {
 
   if (!auth.isAuthenticated()) return true;
 
-  if (auth.userType() === 'hotel_admin') {
+  if (auth.userType() === 'hotel') {
     router.navigate(['/hotel-home']);
   } else {
     router.navigate(['/home']);
