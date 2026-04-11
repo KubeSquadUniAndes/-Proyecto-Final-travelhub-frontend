@@ -27,9 +27,8 @@ export class LoginComponent {
     this.isLoading.set(true);
 
     this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: () => {
-        const userType = this.authService.userType();
-        this.router.navigate([userType === 'hotel_admin' ? '/hotel-home' : '/home']);
+      next: (profile) => {
+        this.router.navigate([profile.role === 'hotel' ? '/hotel-home' : '/home']);
       },
       error: (err) => {
         this.errorMessage.set(parseApiError(err, 'Credenciales incorrectas. Intenta de nuevo.'));

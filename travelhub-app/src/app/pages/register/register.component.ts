@@ -69,7 +69,7 @@ export class RegisterComponent {
       city: v.city!,
       birth_date: v.birth_date!,
       password: v.password!,
-      user_type: v.user_type as 'traveler' | 'hotel_admin',
+      user_type: v.user_type as 'traveler' | 'hotel',
       identification_type: v.identification_type!,
       identification_number: v.identification_number!,
     };
