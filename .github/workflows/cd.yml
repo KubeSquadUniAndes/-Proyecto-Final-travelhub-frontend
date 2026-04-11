@@ -1,18 +1,17 @@
 name: CD Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI Pipeline"]
     branches: [main]
-
-defaults:
-  run:
-    working-directory: travelhub-app
+    types: [completed]
 
 jobs:
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v6
 
@@ -24,12 +23,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: travelhub-app
 
       - name: Build production
         run: npx ng build --configuration production
+        working-directory: travelhub-app
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -37,6 +38,7 @@ jobs:
 
       - name: Deploy to S3
         run: aws s3 sync dist/travelhub-app/browser/ s3://travelhub-frontend-prod --delete
+        working-directory: travelhub-app
 
       - name: Invalidate CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
