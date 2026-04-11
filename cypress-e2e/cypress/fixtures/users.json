@@ -1,0 +1,38 @@
+{
+  "validUser": {
+    "firstName": "Test",
+    "lastName": "Automation",
+    "email": "test.automation@travelhub.com",
+    "phone": "+57 300 999 8888",
+    "country": "Colombia",
+    "city": "Medellín",
+    "birthDate": "1995-06-15",
+    "idType": "CC",
+    "idNumber": "9876543210",
+    "userType": "traveler",
+    "password": "TestPass123!",
+    "confirmPassword": "TestPass123!"
+  },
+  "validHotelUser": {
+    "firstName": "Hotel",
+    "lastName": "Admin",
+    "email": "hotel.admin@travelhub.com",
+    "phone": "+57 300 777 6666",
+    "country": "Colombia",
+    "city": "Cartagena",
+    "birthDate": "1985-03-20",
+    "idType": "CC",
+    "idNumber": "1122334455",
+    "userType": "hotel",
+    "password": "HotelPass123!",
+    "confirmPassword": "HotelPass123!"
+  },
+  "existingUser": {
+    "email": "juan.perez@example.com",
+    "password": "SecurePass123!"
+  },
+  "hotelUser": {
+    "email": "hotel.test.1234@travelhub.com",
+    "password": "HotelPass123!"
+  }
+}
