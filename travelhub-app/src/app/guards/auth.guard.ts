@@ -12,12 +12,50 @@ export const authGuard: CanActivateFn = () => {
   return false;
 };
 
+export const travelerGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (!auth.isAuthenticated()) {
+    router.navigate(['/login']);
+    return false;
+  }
+
+  if (auth.userType() === 'hotel_admin') {
+    router.navigate(['/hotel-home']);
+    return false;
+  }
+
+  return true;
+};
+
+export const hotelAdminGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (!auth.isAuthenticated()) {
+    router.navigate(['/login']);
+    return false;
+  }
+
+  if (auth.userType() !== 'hotel_admin') {
+    router.navigate(['/home']);
+    return false;
+  }
+
+  return true;
+};
+
 export const guestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) return true;
 
-  router.navigate(['/home']);
+  if (auth.userType() === 'hotel_admin') {
+    router.navigate(['/hotel-home']);
+  } else {
+    router.navigate(['/home']);
+  }
   return false;
 };

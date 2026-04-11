@@ -11,12 +11,11 @@ export class AuthService {
   private router = inject(Router);
 
   private readonly usersUrl = `${environment.apiUrl}/users/api/v1/users`;
-  private readonly authUrl = `${environment.apiUrl}/auth/api/v1/auth`;
+  private readonly authUrl = `${environment.apiUrl}/login-handler/api/v1/auth`;
   private readonly headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
 
-  // Signals de estado
   private _token = signal<string | null>(localStorage.getItem('access_token'));
   private _user = signal<LoginResponse['user'] | null>(
     JSON.parse(localStorage.getItem('user') ?? 'null')
@@ -24,6 +23,7 @@ export class AuthService {
 
   readonly isAuthenticated = computed(() => !!this._token());
   readonly currentUser = computed(() => this._user());
+  readonly userType = computed(() => this._user()?.user_type ?? null);
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.usersUrl}/register`, data, {
