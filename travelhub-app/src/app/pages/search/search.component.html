@@ -1,20 +1,50 @@
 <div class="search-container">
   <header>
-    <div class="logo">TravelHub</div>
-    <button (click)="goBack()">Volver</button>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Inicio</a>
+        <a class="active" (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hoteles</a>
+        @if (userType() === 'hotel') {
+          <a (click)="navigate('/dashboard')" (keydown.enter)="navigate('/dashboard')" tabindex="0">Dashboard</a>
+        }
+      </nav>
+      <div class="header-actions">
+        <button class="btn-reservas" (click)="navigate('/dashboard')">Mis Reservas</button>
+        <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
 
   <main>
-    <h1>Buscar Hoteles</h1>
+    <div class="search-header">
+      <h1>Buscar Hoteles</h1>
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          name="searchQuery"
+          placeholder="Buscar por nombre de hotel..."
+          class="search-input"
+        />
+      </div>
+    </div>
 
     <div class="hotels-list">
-      @for (hotel of hotels; track hotel) {
+      @for (hotel of filteredHotels; track hotel.id) {
         <div class="hotel-card">
           <h3>{{ hotel.name }}</h3>
           <p>Precio: ${{ hotel.price }} / noche</p>
-          <p>Rating: {{ hotel.rating }} ⭐</p>
+          <p>Calificación: {{ hotel.rating }} ⭐</p>
           <button (click)="goToCheckout(hotel.id)">Reservar</button>
         </div>
+      }
+      @if (filteredHotels.length === 0) {
+        <p class="no-results">No se encontraron hoteles para "{{ searchQuery }}"</p>
       }
     </div>
   </main>

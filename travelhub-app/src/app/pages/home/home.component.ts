@@ -15,6 +15,8 @@ export class HomeComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
 
+  readonly userType = this.authService.userType;
+
   destino = '';
   checkIn = '';
   checkOut = '';
