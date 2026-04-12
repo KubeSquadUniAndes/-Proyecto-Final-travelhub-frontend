@@ -1,0 +1,20 @@
+{
+  "name": "travelhub-e2e",
+  "version": "1.0.0",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:register": "cypress run --spec 'cypress/e2e/register.cy.ts'",
+    "cy:run:login": "cypress run --spec 'cypress/e2e/login.cy.ts'"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "cypress": "^13.0.0",
+    "typescript": "~5.9.2"
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
