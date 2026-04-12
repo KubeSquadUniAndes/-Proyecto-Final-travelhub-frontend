@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "travelhub-frontend-prod"
+    bucket  = "travelhub-tfstate-universidad"
     key     = "terraform/state.tfstate"
     region  = "us-east-1"
   }
