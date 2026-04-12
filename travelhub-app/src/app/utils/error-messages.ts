@@ -40,6 +40,7 @@ export function parseApiError(err: { error?: { detail?: unknown } }, fallback: s
   }
 
   if (typeof detail === 'string') {
+    if (detail.includes('already registered')) return 'Este correo ya está registrado.';
     return MSG_MAP[detail] ?? detail;
   }
 

@@ -8,8 +8,10 @@
       </a>
       <nav>
         <a class="active" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
-        <a (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hotels</a>
-        <a (click)="navigate('/dashboard')" (keydown.enter)="navigate('/dashboard')" tabindex="0">Dashboard</a>
+        <a (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hoteles</a>
+        @if (userType() === 'hotel') {
+          <a (click)="navigate('/dashboard')" (keydown.enter)="navigate('/dashboard')" tabindex="0">Dashboard</a>
+        }
       </nav>
       <div class="header-actions">
         <button class="btn-reservas" (click)="navigate('/dashboard')">Mis Reservas</button>
