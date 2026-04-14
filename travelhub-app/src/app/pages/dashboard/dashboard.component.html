@@ -1,4 +1,117 @@
-<div class="dashboard-container">
-  <h1>Dashboard</h1>
-  <!-- TODO: Implementar según wireframe -->
+<div class="dashboard-page">
+  <header>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a class="active">Mis Reservas</a>
+      </nav>
+      <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main>
+    <h1>Mis Reservas</h1>
+
+    @if (isLoading()) {
+      <div class="loading">Cargando reservas...</div>
+    } @else if (hasError()) {
+      <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <h2>Error al cargar las reservas</h2>
+        <p>No pudimos obtener tus reservas. Verifica tu conexión e intenta de nuevo.</p>
+        <button class="btn-primary" (click)="loadReservas()">Reintentar</button>
+      </div>
+    } @else if (allReservas().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🧳</div>
+        <h2>No tienes reservas aún</h2>
+        <p>Explora hospedajes y realiza tu primera reserva.</p>
+        <button class="btn-primary" (click)="navigate('/search')">Buscar hospedaje</button>
+      </div>
+    } @else {
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label for="search">Buscar</label>
+          <input id="search" type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); currentPage.set(1)" name="search" placeholder="Código o hotel..." />
+        </div>
+        <div class="filter-group">
+          <label for="estado">Estado</label>
+          <select id="estado" [ngModel]="estadoFilter()" (ngModelChange)="estadoFilter.set($event); currentPage.set(1)" name="estado">
+            <option value="">Todos</option>
+            <option value="Pendiente de pago">Pendiente de pago</option>
+            <option value="Confirmada">Confirmada</option>
+            <option value="Cancelada">Cancelada</option>
+            <option value="Completada">Completada</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="desde">Desde</label>
+          <input id="desde" type="date" [ngModel]="fechaDesde()" (ngModelChange)="fechaDesde.set($event); currentPage.set(1)" name="desde" />
+        </div>
+        <div class="filter-group">
+          <label for="hasta">Hasta</label>
+          <input id="hasta" type="date" [ngModel]="fechaHasta()" (ngModelChange)="fechaHasta.set($event); currentPage.set(1)" name="hasta" />
+        </div>
+        @if (hasFilters()) {
+          <button class="btn-clear" (click)="clearFilters()">Limpiar</button>
+        }
+      </div>
+
+      @if (filteredReservas().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h2>Sin resultados</h2>
+          <p>No hay reservas que coincidan con los filtros.</p>
+          <button class="btn-primary" (click)="clearFilters()">Limpiar filtros</button>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Hotel</th>
+                <th>Ciudad</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Huéspedes</th>
+                <th>Estado</th>
+                <th>Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of paginatedReservas(); track r.codigo) {
+                <tr>
+                  <td class="code">{{ r.codigo }}</td>
+                  <td>{{ r.hotel }}</td>
+                  <td>{{ r.ciudad }}</td>
+                  <td>{{ r.checkIn }}</td>
+                  <td>{{ r.checkOut }}</td>
+                  <td>{{ r.huespedes }}</td>
+                  <td><span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span></td>
+                  <td class="monto">$ {{ r.monto | number }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-label">{{ paginationLabel() }}</span>
+          <div class="pagination-controls">
+            <button [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">Anterior</button>
+            @for (p of getPages(); track p) {
+              <button [class.active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+            }
+            <button [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">Siguiente</button>
+          </div>
+        </div>
+      }
+    }
+  </main>
 </div>
