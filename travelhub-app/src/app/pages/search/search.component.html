@@ -1,4 +1,5 @@
-<div class="search-container">
+<div class="search-page">
+  <!-- Header -->
   <header>
     <div class="header-content">
       <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
@@ -6,11 +7,8 @@
         <span>TravelHub</span>
       </a>
       <nav>
-        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Inicio</a>
-        <a class="active" (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hoteles</a>
-        @if (userType() === 'hotel') {
-          <a (click)="navigate('/dashboard')" (keydown.enter)="navigate('/dashboard')" tabindex="0">Dashboard</a>
-        }
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a class="active">Hoteles</a>
       </nav>
       <div class="header-actions">
         <button class="btn-reservas" (click)="navigate('/dashboard')">Mis Reservas</button>
@@ -19,33 +17,86 @@
     </div>
   </header>
 
-  <main>
-    <div class="search-header">
-      <h1>Buscar Hoteles</h1>
-      <div class="search-input-wrapper">
-        <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          name="searchQuery"
-          placeholder="Buscar por nombre de hotel..."
-          class="search-input"
-        />
-      </div>
-    </div>
+  <div class="content">
+    <!-- Filters -->
+    <aside class="filters">
+      <h2>Filtros de búsqueda</h2>
 
-    <div class="hotels-list">
-      @for (hotel of filteredHotels; track hotel.id) {
-        <div class="hotel-card">
-          <h3>{{ hotel.name }}</h3>
-          <p>Precio: ${{ hotel.price }} / noche</p>
-          <p>Calificación: {{ hotel.rating }} ⭐</p>
-          <button (click)="goToCheckout(hotel.id)">Reservar</button>
+      <div class="filter-group">
+        <label for="f-destino">Ubicación</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📍</span>
+          <input id="f-destino" type="text" [ngModel]="destino()" (ngModelChange)="destino.set($event)" name="destino" placeholder="Ciudad o destino" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-checkin">Check-in</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📅</span>
+          <input id="f-checkin" type="date" [ngModel]="checkIn()" (ngModelChange)="checkIn.set($event)" name="checkIn" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-checkout">Check-out</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📅</span>
+          <input id="f-checkout" type="date" [ngModel]="checkOut()" (ngModelChange)="checkOut.set($event)" name="checkOut" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-huespedes">Huéspedes</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input id="f-huespedes" type="number" [ngModel]="huespedes()" (ngModelChange)="huespedes.set($event)" name="huespedes" min="1" max="20" />
+        </div>
+      </div>
+
+      @if (hasFilters()) {
+        <button class="btn-clear" (click)="clearFilters()">Limpiar filtros</button>
+      }
+    </aside>
+
+    <!-- Results -->
+    <main>
+      <div class="results-header">
+        <h1>Hospedajes disponibles</h1>
+        <p>{{ filteredHospedajes().length }} resultados encontrados</p>
+      </div>
+
+      @if (filteredHospedajes().length > 0) {
+        <div class="hotels-grid">
+          @for (hotel of filteredHospedajes(); track hotel.id) {
+            <div class="hotel-card">
+              <div class="hotel-image">
+                <img [src]="hotel.image" [alt]="hotel.name" loading="lazy" />
+                <span class="hotel-rating">⭐ {{ hotel.rating }}</span>
+              </div>
+              <div class="hotel-info">
+                <h3>{{ hotel.name }}</h3>
+                <p class="hotel-location">📍 {{ hotel.location }}</p>
+                <p class="hotel-capacity">👥 Hasta {{ hotel.capacity }} huéspedes</p>
+                <div class="hotel-footer">
+                  <div class="hotel-price">
+                    <span class="price-value">$ {{ hotel.price | number }}</span>
+                    <span class="price-label">/ noche</span>
+                  </div>
+                  <button class="btn-reservar" (click)="goToCheckout(hotel.id)">Reservar</button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h2>No se encontraron hospedajes</h2>
+          <p>No hay hospedajes que coincidan con los filtros seleccionados. Intenta ajustar tu búsqueda.</p>
+          <button class="btn-clear-large" (click)="clearFilters()">Limpiar filtros</button>
         </div>
       }
-      @if (filteredHotels.length === 0) {
-        <p class="no-results">No se encontraron hoteles para "{{ searchQuery }}"</p>
-      }
-    </div>
-  </main>
+    </main>
+  </div>
 </div>
