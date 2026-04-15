@@ -104,8 +104,8 @@
 
   <!-- Reject Modal -->
   @if (showRejectModal()) {
-    <div class="modal-overlay" (click)="cancelReject()">
-      <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-overlay" (click)="cancelReject()" (keydown.escape)="cancelReject()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="cancelReject()" tabindex="0">
         <h2>Rechazar Reserva</h2>
         <p>Reserva <strong>{{ rejectingReserva()?.id }}</strong> de <strong>{{ rejectingReserva()?.huesped }}</strong></p>
         <label for="rejectReason">Motivo del rechazo *</label>
