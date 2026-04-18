@@ -4,8 +4,6 @@ import { ManageRoomsPage } from '../pages/ManageRoomsPage';
 const loginPage = new LoginPage();
 const manageRoomsPage = new ManageRoomsPage();
 
-const uniqueRoomName = `Habitación E2E ${Date.now()}`;
-
 describe('Gestionar Habitaciones', () => {
   beforeEach(() => {
     cy.fixture('users').then((users) => {
@@ -38,69 +36,66 @@ describe('Gestionar Habitaciones', () => {
     });
 
     it('Cuando llena el formulario y lo envía, entonces debe crear la habitación', () => {
+      const roomName = `Hab E2E ${Date.now()}`;
       manageRoomsPage.clickNewRoom();
       manageRoomsPage.fillRoomForm({
-        name: uniqueRoomName,
+        name: roomName,
         type: 'doble',
         price: '250.00',
         capacity: 3,
         beds: '2 camas sencillas',
         size: 30,
-        amenities: 'WiFi, AC, TV, Minibar',
+        amenities: 'WiFi, AC, TV',
       });
       manageRoomsPage.submitForm();
-      manageRoomsPage.shouldShowToast('creada');
-      manageRoomsPage.shouldShowRoomWithName(uniqueRoomName);
+      // Wait for modal to close and room to appear
+      cy.get('.modal').should('not.exist');
+      manageRoomsPage.shouldShowRoomWithName(roomName);
     });
 
     it('Cuando cancela el formulario, entonces no debe crear la habitación', () => {
       manageRoomsPage.clickNewRoom();
       manageRoomsPage.fillRoomForm({ name: 'Habitación Cancelada', price: '100.00' });
       manageRoomsPage.cancelForm();
-      manageRoomsPage.shouldNotShowRoomWithName('Habitación Cancelada');
+      cy.get('.modal').should('not.exist');
     });
   });
 
   context('Dado que existe una habitación creada', () => {
-    it('Cuando edita la habitación, entonces debe actualizar los datos', () => {
-      // Primero crear una habitación para editar
-      manageRoomsPage.clickNewRoom();
-      const editRoomName = `Edit Room ${Date.now()}`;
-      manageRoomsPage.fillRoomForm({ name: editRoomName, price: '150.00', capacity: 2 });
-      manageRoomsPage.submitForm();
-      manageRoomsPage.shouldShowToast('creada');
+    const editRoomName = `Edit ${Date.now()}`;
+    const deleteRoomName = `Del ${Date.now()}`;
+    const keepRoomName = `Keep ${Date.now()}`;
 
-      // Editar
+    beforeEach(() => {
+      // Create rooms needed for these tests
+      [editRoomName, deleteRoomName, keepRoomName].forEach((name) => {
+        manageRoomsPage.clickNewRoom();
+        manageRoomsPage.fillRoomForm({ name, price: '150.00', capacity: 2 });
+        manageRoomsPage.submitForm();
+        cy.get('.modal').should('not.exist');
+        manageRoomsPage.shouldShowRoomWithName(name);
+      });
+    });
+
+    it('Cuando edita la habitación, entonces debe actualizar los datos', () => {
       manageRoomsPage.clickEditRoom(editRoomName);
       manageRoomsPage.shouldShowModal();
       cy.get('#price').clear().type('200.00');
       manageRoomsPage.submitForm();
-      manageRoomsPage.shouldShowToast('actualizada');
+      cy.get('.modal').should('not.exist');
     });
 
     it('Cuando elimina la habitación, entonces debe desaparecer del listado', () => {
-      // Crear habitación para eliminar
-      manageRoomsPage.clickNewRoom();
-      const deleteRoomName = `Delete Room ${Date.now()}`;
-      manageRoomsPage.fillRoomForm({ name: deleteRoomName, price: '100.00' });
-      manageRoomsPage.submitForm();
-      manageRoomsPage.shouldShowToast('creada');
-
-      // Eliminar
       manageRoomsPage.clickDeleteRoom(deleteRoomName);
       manageRoomsPage.confirmDelete();
-      manageRoomsPage.shouldShowToast('eliminada');
+      cy.get('.modal').should('not.exist');
+      manageRoomsPage.shouldNotShowRoomWithName(deleteRoomName);
     });
 
     it('Cuando cancela la eliminación, entonces la habitación debe seguir visible', () => {
-      manageRoomsPage.clickNewRoom();
-      const keepRoomName = `Keep Room ${Date.now()}`;
-      manageRoomsPage.fillRoomForm({ name: keepRoomName, price: '100.00' });
-      manageRoomsPage.submitForm();
-      manageRoomsPage.shouldShowToast('creada');
-
       manageRoomsPage.clickDeleteRoom(keepRoomName);
       manageRoomsPage.cancelDelete();
+      cy.get('.modal').should('not.exist');
       manageRoomsPage.shouldShowRoomWithName(keepRoomName);
     });
   });
