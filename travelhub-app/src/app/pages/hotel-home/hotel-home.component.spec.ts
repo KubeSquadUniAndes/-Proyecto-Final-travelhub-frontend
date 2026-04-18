@@ -213,7 +213,7 @@ describe('HotelHomeComponent', () => {
 
     it('should render navigation links', () => {
       const navLinks = fixture.nativeElement.querySelectorAll('nav a, nav button');
-      expect(navLinks.length).toBe(2);
+      expect(navLinks.length).toBe(3);
     });
 
     it('should render sidebar menu items', () => {
