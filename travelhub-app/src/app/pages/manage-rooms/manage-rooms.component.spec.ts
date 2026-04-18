@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { ManageRoomsComponent } from './manage-rooms.component';
 import { AuthService } from '../../services/auth.service';
 import { Room } from '../../services/rooms.service';
