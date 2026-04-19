@@ -1,4 +1,198 @@
-<div class="dashboard-container">
-  <h1>Dashboard</h1>
-  <!-- TODO: Implementar según wireframe -->
+<div class="dashboard-page">
+  <header>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a class="active">Mis Reservas</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-new" (click)="navigate('/search')">+ Nueva Reserva</button>
+        <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  @if (toastMessage()) {
+    <div class="toast" [class.toast-error]="toastType() === 'error'">{{ toastMessage() }}</div>
+  }
+
+  <main>
+    <h1>Mis Reservas</h1>
+
+    @if (isLoading()) {
+      <div class="loading">Cargando reservas...</div>
+    } @else if (hasError()) {
+      <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <h2>Error al cargar las reservas</h2>
+        <p>No pudimos obtener tus reservas. Verifica tu conexión e intenta de nuevo.</p>
+        <button class="btn-primary" (click)="loadReservas()">Reintentar</button>
+      </div>
+    } @else if (allReservas().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🧳</div>
+        <h2>No tienes reservas aún</h2>
+        <p>Explora hospedajes y realiza tu primera reserva.</p>
+        <button class="btn-primary" (click)="navigate('/search')">Buscar hospedaje</button>
+      </div>
+    } @else {
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label for="search">Buscar</label>
+          <input id="search" type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); currentPage.set(1)" name="search" placeholder="ID, nombre o tipo..." />
+        </div>
+        <div class="filter-group">
+          <label for="estado">Estado</label>
+          <select id="estado" [ngModel]="estadoFilter()" (ngModelChange)="estadoFilter.set($event); currentPage.set(1)" name="estado">
+            <option value="">Todos</option>
+            <option value="pending">Pendiente</option>
+            <option value="confirmed">Confirmada</option>
+            <option value="cancelled">Cancelada</option>
+            <option value="completed">Completada</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="desde">Desde</label>
+          <input id="desde" type="date" [ngModel]="fechaDesde()" (ngModelChange)="fechaDesde.set($event); currentPage.set(1)" name="desde" />
+        </div>
+        <div class="filter-group">
+          <label for="hasta">Hasta</label>
+          <input id="hasta" type="date" [ngModel]="fechaHasta()" (ngModelChange)="fechaHasta.set($event); currentPage.set(1)" name="hasta" />
+        </div>
+        @if (hasFilters()) {
+          <button class="btn-clear" (click)="clearFilters()">Limpiar</button>
+        }
+      </div>
+
+      @if (filteredReservas().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h2>Sin resultados</h2>
+          <p>No hay reservas que coincidan con los filtros.</p>
+          <button class="btn-primary" (click)="clearFilters()">Limpiar filtros</button>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Huéspedes</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of paginatedReservas(); track r.id) {
+                <tr>
+                  <td class="code">{{ r.booking_code || (r.id | slice:0:8) }}</td>
+                  <td>{{ r.room_type }}</td>
+                  <td>{{ formatDate(r.start_time) }}</td>
+                  <td>{{ formatDate(r.end_time) }}</td>
+                  <td>{{ r.num_guests }}</td>
+                  <td class="monto">$ {{ r.final_price || r.price_per_night }}</td>
+                  <td><span class="status" [ngClass]="estadoClass(r.status)">{{ r.status_display || estadoLabel(r.status) }}</span></td>
+                  <td>
+                    <div class="actions">
+                      <button class="btn-action" title="Ver detalle" (click)="viewDetail(r)">📋</button>
+                      <button class="btn-action" title="Editar" (click)="openEdit(r)">✏️</button>
+                      @if (r.cancellable) {
+                        <button class="btn-action btn-cancel-action" title="Cancelar" (click)="openCancel(r)">❌</button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+                @if (selectedBooking()?.id === r.id) {
+                  <tr class="detail-row">
+                    <td colspan="8">
+                      <div class="detail-grid">
+                        <div class="detail-item"><span>Código</span><span>{{ r.booking_code }}</span></div>
+                        <div class="detail-item"><span>Viajero</span><span>{{ r.traveler_name }}</span></div>
+                        <div class="detail-item"><span>Email</span><span>{{ r.traveler_email }}</span></div>
+                        <div class="detail-item"><span>Teléfono</span><span>{{ r.traveler_phone }}</span></div>
+                        <div class="detail-item"><span>Documento</span><span>{{ r.traveler_document }}</span></div>
+                        <div class="detail-item"><span>Tipo habitación</span><span>{{ r.room_type }}</span></div>
+                        <div class="detail-item"><span>Noches</span><span>{{ r.total_nights }}</span></div>
+                        <div class="detail-item"><span>Huéspedes</span><span>{{ r.num_guests }}</span></div>
+                        <div class="detail-item"><span>Precio/noche</span><span>$ {{ r.price_per_night }}</span></div>
+                        <div class="detail-item"><span>Subtotal</span><span>$ {{ r.total_price }}</span></div>
+                        <div class="detail-item"><span>Impuestos</span><span>$ {{ r.taxes }}</span></div>
+                        <div class="detail-item"><span>Total</span><span class="total-highlight">$ {{ r.final_price }}</span></div>
+                        @if (r.special_requests) {
+                          <div class="detail-item full"><span>Solicitudes especiales</span><span>{{ r.special_requests }}</span></div>
+                        }
+                        @if (r.notes) {
+                          <div class="detail-item full"><span>Notas</span><span>{{ r.notes }}</span></div>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="pagination-label">{{ paginationLabel() }}</span>
+          <div class="pagination-controls">
+            <button [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">Anterior</button>
+            @for (p of getPages(); track p) {
+              <button [class.active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+            }
+            <button [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">Siguiente</button>
+          </div>
+        </div>
+      }
+    }
+  </main>
+
+  <!-- Edit Modal -->
+  @if (showEditModal()) {
+    <div class="modal-overlay" (click)="closeEdit()" (keydown.escape)="closeEdit()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="closeEdit()" tabindex="0">
+        <h2>Editar Reserva</h2>
+        <p>Reserva <strong>{{ editingBooking()?.booking_code }}</strong></p>
+        <div class="form-group">
+          <label for="edit-start">Check-in</label>
+          <input id="edit-start" type="date" [(ngModel)]="editForm.start_time" name="editStart" />
+        </div>
+        <div class="form-group">
+          <label for="edit-end">Check-out</label>
+          <input id="edit-end" type="date" [(ngModel)]="editForm.end_time" name="editEnd" />
+        </div>
+        <div class="form-group">
+          <label for="edit-notes">Notas</label>
+          <textarea id="edit-notes" [(ngModel)]="editForm.notes" name="editNotes" rows="3" placeholder="Llegada tarde, etc."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" (click)="closeEdit()">Cancelar</button>
+          <button class="btn-primary" (click)="saveEdit()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Cancel Modal -->
+  @if (showCancelModal()) {
+    <div class="modal-overlay" (click)="closeCancel()" (keydown.escape)="closeCancel()" tabindex="0">
+      <div class="modal modal-sm" (click)="$event.stopPropagation()" (keydown.escape)="closeCancel()" tabindex="0">
+        <h2>Cancelar Reserva</h2>
+        <p>¿Estás seguro de cancelar la reserva <strong>{{ cancellingBooking()?.booking_code }}</strong>? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" (click)="closeCancel()">Volver</button>
+          <button class="btn-danger" (click)="confirmCancel()">Cancelar Reserva</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

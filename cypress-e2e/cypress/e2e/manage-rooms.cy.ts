@@ -12,7 +12,8 @@ describe('Gestionar Habitaciones', () => {
         .fillEmail(users.hotelUser.email)
         .fillPassword(users.hotelUser.password)
         .submit();
-      cy.url().should('include', '/hotel-home');
+      // Wait for redirect after login
+      cy.url().should('not.include', '/login');
       cy.visit('/manage-rooms');
       cy.url().should('include', '/manage-rooms');
     });

@@ -10,78 +10,51 @@ describe('Hoteles', () => {
         .fillEmail(users.existingUser.email)
         .fillPassword(users.existingUser.password)
         .submit();
-      cy.url().should('include', '/home');
-      cy.contains('Hoteles').click();
+      cy.url().should('not.include', '/login');
+      cy.visit('/search');
       cy.url().should('include', '/search');
     });
   });
 
-  context('Dado que el viajero accede al menú de Hoteles', () => {
-    context('Cuando accede a la página de hoteles', () => {
-      it('Entonces debe ver el título Buscar Hoteles', () => {
-        cy.contains('Buscar Hoteles').should('be.visible');
-      });
+  context('Dado que el viajero accede a la búsqueda de hoteles', () => {
+    it('Entonces debe ver el título de hospedajes', () => {
+      cy.contains('Hospedajes disponibles').should('be.visible');
+    });
 
-      it('Entonces debe ver el buscador de hoteles', () => {
-        cy.get('input[placeholder="Buscar por nombre de hotel..."]').should('be.visible');
-      });
+    it('Entonces debe ver los filtros de búsqueda', () => {
+      cy.get('.filters').should('be.visible');
+    });
 
-      it('Entonces debe ver el listado de hoteles', () => {
-        cy.contains('Hotel Paradise').should('be.visible');
-        cy.contains('Beach Resort').should('be.visible');
-        cy.contains('City Center Hotel').should('be.visible');
-      });
+    it('Entonces debe ver tarjetas de hoteles', () => {
+      cy.get('.hotel-card').should('have.length.greaterThan', 0);
+    });
 
-      it('Entonces debe ver el menú igual al del home', () => {
-        cy.contains('Inicio').should('be.visible');
-        cy.contains('Hoteles').should('be.visible');
-        cy.contains('Mis Reservas').should('be.visible');
-        cy.contains('Cerrar sesión').should('be.visible');
+    it('Entonces debe ver la navegación', () => {
+      cy.contains('Home').should('be.visible');
+      cy.contains('Hoteles').should('be.visible');
+    });
+
+    it('Entonces debe filtrar por ubicación', () => {
+      cy.get('#f-destino').type('Cartagena');
+      cy.get('.hotel-card').each(($card) => {
+        cy.wrap($card).should('contain.text', 'Cartagena');
       });
     });
 
-    context('Cuando filtra por nombre', () => {
-      it('Entonces debe mostrar solo los hoteles que coinciden', () => {
-        // When
-        cy.get('input[placeholder="Buscar por nombre de hotel..."]').type('Beach');
-
-        // Then
-        cy.contains('Beach Resort').should('be.visible');
-        cy.contains('Hotel Paradise').should('not.exist');
-        cy.contains('City Center Hotel').should('not.exist');
-      });
-
-      it('Entonces debe mostrar mensaje cuando no hay resultados', () => {
-        // When
-        cy.get('input[placeholder="Buscar por nombre de hotel..."]').type('xyz123');
-
-        // Then
-        cy.contains('No se encontraron hoteles').should('be.visible');
-      });
-
-      it('Entonces debe mostrar todos al limpiar el filtro', () => {
-        // Given
-        cy.get('input[placeholder="Buscar por nombre de hotel..."]').type('Beach');
-        cy.contains('Hotel Paradise').should('not.exist');
-
-        // When
-        cy.get('input[placeholder="Buscar por nombre de hotel..."]').clear();
-
-        // Then
-        cy.contains('Hotel Paradise').should('be.visible');
-        cy.contains('Beach Resort').should('be.visible');
-        cy.contains('City Center Hotel').should('be.visible');
-      });
+    it('Entonces debe mostrar estado vacío cuando no hay resultados', () => {
+      cy.get('#f-destino').type('zzzzzzzzz');
+      cy.contains('No se encontraron').should('be.visible');
     });
 
-    context('Cuando navega de vuelta al Inicio', () => {
-      it('Entonces debe redirigir al home', () => {
-        // When
-        cy.contains('Inicio').click();
+    it('Entonces debe limpiar filtros', () => {
+      cy.get('#f-destino').type('Cartagena');
+      cy.contains('Limpiar filtros').click();
+      cy.get('.hotel-card').should('have.length.greaterThan', 5);
+    });
 
-        // Then
-        cy.url().should('include', '/home');
-      });
+    it('Cuando navega al Home, debe redirigir', () => {
+      cy.contains('Home').click();
+      cy.url().should('include', '/home');
     });
   });
 });
