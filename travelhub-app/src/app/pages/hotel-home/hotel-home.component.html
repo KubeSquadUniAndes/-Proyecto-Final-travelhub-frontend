@@ -14,8 +14,13 @@
     </div>
   </header>
 
+  <!-- Toast -->
+  @if (toastMessage()) {
+    <div class="toast" [class.toast-error]="toastType() === 'error'">{{ toastMessage() }}</div>
+  }
+
   <div class="content">
-    <!-- Sidebar Menu -->
+    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Gestión</h3>
       <div class="menu">
@@ -25,6 +30,11 @@
             <span>{{ item.label }}</span>
           </button>
         }
+      </div>
+      <div class="sidebar-stats">
+        <div class="mini-stat"><span>Pendientes</span><span class="mini-value pending">{{ pendingCount() }}</span></div>
+        <div class="mini-stat"><span>Confirmadas</span><span class="mini-value confirmed">{{ confirmedCount() }}</span></div>
+        <div class="mini-stat"><span>Rechazadas</span><span class="mini-value rejected">{{ rejectedCount() }}</span></div>
       </div>
     </aside>
 
@@ -61,10 +71,8 @@
                 <div class="reserva-actions">
                   <button class="btn-icon" title="Ver detalle" (click)="onMenuAction('detail', r)">📋</button>
                   @if (r.estado === 'Pendiente') {
-                    <button class="btn-icon" title="Aprobar" (click)="onMenuAction('approve', r)">✅</button>
-                  }
-                  @if (r.estado !== 'Completada' && r.estado !== 'Cancelada') {
-                    <button class="btn-icon" title="Cancelar" (click)="onMenuAction('cancel', r)">❌</button>
+                    <button class="btn-approve-sm" title="Aprobar" (click)="onMenuAction('approve', r)">✅ Aprobar</button>
+                    <button class="btn-reject-sm" title="Rechazar" (click)="onMenuAction('reject', r)">❌ Rechazar</button>
                   }
                 </div>
               </div>
@@ -77,6 +85,9 @@
                   <div class="detail-row"><span>Check-in</span><span>{{ r.checkIn }}</span></div>
                   <div class="detail-row"><span>Check-out</span><span>{{ r.checkOut }}</span></div>
                   <div class="detail-row"><span>Estado</span><span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span></div>
+                  @if (r.rejectReason) {
+                    <div class="detail-row"><span>Motivo rechazo</span><span>{{ r.rejectReason }}</span></div>
+                  }
                 </div>
               }
             </div>
@@ -86,9 +97,25 @@
         <div class="empty-state">
           <div class="empty-icon">🏨</div>
           <h2>No hay reservas disponibles</h2>
-          <p>Tu hotel aún no tiene reservas registradas. Las nuevas reservas aparecerán aquí automáticamente.</p>
+          <p>Tu hotel aún no tiene reservas registradas.</p>
         </div>
       }
     </main>
   </div>
+
+  <!-- Reject Modal -->
+  @if (showRejectModal()) {
+    <div class="modal-overlay" (click)="cancelReject()" (keydown.escape)="cancelReject()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="cancelReject()" tabindex="0">
+        <h2>Rechazar Reserva</h2>
+        <p>Reserva <strong>{{ rejectingReserva()?.id }}</strong> de <strong>{{ rejectingReserva()?.huesped }}</strong></p>
+        <label for="rejectReason">Motivo del rechazo *</label>
+        <textarea id="rejectReason" [(ngModel)]="rejectReason" name="rejectReason" placeholder="Ingresa el motivo del rechazo..." rows="3"></textarea>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" (click)="cancelReject()">Cancelar</button>
+          <button class="btn-modal-reject" [disabled]="!rejectReason.trim()" (click)="confirmReject()">Confirmar Rechazo</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
