@@ -80,3 +80,39 @@ nav a:hover, nav a.active { color: #2563eb; }
   nav { display: none; }
   .hotel-badge { display: none; }
 }
+
+/* Toast */
+.toast { position: fixed; top: 80px; right: 32px; background: #dcfce7; color: #008236; padding: 14px 24px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; }
+.toast-error { background: #fee2e2; color: #c10007; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Approve/Reject buttons */
+.btn-approve-sm, .btn-reject-sm { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+.btn-approve-sm { background: #dcfce7; color: #008236; }
+.btn-approve-sm:hover { background: #008236; color: #fff; }
+.btn-reject-sm { background: #fee2e2; color: #c10007; }
+.btn-reject-sm:hover { background: #c10007; color: #fff; }
+
+/* Sidebar stats */
+.sidebar-stats { margin-top: 20px; padding-top: 16px; border-top: 1px solid #f3f4f6; display: flex; flex-direction: column; gap: 8px; }
+.mini-stat { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #364153; }
+.mini-value { font-weight: 700; font-size: 16px; }
+.mini-value.pending { color: #a66f00; }
+.mini-value.confirmed { color: #008236; }
+.mini-value.rejected { color: #c10007; }
+
+/* Rejected status */
+.status-rejected { background: #fce4ec; color: #c10007; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; }
+.modal { background: #fff; border-radius: 14px; padding: 32px; width: 100%; max-width: 480px; }
+.modal h2 { font-size: 20px; font-weight: 700; color: #101828; margin: 0 0 8px; }
+.modal p { font-size: 14px; color: #4a5565; margin: 0 0 20px; }
+.modal label { font-size: 14px; font-weight: 600; color: #364153; display: block; margin-bottom: 6px; }
+.modal textarea { width: 100%; padding: 12px; border: 1px solid #d1d5dc; border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; resize: vertical; box-sizing: border-box; }
+.modal textarea:focus { outline: none; border-color: #155dfc; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+.btn-modal-cancel { padding: 10px 20px; background: transparent; color: #364153; border: 1px solid #d1d5dc; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-modal-reject { padding: 10px 20px; background: #c10007; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-modal-reject:disabled { opacity: 0.4; cursor: default; }

@@ -5,7 +5,7 @@ import { HotelHomeComponent, HotelReserva } from './hotel-home.component';
 import { AuthService } from '../../services/auth.service';
 
 function buildFakeReserva(overrides: Partial<HotelReserva> = {}): HotelReserva {
-  const estados: HotelReserva['estado'][] = ['Pendiente', 'Confirmada', 'En curso', 'Completada', 'Cancelada'];
+  const estados: HotelReserva['estado'][] = ['Pendiente', 'Confirmada', 'En curso', 'Completada', 'Cancelada', 'Rechazada'];
   return {
     id: `BK-${faker.number.int({ min: 1000, max: 9999 })}`,
     huesped: faker.person.fullName(),
@@ -46,7 +46,7 @@ describe('HotelHomeComponent', () => {
 
   it('should have menu items defined', () => {
     expect(component.menuItems.length).toBe(4);
-    expect(component.menuItems.map(m => m.action)).toEqual(['detail', 'approve', 'cancel', 'reports']);
+    expect(component.menuItems.map(m => m.action)).toEqual(['detail', 'approve', 'reject', 'reports']);
   });
 
   describe('ngOnInit', () => {
@@ -99,9 +99,11 @@ describe('HotelHomeComponent', () => {
     });
 
     it('should approve a Pendiente reserva', () => {
-      const reserva = buildFakeReserva({ estado: 'Pendiente' });
-      component.onMenuAction('approve', reserva);
-      expect(reserva.estado).toBe('Confirmada');
+      component.ngOnInit();
+      const pendiente = component.reservas().find(r => r.estado === 'Pendiente')!;
+      component.approveReserva(pendiente);
+      const updated = component.reservas().find(r => r.id === pendiente.id)!;
+      expect(updated.estado).toBe('Confirmada');
     });
 
     it('should not approve a non-Pendiente reserva', () => {
@@ -114,38 +116,52 @@ describe('HotelHomeComponent', () => {
       expect(() => component.onMenuAction('approve')).not.toThrow();
     });
 
-    it('should cancel an active reserva', () => {
+    it('should open reject modal for Pendiente reserva', () => {
       const reserva = buildFakeReserva({ estado: 'Pendiente' });
-      component.onMenuAction('cancel', reserva);
-      expect(reserva.estado).toBe('Cancelada');
+      component.openRejectModal(reserva);
+      expect(component.showRejectModal()).toBe(true);
+      expect(component.rejectingReserva()).toBe(reserva);
     });
 
-    it('should cancel a Confirmada reserva', () => {
-      const reserva = buildFakeReserva({ estado: 'Confirmada' });
-      component.onMenuAction('cancel', reserva);
-      expect(reserva.estado).toBe('Cancelada');
+    it('should reject a reserva with reason', () => {
+      component.ngOnInit();
+      const pendiente = component.reservas().find(r => r.estado === 'Pendiente')!;
+      component.openRejectModal(pendiente);
+      component.rejectReason = 'No disponible';
+      component.confirmReject();
+      const updated = component.reservas().find(r => r.id === pendiente.id)!;
+      expect(updated.estado).toBe('Rechazada');
+      expect(updated.rejectReason).toBe('No disponible');
     });
 
-    it('should cancel an En curso reserva', () => {
-      const reserva = buildFakeReserva({ estado: 'En curso' });
-      component.onMenuAction('cancel', reserva);
-      expect(reserva.estado).toBe('Cancelada');
+    it('should not reject without reason', () => {
+      component.ngOnInit();
+      const pendiente = component.reservas().find(r => r.estado === 'Pendiente')!;
+      component.openRejectModal(pendiente);
+      component.rejectReason = '';
+      component.confirmReject();
+      const updated = component.reservas().find(r => r.id === pendiente.id)!;
+      expect(updated.estado).toBe('Pendiente');
     });
 
-    it('should not cancel a Completada reserva', () => {
+    it('should not approve a non-Pendiente via approveReserva', () => {
       const reserva = buildFakeReserva({ estado: 'Completada' });
-      component.onMenuAction('cancel', reserva);
-      expect(reserva.estado).toBe('Completada');
+      component.approveReserva(reserva);
+      expect(component.toastType()).toBe('error');
     });
 
-    it('should not cancel an already Cancelada reserva', () => {
-      const reserva = buildFakeReserva({ estado: 'Cancelada' });
-      component.onMenuAction('cancel', reserva);
-      expect(reserva.estado).toBe('Cancelada');
+    it('should not open reject modal for non-Pendiente', () => {
+      const reserva = buildFakeReserva({ estado: 'Confirmada' });
+      component.openRejectModal(reserva);
+      expect(component.showRejectModal()).toBe(false);
     });
 
-    it('should not cancel without reserva', () => {
-      expect(() => component.onMenuAction('cancel')).not.toThrow();
+    it('should cancel reject modal', () => {
+      const reserva = buildFakeReserva({ estado: 'Pendiente' });
+      component.openRejectModal(reserva);
+      component.cancelReject();
+      expect(component.showRejectModal()).toBe(false);
+      expect(component.rejectingReserva()).toBeNull();
     });
 
     it('should navigate to hotel-dashboard on reports action', () => {
@@ -213,7 +229,7 @@ describe('HotelHomeComponent', () => {
 
     it('should render navigation links', () => {
       const navLinks = fixture.nativeElement.querySelectorAll('nav a, nav button');
-      expect(navLinks.length).toBe(2);
+      expect(navLinks.length).toBe(3);
     });
 
     it('should render sidebar menu items', () => {
@@ -267,31 +283,30 @@ describe('HotelHomeComponent', () => {
       expect(detail).toBeTruthy();
     });
 
-    it('should show approve button only for Pendiente reservas', () => {
+    it('should show approve/reject buttons only for Pendiente reservas', () => {
       component.reservas.set([
         buildFakeReserva({ estado: 'Pendiente' }),
         buildFakeReserva({ estado: 'Confirmada' }),
       ]);
       fixture.detectChanges();
       const cards = fixture.nativeElement.querySelectorAll('.reserva-card');
-      const firstCardButtons = cards[0].querySelectorAll('.btn-icon');
-      const secondCardButtons = cards[1].querySelectorAll('.btn-icon');
-      // Pendiente: detail + approve + cancel = 3
-      expect(firstCardButtons.length).toBe(3);
-      // Confirmada: detail + cancel = 2
-      expect(secondCardButtons.length).toBe(2);
+      const firstApprove = cards[0].querySelectorAll('.btn-approve-sm');
+      const firstReject = cards[0].querySelectorAll('.btn-reject-sm');
+      const secondApprove = cards[1].querySelectorAll('.btn-approve-sm');
+      expect(firstApprove.length).toBe(1);
+      expect(firstReject.length).toBe(1);
+      expect(secondApprove.length).toBe(0);
     });
 
-    it('should not show cancel button for Completada/Cancelada', () => {
+    it('should not show approve/reject for Completada/Cancelada', () => {
       component.reservas.set([
         buildFakeReserva({ estado: 'Completada' }),
         buildFakeReserva({ estado: 'Cancelada' }),
       ]);
       fixture.detectChanges();
       const cards = fixture.nativeElement.querySelectorAll('.reserva-card');
-      // Only detail button
-      expect(cards[0].querySelectorAll('.btn-icon').length).toBe(1);
-      expect(cards[1].querySelectorAll('.btn-icon').length).toBe(1);
+      expect(cards[0].querySelectorAll('.btn-approve-sm').length).toBe(0);
+      expect(cards[1].querySelectorAll('.btn-approve-sm').length).toBe(0);
     });
   });
 });

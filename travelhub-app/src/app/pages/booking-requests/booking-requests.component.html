@@ -1,110 +1,123 @@
 <div class="page-container">
   <header>
-    <div class="header-left">
-      <div class="logo-icon">TH</div>
-      <span class="logo-text">TravelHub</span>
-    </div>
-    <nav>
-      <button class="nav-link" (click)="navigate('/home')">Home</button>
-      <button class="nav-link" (click)="navigate('/search')">Hotels</button>
-      <button class="nav-link" (click)="navigate('/dashboard')">Dashboard</button>
-      <button class="nav-link" (click)="navigate('/manage-rooms')">Habitaciones</button>
-      <button class="nav-link active" (click)="navigate('/booking-requests')">Solicitudes</button>
-    </nav>
-    <div class="header-right">
-      <span class="user">user</span>
-      <button class="logout" (click)="navigate('/login')">Salir</button>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/hotel-home')" (keydown.enter)="navigate('/hotel-home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/hotel-home')" (keydown.enter)="navigate('/hotel-home')" tabindex="0">Inicio</a>
+        <a (click)="navigate('/hotel-dashboard')" (keydown.enter)="navigate('/hotel-dashboard')" tabindex="0">Dashboard</a>
+        <a class="active">Solicitudes</a>
+      </nav>
+      <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
+
+  <!-- Toast -->
+  @if (toastMessage()) {
+    <div class="toast" [class.toast-error]="toastType() === 'error'">{{ toastMessage() }}</div>
+  }
 
   <main>
     <div class="page-header">
       <h1>Solicitudes de Reserva Pendientes</h1>
       <p>Aprueba o rechaza las solicitudes para gestionar tu inventario</p>
-      <span class="badge-warning">4 solicitudes pendientes</span>
+      <span class="badge-warning">{{ pendingRequests().length }} solicitudes pendientes</span>
     </div>
 
     <div class="stats">
       <div class="stat-card">
-        <span class="stat-label">Pendientes de Aprobación</span>
-        <span class="stat-value">4</span>
+        <span class="stat-label">Pendientes</span>
+        <span class="stat-value">{{ pendingRequests().length }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Confirmadas Hoy</span>
-        <span class="stat-value">0</span>
+        <span class="stat-value green">{{ confirmedToday() }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Rechazadas Hoy</span>
-        <span class="stat-value red">0</span>
+        <span class="stat-value red">{{ rejectedToday() }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Ingresos Confirmados</span>
-        <span class="stat-value blue">$0</span>
+        <span class="stat-value blue">$ {{ confirmedRevenue() | number }}</span>
       </div>
     </div>
 
     <div class="table-container">
       <div class="table-header">
-        <input
-          type="text"
-          placeholder="Buscar por nombre, email o ID de reserva..."
-          class="search-input"
-        />
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" name="search" placeholder="Buscar por nombre, email o ID..." class="search-input" />
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID Reserva</th>
-            <th>Huésped</th>
-            <th>Habitación</th>
-            <th>Fechas</th>
-            <th>Huéspedes</th>
-            <th>Monto Total</th>
-            <th>Solicitada</th>
-            <th>Tiempo Restante</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (req of requests; track req) {
-            <tr>
-              <td class="id-link">{{ req.id }}</td>
-              <td>
-                <div class="guest-name">{{ req.guest }}</div>
-                <div class="guest-detail">{{ req.email }}</div>
-                <div class="guest-detail">{{ req.phone }}</div>
-              </td>
-              <td>
-                <div class="room-name">{{ req.room }}</div>
-                <div class="guest-detail">{{ req.type }}</div>
-              </td>
-              <td>
-                <div>{{ req.checkIn }}</div>
-                <div>{{ req.checkOut }}</div>
-                <div class="guest-detail">{{ req.nights }} noches</div>
-              </td>
-              <td>{{ req.guests }}</td>
-              <td class="amount">${{ req.total | number }}</td>
-              <td>{{ req.requested }}</td>
-              <td>
-                <span [class]="req.expired ? 'time-expired' : 'time-warning'">{{
-                  req.timeLeft
-                }}</span>
-              </td>
-              <td>
-                <div class="actions">
-                  <button class="btn-approve" [disabled]="req.expired">Aprobar</button>
-                  <button class="btn-reject" [disabled]="req.expired">Rechazar</button>
-                </div>
-                <button class="special-req" (click)="null">Req. especiales</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      @if (filteredRequests().length === 0) {
+        <div class="empty">No hay solicitudes pendientes que coincidan con la búsqueda.</div>
+      } @else {
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Reserva</th>
+                <th>Huésped</th>
+                <th>Habitación</th>
+                <th>Fechas</th>
+                <th>Huéspedes</th>
+                <th>Monto</th>
+                <th>Tiempo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (req of filteredRequests(); track req.id) {
+                <tr [class.expired-row]="req.expired">
+                  <td class="id-link">{{ req.id }}</td>
+                  <td>
+                    <div class="guest-name">{{ req.guest }}</div>
+                    <div class="guest-detail">{{ req.email }}</div>
+                  </td>
+                  <td>
+                    <div class="room-name">{{ req.room }}</div>
+                    <div class="guest-detail">{{ req.type }}</div>
+                  </td>
+                  <td>
+                    <div>{{ req.checkIn }} → {{ req.checkOut }}</div>
+                    <div class="guest-detail">{{ req.nights }} noches</div>
+                  </td>
+                  <td>{{ req.guests }}</td>
+                  <td class="amount">$ {{ req.total | number }}</td>
+                  <td>
+                    <span [class]="req.expired ? 'time-expired' : 'time-active'">{{ req.timeLeft }}</span>
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button class="btn-approve" (click)="approve(req)" [disabled]="req.expired">✅ Aprobar</button>
+                      <button class="btn-reject" (click)="openRejectModal(req)" [disabled]="req.expired">❌ Rechazar</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
 
-      <div class="table-footer">Mostrando 4 de 4 solicitudes pendientes</div>
+      <div class="table-footer">Mostrando {{ filteredRequests().length }} solicitudes pendientes</div>
     </div>
   </main>
+
+  <!-- Reject Modal -->
+  @if (showRejectModal()) {
+    <div class="modal-overlay" (click)="cancelReject()" (keydown.escape)="cancelReject()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="cancelReject()" tabindex="0">
+        <h2>Rechazar Reserva</h2>
+        <p>Reserva <strong>{{ rejectingRequest()?.id }}</strong> de <strong>{{ rejectingRequest()?.guest }}</strong></p>
+        <label for="rejectReason">Motivo del rechazo *</label>
+        <textarea id="rejectReason" [(ngModel)]="rejectReason" name="rejectReason" placeholder="Ingresa el motivo del rechazo..." rows="3"></textarea>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="cancelReject()">Cancelar</button>
+          <button class="btn-confirm-reject" [disabled]="!rejectReason.trim()" (click)="confirmReject()">Confirmar Rechazo</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
