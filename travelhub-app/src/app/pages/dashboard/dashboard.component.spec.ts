@@ -193,3 +193,184 @@ describe('DashboardComponent', () => {
     expect(fixture.nativeElement.querySelector('.loading')).toBeTruthy();
   });
 });
+
+describe('DashboardComponent - Template', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DashboardComponent],
+      providers: [
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'traveler' } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should render filters bar with bookings', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.filters-bar')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#search')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#estado')).toBeTruthy();
+  });
+
+  it('should render action buttons in table rows', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('.btn-action').length).toBeGreaterThan(0);
+  });
+
+  it('should render cancel button only for cancellable bookings', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    const cancelBtns = fixture.nativeElement.querySelectorAll('.btn-cancel-action');
+    expect(cancelBtns.length).toBe(1);
+  });
+
+  it('should show detail row when booking selected', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.viewDetail(mockBookings[0]);
+    fixture.detectChanges();
+    const detail = fixture.nativeElement.querySelector('.detail-row');
+    expect(detail).toBeTruthy();
+    expect(detail.textContent).toContain('TH-2026-A1');
+    expect(detail.textContent).toContain('Juan');
+  });
+
+  it('should show edit modal when opened', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.openEdit(mockBookings[0]);
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.modal');
+    expect(modal).toBeTruthy();
+    expect(modal.textContent).toContain('Editar Reserva');
+  });
+
+  it('should show cancel modal when opened', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.openCancel(mockBookings[1]);
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.modal');
+    expect(modal).toBeTruthy();
+    expect(modal.textContent).toContain('Cancelar Reserva');
+  });
+
+  it('should show toast message', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.toastMessage.set('Test toast');
+    component.toastType.set('success');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.toast')).toBeTruthy();
+  });
+
+  it('should show error toast', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.toastMessage.set('Error');
+    component.toastType.set('error');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.toast-error')).toBeTruthy();
+  });
+
+  it('should render pagination', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.pagination')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.pagination-label')).toBeTruthy();
+  });
+
+  it('should render Nueva Reserva button', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Nueva Reserva');
+  });
+
+  it('should render booking codes in table', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('TH-2026-A1');
+    expect(fixture.nativeElement.textContent).toContain('TH-2026-B2');
+  });
+
+  it('should render status badges', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('.status').length).toBe(3);
+  });
+
+  it('should handle cancel error', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.openCancel(mockBookings[1]);
+    component.confirmCancel();
+    httpMock.expectOne(r => r.method === 'DELETE').error(new ProgressEvent('error'));
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should not cancel if no booking selected', () => {
+    component.confirmCancel();
+    expect(component.showCancelModal()).toBe(false);
+  });
+
+  it('should not save edit if no booking selected', () => {
+    component.saveEdit();
+    expect(component.showEditModal()).toBe(false);
+  });
+
+  it('should filter by fecha desde', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.fechaDesde.set('2026-08-01');
+    expect(component.filteredReservas().length).toBeLessThan(3);
+  });
+
+  it('should filter by fecha hasta', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.fechaHasta.set('2026-08-01');
+    expect(component.filteredReservas().length).toBeLessThan(3);
+  });
+
+  it('should show empty filtered state', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.searchQuery.set('zzzzzzzzz');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.empty-state')).toBeTruthy();
+  });
+
+  it('should get pages', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    expect(component.getPages().length).toBeGreaterThan(0);
+  });
+
+  it('should close detail', () => {
+    component.selectedBooking.set(mockBookings[0] as any);
+    component.closeDetail();
+    expect(component.selectedBooking()).toBeNull();
+  });
+});
