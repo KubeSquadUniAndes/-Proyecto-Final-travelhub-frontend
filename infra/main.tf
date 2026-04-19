@@ -76,11 +76,16 @@ resource "aws_cloudfront_distribution" "frontend" {
     domain_name = "k8s-workload-travelhu-6ebf4c6317-8eaeeae129c46548.elb.us-east-1.amazonaws.com"
     origin_id   = "ELB-backend"
 
+    custom_header {
+      name  = "Host"
+      value = "api.travelhub.com"
+    }
+
     custom_origin_config {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
+      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
     }
   }
 
