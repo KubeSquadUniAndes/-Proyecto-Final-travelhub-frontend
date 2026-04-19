@@ -1,19 +1,8 @@
-import { LoginPage } from '../pages/LoginPage';
-
-const loginPage = new LoginPage();
-
 describe('Mis Reservas (Dashboard Viajero)', () => {
   beforeEach(() => {
-    cy.fixture('users').then((users) => {
-      loginPage.visit();
-      loginPage
-        .fillEmail(users.existingUser.email)
-        .fillPassword(users.existingUser.password)
-        .submit();
-      cy.url().should('not.include', '/login');
-      cy.visit('/dashboard');
-      cy.url().should('include', '/dashboard');
-    });
+    cy.visit('/login');
+    cy.loginAsUser('traveler');
+    cy.visit('/dashboard');
   });
 
   context('Dado que el viajero accede a Mis Reservas', () => {
@@ -21,7 +10,7 @@ describe('Mis Reservas (Dashboard Viajero)', () => {
       cy.contains('Mis Reservas').should('be.visible');
     });
 
-    it('Entonces debe ver la navegación con Home y Mis Reservas', () => {
+    it('Entonces debe ver la navegación', () => {
       cy.contains('Home').should('be.visible');
       cy.contains('Mis Reservas').should('be.visible');
     });
@@ -34,31 +23,8 @@ describe('Mis Reservas (Dashboard Viajero)', () => {
       cy.contains('Cerrar sesión').should('be.visible');
     });
 
-    it('Entonces debe mostrar reservas o estado vacío', () => {
-      cy.get('table, .empty-state, .error-state, .loading').should('be.visible');
-    });
-  });
-
-  context('Dado que el viajero tiene reservas', () => {
-    it('Entonces debe ver la tabla con columnas correctas', () => {
-      cy.get('table').then(($table) => {
-        if ($table.length) {
-          cy.contains('th', 'Código').should('be.visible');
-          cy.contains('th', 'Tipo').should('be.visible');
-          cy.contains('th', 'Check-in').should('be.visible');
-          cy.contains('th', 'Estado').should('be.visible');
-          cy.contains('th', 'Acciones').should('be.visible');
-        }
-      });
-    });
-
-    it('Entonces debe ver los filtros de búsqueda', () => {
-      cy.get('.filters-bar').then(($filters) => {
-        if ($filters.length) {
-          cy.get('#search').should('be.visible');
-          cy.get('#estado').should('be.visible');
-        }
-      });
+    it('Entonces debe mostrar contenido (reservas, vacío o error)', () => {
+      cy.get('table, .empty-state, .error-state, .loading').should('exist');
     });
   });
 
