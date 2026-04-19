@@ -73,13 +73,13 @@ resource "aws_cloudfront_distribution" "frontend" {
 
   # Origin 2: ELB del backend
   origin {
-    domain_name = "ac579e79af7f644ea9a28fcf0b880a47-b476310f4eeda9e2.elb.us-east-1.amazonaws.com"
+    domain_name = "k8s-workload-travelhu-6ebf4c6317-8eaeeae129c46548.elb.us-east-1.amazonaws.com"
     origin_id   = "ELB-backend"
 
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "http-only"
+      origin_protocol_policy = "match-viewer"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
@@ -95,7 +95,7 @@ resource "aws_cloudfront_distribution" "frontend" {
 
     forwarded_values {
       query_string = true
-      headers      = ["Authorization", "Content-Type", "Accept", "Host"]
+      headers      = ["Authorization", "Content-Type", "Accept"]
       cookies { forward = "none" }
     }
 
@@ -115,7 +115,47 @@ resource "aws_cloudfront_distribution" "frontend" {
 
     forwarded_values {
       query_string = true
-      headers      = ["Authorization", "Content-Type", "Accept", "Host"]
+      headers      = ["Authorization", "Content-Type", "Accept"]
+      cookies { forward = "none" }
+    }
+
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
+  }
+
+  # Behavior: /hospedajes/* → ELB
+  ordered_cache_behavior {
+    path_pattern           = "/hospedajes/*"
+    target_origin_id       = "ELB-backend"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization", "Content-Type", "Accept"]
+      cookies { forward = "none" }
+    }
+
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
+  }
+
+  # Behavior: /reservas/* → ELB
+  ordered_cache_behavior {
+    path_pattern           = "/reservas/*"
+    target_origin_id       = "ELB-backend"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization", "Content-Type", "Accept"]
       cookies { forward = "none" }
     }
 

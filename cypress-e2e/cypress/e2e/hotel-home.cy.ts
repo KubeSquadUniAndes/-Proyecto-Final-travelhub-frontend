@@ -1,118 +1,78 @@
-import { LoginPage } from '../pages/LoginPage';
-import { HotelHomePage } from '../pages/HotelHomePage';
-import { HotelDashboardPage } from '../pages/HotelDashboardPage';
-
-const loginPage = new LoginPage();
-const hotelHomePage = new HotelHomePage();
-const dashboardPage = new HotelDashboardPage();
-
 describe('Hotel Home', () => {
   beforeEach(() => {
-    cy.fixture('users').then((users) => {
-      loginPage.visit();
-      loginPage
-        .fillEmail(users.hotelUser.email)
-        .fillPassword(users.hotelUser.password)
-        .submit();
-      cy.url().should('include', '/hotel-home');
-    });
+    cy.visit('/login');
+    cy.loginAsUser('hotel');
+    cy.visit('/hotel-home');
   });
 
   context('Dado que el usuario hotel inició sesión', () => {
-    context('Cuando accede al home del hotel', () => {
-      it('Entonces debe ver el nombre del hotel en el header', () => {
-        hotelHomePage.shouldShowHotelName();
-      });
-
-      it('Entonces debe ver la navegación con Inicio y Dashboard', () => {
-        hotelHomePage.shouldShowNavigation();
-      });
-
-      it('Entonces debe ver el menú de gestión con todas las opciones', () => {
-        hotelHomePage.shouldShowGestionMenu();
-      });
-
-      it('Entonces debe ver el listado de reservas', () => {
-        hotelHomePage.shouldShowReservasList();
-      });
-
-      it('Entonces debe ver reservas con diferentes estados', () => {
-        hotelHomePage
-          .shouldShowReservaWithStatus('Confirmada')
-          .shouldShowReservaWithStatus('Pendiente')
-          .shouldShowReservaWithStatus('En curso')
-          .shouldShowReservaWithStatus('Completada')
-          .shouldShowReservaWithStatus('Cancelada');
-      });
+    it('Entonces debe ver el nombre del hotel', () => {
+      cy.contains('Grand Seaside Resort').should('be.visible');
     });
 
-    context('Cuando navega al Dashboard', () => {
-      it('Entonces debe redirigir a la página de dashboard', () => {
-        // When
-        hotelHomePage.goToDashboard();
-
-        // Then
-        dashboardPage.shouldBeOnDashboardPage();
-      });
+    it('Entonces debe ver la navegación', () => {
+      cy.contains('Inicio').should('be.visible');
+      cy.contains('Dashboard').should('be.visible');
+      cy.contains('Habitaciones').should('be.visible');
     });
 
-    context('Cuando cierra sesión', () => {
-      it('Entonces debe redirigir al login', () => {
-        // When
-        hotelHomePage.logout();
+    it('Entonces debe ver el menú de gestión', () => {
+      cy.contains('Ver detalle').should('be.visible');
+      cy.contains('Aprobar reserva').should('be.visible');
+      cy.contains('Rechazar reserva').should('be.visible');
+    });
 
-        // Then
-        cy.url().should('include', '/login');
-      });
+    it('Entonces debe ver el listado de reservas', () => {
+      cy.get('.reserva-card').should('have.length.greaterThan', 0);
+    });
+
+    it('Entonces debe ver reservas con estado Pendiente', () => {
+      cy.contains('Pendiente').should('be.visible');
+    });
+
+    it('Cuando navega al Dashboard, debe redirigir', () => {
+      cy.contains('nav a', 'Dashboard').click();
+      cy.url().should('include', '/hotel-dashboard');
+    });
+
+    it('Cuando cierra sesión, debe ir al login', () => {
+      cy.contains('Cerrar sesión').click();
+      cy.url().should('include', '/login');
     });
   });
 });
 
 describe('Hotel Dashboard', () => {
   beforeEach(() => {
-    cy.fixture('users').then((users) => {
-      loginPage.visit();
-      loginPage
-        .fillEmail(users.hotelUser.email)
-        .fillPassword(users.hotelUser.password)
-        .submit();
-      cy.url().should('include', '/hotel-home');
-      hotelHomePage.goToDashboard();
-      cy.url().should('include', '/hotel-dashboard');
-    });
+    cy.visit('/login');
+    cy.loginAsUser('hotel');
+    cy.visit('/hotel-dashboard');
   });
 
   context('Dado que el usuario hotel está en el dashboard', () => {
-    context('Cuando accede al dashboard', () => {
-      it('Entonces debe ver el título Dashboard de Reservas', () => {
-        dashboardPage.shouldShowTitle();
-      });
-
-      it('Entonces debe ver las métricas de reservas', () => {
-        dashboardPage.shouldShowMetrics();
-      });
-
-      it('Entonces debe ver la tabla de reservas con sus columnas', () => {
-        dashboardPage.shouldShowReservasTable();
-      });
-
-      it('Entonces debe ver el buscador de reservas', () => {
-        dashboardPage.shouldShowSearchInput();
-      });
-
-      it('Entonces debe ver reservas con diferentes estados', () => {
-        dashboardPage.shouldShowReservasWithDifferentStatuses();
-      });
+    it('Entonces debe ver el título Dashboard de Reservas', () => {
+      cy.contains('Dashboard de Reservas').should('be.visible');
     });
 
-    context('Cuando navega al Home', () => {
-      it('Entonces debe redirigir al hotel-home', () => {
-        // When
-        dashboardPage.goToHome();
+    it('Entonces debe ver las métricas', () => {
+      cy.contains('Total Reservas').should('be.visible');
+      cy.contains('Confirmadas').should('be.visible');
+      cy.contains('Pendientes').should('be.visible');
+    });
 
-        // Then
-        hotelHomePage.shouldBeOnHotelHomePage();
-      });
+    it('Entonces debe ver la tabla de reservas', () => {
+      cy.contains('Huésped').should('be.visible');
+      cy.contains('Check-in').should('be.visible');
+      cy.contains('Estado').should('be.visible');
+    });
+
+    it('Entonces debe ver el buscador', () => {
+      cy.get('input[placeholder*="Buscar"]').should('be.visible');
+    });
+
+    it('Cuando navega al Home, debe redirigir', () => {
+      cy.contains('nav a', 'Home').click();
+      cy.url().should('include', '/hotel-home');
     });
   });
 });

@@ -19,13 +19,14 @@ export class HotelHomePage {
   shouldShowNavigation() {
     cy.contains('Inicio').should('be.visible');
     cy.contains('Dashboard').should('be.visible');
+    cy.contains('Habitaciones').should('be.visible');
     return this;
   }
 
   shouldShowGestionMenu() {
     cy.contains('Ver detalle').should('be.visible');
     cy.contains('Aprobar reserva').should('be.visible');
-    cy.contains('Cancelar reserva').should('be.visible');
+    cy.contains('Rechazar reserva').should('be.visible');
     cy.contains('Reportes / Dashboard').should('be.visible');
     return this;
   }

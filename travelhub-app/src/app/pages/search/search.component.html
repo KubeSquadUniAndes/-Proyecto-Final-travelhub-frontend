@@ -1,5 +1,4 @@
 <div class="search-page">
-  <!-- Header -->
   <header>
     <div class="header-content">
       <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
@@ -18,10 +17,8 @@
   </header>
 
   <div class="content">
-    <!-- Filters -->
     <aside class="filters">
       <h2>Filtros de búsqueda</h2>
-
       <div class="filter-group">
         <label for="f-destino">Ubicación</label>
         <div class="input-wrapper">
@@ -29,7 +26,6 @@
           <input id="f-destino" type="text" [ngModel]="destino()" (ngModelChange)="destino.set($event)" name="destino" placeholder="Ciudad o destino" />
         </div>
       </div>
-
       <div class="filter-group">
         <label for="f-checkin">Check-in</label>
         <div class="input-wrapper">
@@ -37,7 +33,6 @@
           <input id="f-checkin" type="date" [ngModel]="checkIn()" (ngModelChange)="checkIn.set($event)" name="checkIn" />
         </div>
       </div>
-
       <div class="filter-group">
         <label for="f-checkout">Check-out</label>
         <div class="input-wrapper">
@@ -45,7 +40,6 @@
           <input id="f-checkout" type="date" [ngModel]="checkOut()" (ngModelChange)="checkOut.set($event)" name="checkOut" />
         </div>
       </div>
-
       <div class="filter-group">
         <label for="f-huespedes">Huéspedes</label>
         <div class="input-wrapper">
@@ -53,13 +47,11 @@
           <input id="f-huespedes" type="number" [ngModel]="huespedes()" (ngModelChange)="huespedes.set($event)" name="huespedes" min="1" max="20" />
         </div>
       </div>
-
       @if (hasFilters()) {
         <button class="btn-clear" (click)="clearFilters()">Limpiar filtros</button>
       }
     </aside>
 
-    <!-- Results -->
     <main>
       <div class="results-header">
         <h1>Hospedajes disponibles</h1>
@@ -93,7 +85,7 @@
         <div class="empty-state">
           <div class="empty-icon">🔍</div>
           <h2>No se encontraron hospedajes</h2>
-          <p>No hay hospedajes que coincidan con los filtros seleccionados. Intenta ajustar tu búsqueda.</p>
+          <p>No hay hospedajes que coincidan con los filtros seleccionados.</p>
           <button class="btn-clear-large" (click)="clearFilters()">Limpiar filtros</button>
         </div>
       }
