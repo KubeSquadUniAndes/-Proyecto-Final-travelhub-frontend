@@ -369,7 +369,7 @@ describe('DashboardComponent - Template', () => {
   });
 
   it('should close detail', () => {
-    component.selectedBooking.set(mockBookings[0] as any);
+    component.selectedBooking.set(mockBookings[0]);
     component.closeDetail();
     expect(component.selectedBooking()).toBeNull();
   });
