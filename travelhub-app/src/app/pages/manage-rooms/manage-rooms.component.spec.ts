@@ -156,3 +156,163 @@ describe('ManageRoomsComponent', () => {
     expect(cards.length).toBe(2);
   });
 });
+
+describe('ManageRoomsComponent - Template', () => {
+  let component: ManageRoomsComponent;
+  let fixture: ComponentFixture<ManageRoomsComponent>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ManageRoomsComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel' } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(ManageRoomsComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should show loading state initially', () => {
+    fixture.detectChanges();
+    const loading = fixture.nativeElement.querySelector('.loading');
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show error state on load failure', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).error(new ProgressEvent('error'));
+    fixture.detectChanges();
+    const error = fixture.nativeElement.querySelector('.error-state');
+    expect(error).toBeTruthy();
+  });
+
+  it('should show header with navigation', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush([]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('nav')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Habitaciones');
+  });
+
+  it('should show room details in cards', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    fixture.detectChanges();
+    const el = fixture.nativeElement;
+    expect(el.textContent).toContain('Habitación 101');
+    expect(el.textContent).toContain('150.00');
+    expect(el.textContent).toContain('individual');
+    expect(el.textContent).toContain('WiFi, AC');
+  });
+
+  it('should show edit and delete buttons on each card', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    fixture.detectChanges();
+    const editBtns = fixture.nativeElement.querySelectorAll('.btn-edit');
+    const deleteBtns = fixture.nativeElement.querySelectorAll('.btn-delete');
+    expect(editBtns.length).toBe(2);
+    expect(deleteBtns.length).toBe(2);
+  });
+
+  it('should show create form modal when clicking new room', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush([]);
+    fixture.detectChanges();
+    component.openCreateForm();
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.modal');
+    expect(modal).toBeTruthy();
+    expect(modal.textContent).toContain('Nueva');
+  });
+
+  it('should show edit form modal with room data', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    fixture.detectChanges();
+    component.openEditForm(mockRooms[0]);
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.modal');
+    expect(modal).toBeTruthy();
+    expect(modal.textContent).toContain('Editar');
+  });
+
+  it('should show delete confirm modal', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    fixture.detectChanges();
+    component.confirmDelete(mockRooms[0]);
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.modal');
+    expect(modal).toBeTruthy();
+    expect(modal.textContent).toContain('Eliminar');
+    expect(modal.textContent).toContain('Habitación 101');
+  });
+
+  it('should show toast message', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    fixture.detectChanges();
+    component.toastMessage.set('Test toast');
+    component.toastType.set('success');
+    fixture.detectChanges();
+    const toast = fixture.nativeElement.querySelector('.toast');
+    expect(toast).toBeTruthy();
+    expect(toast.textContent).toContain('Test toast');
+  });
+
+  it('should show error toast with error class', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush([]);
+    fixture.detectChanges();
+    component.toastMessage.set('Error msg');
+    component.toastType.set('error');
+    fixture.detectChanges();
+    const toast = fixture.nativeElement.querySelector('.toast-error');
+    expect(toast).toBeTruthy();
+  });
+
+  it('should show room status when available', () => {
+    const roomWithStatus = { ...mockRooms[0], status: 'disponible' };
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush([roomWithStatus]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('disponible');
+  });
+
+  it('should handle update error with toast', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+
+    component.openEditForm(mockRooms[0]);
+    component.saveRoom();
+
+    httpMock.expectOne(r => r.method === 'PUT').error(new ProgressEvent('error'));
+
+    expect(component.toastMessage()).toContain('Error');
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should handle delete error with toast', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+
+    component.confirmDelete(mockRooms[0]);
+    component.deleteRoom();
+
+    httpMock.expectOne(r => r.method === 'DELETE').error(new ProgressEvent('error'));
+
+    expect(component.toastMessage()).toContain('Error');
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should not delete if no room selected', () => {
+    component.deleteRoom();
+    expect(component.showDeleteConfirm()).toBe(false);
+  });
+});
