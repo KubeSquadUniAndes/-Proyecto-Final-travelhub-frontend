@@ -1,19 +1,8 @@
-import { LoginPage } from '../pages/LoginPage';
-
-const loginPage = new LoginPage();
-
 describe('Hoteles', () => {
   beforeEach(() => {
-    cy.fixture('users').then((users) => {
-      loginPage.visit();
-      loginPage
-        .fillEmail(users.existingUser.email)
-        .fillPassword(users.existingUser.password)
-        .submit();
-      cy.url().should('not.include', '/login');
-      cy.visit('/search');
-      cy.url().should('include', '/search');
-    });
+    cy.visit('/login');
+    cy.loginAsUser('traveler');
+    cy.visit('/search');
   });
 
   context('Dado que el viajero accede a la búsqueda de hoteles', () => {
@@ -53,7 +42,7 @@ describe('Hoteles', () => {
     });
 
     it('Cuando navega al Home, debe redirigir', () => {
-      cy.contains('Home').click();
+      cy.contains('nav a', 'Home').click();
       cy.url().should('include', '/home');
     });
   });
