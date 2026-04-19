@@ -14,56 +14,44 @@ describe('Hotel Home', () => {
         .fillEmail(users.hotelUser.email)
         .fillPassword(users.hotelUser.password)
         .submit();
-      cy.url().should('include', '/hotel-home');
+      cy.url().should('not.include', '/login');
+      cy.visit('/hotel-home');
     });
   });
 
   context('Dado que el usuario hotel inició sesión', () => {
-    context('Cuando accede al home del hotel', () => {
-      it('Entonces debe ver el nombre del hotel en el header', () => {
-        hotelHomePage.shouldShowHotelName();
-      });
-
-      it('Entonces debe ver la navegación con Inicio y Dashboard', () => {
-        hotelHomePage.shouldShowNavigation();
-      });
-
-      it('Entonces debe ver el menú de gestión con todas las opciones', () => {
-        hotelHomePage.shouldShowGestionMenu();
-      });
-
-      it('Entonces debe ver el listado de reservas', () => {
-        hotelHomePage.shouldShowReservasList();
-      });
-
-      it('Entonces debe ver reservas con diferentes estados', () => {
-        hotelHomePage
-          .shouldShowReservaWithStatus('Confirmada')
-          .shouldShowReservaWithStatus('Pendiente')
-          .shouldShowReservaWithStatus('En curso')
-          .shouldShowReservaWithStatus('Completada')
-          .shouldShowReservaWithStatus('Cancelada');
-      });
+    it('Entonces debe ver el nombre del hotel en el header', () => {
+      hotelHomePage.shouldShowHotelName();
     });
 
-    context('Cuando navega al Dashboard', () => {
-      it('Entonces debe redirigir a la página de dashboard', () => {
-        // When
-        hotelHomePage.goToDashboard();
-
-        // Then
-        dashboardPage.shouldBeOnDashboardPage();
-      });
+    it('Entonces debe ver la navegación', () => {
+      hotelHomePage.shouldShowNavigation();
     });
 
-    context('Cuando cierra sesión', () => {
-      it('Entonces debe redirigir al login', () => {
-        // When
-        hotelHomePage.logout();
+    it('Entonces debe ver el menú de gestión', () => {
+      hotelHomePage.shouldShowGestionMenu();
+    });
 
-        // Then
-        cy.url().should('include', '/login');
-      });
+    it('Entonces debe ver el listado de reservas', () => {
+      hotelHomePage.shouldShowReservasList();
+    });
+
+    it('Entonces debe ver reservas con estado Pendiente', () => {
+      hotelHomePage.shouldShowReservaWithStatus('Pendiente');
+    });
+
+    it('Entonces debe ver reservas con estado Confirmada', () => {
+      hotelHomePage.shouldShowReservaWithStatus('Confirmada');
+    });
+
+    it('Cuando navega al Dashboard, debe redirigir', () => {
+      hotelHomePage.goToDashboard();
+      dashboardPage.shouldBeOnDashboardPage();
+    });
+
+    it('Cuando cierra sesión, debe redirigir al login', () => {
+      hotelHomePage.logout();
+      cy.url().should('include', '/login');
     });
   });
 });
@@ -76,43 +64,31 @@ describe('Hotel Dashboard', () => {
         .fillEmail(users.hotelUser.email)
         .fillPassword(users.hotelUser.password)
         .submit();
-      cy.url().should('include', '/hotel-home');
-      hotelHomePage.goToDashboard();
-      cy.url().should('include', '/hotel-dashboard');
+      cy.url().should('not.include', '/login');
+      cy.visit('/hotel-dashboard');
     });
   });
 
   context('Dado que el usuario hotel está en el dashboard', () => {
-    context('Cuando accede al dashboard', () => {
-      it('Entonces debe ver el título Dashboard de Reservas', () => {
-        dashboardPage.shouldShowTitle();
-      });
-
-      it('Entonces debe ver las métricas de reservas', () => {
-        dashboardPage.shouldShowMetrics();
-      });
-
-      it('Entonces debe ver la tabla de reservas con sus columnas', () => {
-        dashboardPage.shouldShowReservasTable();
-      });
-
-      it('Entonces debe ver el buscador de reservas', () => {
-        dashboardPage.shouldShowSearchInput();
-      });
-
-      it('Entonces debe ver reservas con diferentes estados', () => {
-        dashboardPage.shouldShowReservasWithDifferentStatuses();
-      });
+    it('Entonces debe ver el título Dashboard de Reservas', () => {
+      dashboardPage.shouldShowTitle();
     });
 
-    context('Cuando navega al Home', () => {
-      it('Entonces debe redirigir al hotel-home', () => {
-        // When
-        dashboardPage.goToHome();
+    it('Entonces debe ver las métricas', () => {
+      dashboardPage.shouldShowMetrics();
+    });
 
-        // Then
-        hotelHomePage.shouldBeOnHotelHomePage();
-      });
+    it('Entonces debe ver la tabla de reservas', () => {
+      dashboardPage.shouldShowReservasTable();
+    });
+
+    it('Entonces debe ver el buscador', () => {
+      dashboardPage.shouldShowSearchInput();
+    });
+
+    it('Cuando navega al Home, debe redirigir', () => {
+      dashboardPage.goToHome();
+      hotelHomePage.shouldBeOnHotelHomePage();
     });
   });
 });

@@ -1,21 +1,95 @@
-<div class="checkout-container">
+<div class="checkout-page">
   <header>
-    <div class="logo">TravelHub</div>
-    <button (click)="goBack()">Volver</button>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">
+        <div class="logo-icon">TH</div>
+        <span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/home')" (keydown.enter)="navigate('/home')" tabindex="0">Home</a>
+        <a (click)="navigate('/search')" (keydown.enter)="navigate('/search')" tabindex="0">Hoteles</a>
+      </nav>
+      <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+    </div>
   </header>
-  
+
   <main>
-    <h1>Checkout - Paso 1</h1>
-    <p>Hotel ID: {{ hotelId }}</p>
-    
-    <div class="checkout-form">
-      <h2>Información Personal</h2>
-      <form>
-        <input type="text" placeholder="Nombre completo" />
-        <input type="email" placeholder="Email" />
-        <input type="tel" placeholder="Teléfono" />
-        <button type="button" (click)="goToStep2()">Continuar</button>
-      </form>
+    <button class="btn-back" (click)="goBack()">← Volver a búsqueda</button>
+
+    <h1>Reservar Hospedaje</h1>
+
+    @if (errorMessage()) {
+      <div class="alert-error">{{ errorMessage() }}</div>
+    }
+
+    <div class="checkout-grid">
+      <div class="form-card">
+        <h2>Datos del viajero</h2>
+        <div class="form-group">
+          <label for="traveler_name">Nombre completo *</label>
+          <input id="traveler_name" type="text" [(ngModel)]="form.traveler_name" name="traveler_name" placeholder="Juan Pérez" />
+        </div>
+        <div class="form-group">
+          <label for="traveler_email">Email *</label>
+          <input id="traveler_email" type="email" [(ngModel)]="form.traveler_email" name="traveler_email" placeholder="tu@email.com" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="traveler_phone">Teléfono *</label>
+            <input id="traveler_phone" type="tel" [(ngModel)]="form.traveler_phone" name="traveler_phone" placeholder="+573001234567" />
+          </div>
+          <div class="form-group">
+            <label for="traveler_document">Documento *</label>
+            <input id="traveler_document" type="text" [(ngModel)]="form.traveler_document" name="traveler_document" placeholder="CC-12345678" />
+          </div>
+        </div>
+
+        <h2>Detalles de la reserva</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="start_time">Check-in *</label>
+            <input id="start_time" type="date" [(ngModel)]="form.start_time" name="start_time" />
+          </div>
+          <div class="form-group">
+            <label for="end_time">Check-out *</label>
+            <input id="end_time" type="date" [(ngModel)]="form.end_time" name="end_time" [min]="form.start_time" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="room_type">Tipo de habitación</label>
+            <select id="room_type" [(ngModel)]="form.room_type" name="room_type">
+              <option value="Suite">Suite</option>
+              <option value="Doble">Doble</option>
+              <option value="Individual">Individual</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="num_guests">Huéspedes *</label>
+            <input id="num_guests" type="number" [(ngModel)]="form.num_guests" name="num_guests" min="1" max="10" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="price_per_night">Precio por noche ($)</label>
+          <input id="price_per_night" type="number" [(ngModel)]="form.price_per_night" name="price_per_night" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="special_requests">Solicitudes especiales</label>
+          <textarea id="special_requests" [(ngModel)]="form.special_requests" name="special_requests" placeholder="Piso alto, cama extra, etc." rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <h2>Resumen</h2>
+        <div class="summary-row"><span>Tipo</span><span>{{ form.room_type }}</span></div>
+        <div class="summary-row"><span>Huéspedes</span><span>{{ form.num_guests }}</span></div>
+        <div class="summary-row"><span>Check-in</span><span>{{ form.start_time || '—' }}</span></div>
+        <div class="summary-row"><span>Check-out</span><span>{{ form.end_time || '—' }}</span></div>
+        <div class="summary-row total"><span>Precio/noche</span><span>$ {{ form.price_per_night | number }}</span></div>
+        <button class="btn-confirm" [disabled]="isLoading() || !form.traveler_name || !form.start_time || !form.end_time" (click)="submitBooking()">
+          {{ isLoading() ? 'Procesando...' : 'Confirmar Reserva' }}
+        </button>
+      </div>
     </div>
   </main>
 </div>
