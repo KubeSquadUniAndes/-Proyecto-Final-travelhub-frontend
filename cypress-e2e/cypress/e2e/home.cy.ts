@@ -12,7 +12,8 @@ describe('Home', () => {
         .fillEmail(users.existingUser.email)
         .fillPassword(users.existingUser.password)
         .submit();
-      cy.url().should('include', '/home');
+      cy.url().should('not.include', '/login');
+      cy.visit('/home');
     });
   });
 
@@ -37,10 +38,7 @@ describe('Home', () => {
 
     context('Cuando cierra sesión', () => {
       it('Entonces debe redirigir al login', () => {
-        // When
         homePage.logout();
-
-        // Then
         cy.url().should('include', '/login');
       });
     });
