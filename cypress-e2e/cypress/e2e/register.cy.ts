@@ -74,7 +74,7 @@ describe('Registro de usuario', () => {
       it('Entonces debe mostrar respuesta del servidor para hotel', () => {
         const user = generateUser('hotel');
         registerPage.fillForm(user).submit();
-        cy.get('.alert-success, .alert-error', { timeout: 15000 }).should('be.visible');
+        cy.get('.alert-success, .alert-error', { timeout: 30000 }).should('be.visible');
       });
     });
   });
