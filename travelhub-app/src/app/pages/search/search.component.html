@@ -20,10 +20,10 @@
     <aside class="filters">
       <h2>Filtros de búsqueda</h2>
       <div class="filter-group">
-        <label for="f-destino">Ubicación</label>
+        <label for="f-destino">Buscar</label>
         <div class="input-wrapper">
-          <span class="input-icon">📍</span>
-          <input id="f-destino" type="text" [ngModel]="destino()" (ngModelChange)="destino.set($event)" name="destino" placeholder="Ciudad o destino" />
+          <span class="input-icon">🔍</span>
+          <input id="f-destino" type="text" [ngModel]="destino()" (ngModelChange)="destino.set($event)" name="destino" placeholder="Nombre, tipo o amenidad" />
         </div>
       </div>
       <div class="filter-group">
@@ -55,27 +55,41 @@
     <main>
       <div class="results-header">
         <h1>Hospedajes disponibles</h1>
-        <p>{{ filteredHospedajes().length }} resultados encontrados</p>
+        @if (!isLoading() && !hasError()) {
+          <p>{{ filteredRooms().length }} resultados encontrados</p>
+        }
       </div>
 
-      @if (filteredHospedajes().length > 0) {
+      @if (isLoading()) {
+        <div class="loading">Cargando habitaciones...</div>
+      } @else if (hasError()) {
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <h2>Error al cargar</h2>
+          <p>No pudimos obtener las habitaciones. Verifica tu conexión.</p>
+          <button class="btn-clear-large" (click)="loadRooms()">Reintentar</button>
+        </div>
+      } @else if (filteredRooms().length > 0) {
         <div class="hotels-grid">
-          @for (hotel of filteredHospedajes(); track hotel.id) {
+          @for (room of filteredRooms(); track room.id; let i = $index) {
             <div class="hotel-card">
               <div class="hotel-image">
-                <img [src]="hotel.image" [alt]="hotel.name" loading="lazy" />
-                <span class="hotel-rating">⭐ {{ hotel.rating }}</span>
+                <img [src]="getImage(i)" [alt]="room.name" loading="lazy" />
+                <span class="hotel-rating">{{ room.room_type }}</span>
               </div>
               <div class="hotel-info">
-                <h3>{{ hotel.name }}</h3>
-                <p class="hotel-location">📍 {{ hotel.location }}</p>
-                <p class="hotel-capacity">👥 Hasta {{ hotel.capacity }} huéspedes</p>
+                <h3>{{ room.name }}</h3>
+                <p class="hotel-location">🛏️ {{ room.beds }} · 📐 {{ room.size }} m²</p>
+                <p class="hotel-capacity">👥 Hasta {{ room.capacity }} huéspedes</p>
+                @if (room.amenities) {
+                  <p class="hotel-amenities">{{ room.amenities }}</p>
+                }
                 <div class="hotel-footer">
                   <div class="hotel-price">
-                    <span class="price-value">$ {{ hotel.price | number }}</span>
+                    <span class="price-value">$ {{ room.price }}</span>
                     <span class="price-label">/ noche</span>
                   </div>
-                  <button class="btn-reservar" (click)="goToCheckout(hotel.id)">Reservar</button>
+                  <button class="btn-reservar" (click)="goToCheckout(room)">Reservar</button>
                 </div>
               </div>
             </div>
@@ -85,7 +99,7 @@
         <div class="empty-state">
           <div class="empty-icon">🔍</div>
           <h2>No se encontraron hospedajes</h2>
-          <p>No hay hospedajes que coincidan con los filtros seleccionados.</p>
+          <p>No hay habitaciones que coincidan con los filtros.</p>
           <button class="btn-clear-large" (click)="clearFilters()">Limpiar filtros</button>
         </div>
       }

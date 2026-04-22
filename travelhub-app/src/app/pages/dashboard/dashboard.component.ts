@@ -44,6 +44,8 @@ export class DashboardComponent implements OnInit {
   payingBooking = signal<Booking | null>(null);
   isProcessingPayment = signal(false);
   paymentForm = { cardNumber: '', cardName: '', expiry: '', cvv: '' };
+  cardBrand = signal('');
+  cardErrors = signal<Record<string, string>>({});
   showCancelModal = signal(false);
   cancellingBooking = signal<Booking | null>(null);
   cancelReason = '';
@@ -140,15 +142,74 @@ export class DashboardComponent implements OnInit {
   openPayment(booking: Booking) {
     this.payingBooking.set(booking);
     this.paymentForm = { cardNumber: '', cardName: '', expiry: '', cvv: '' };
+    this.cardBrand.set('');
+    this.cardErrors.set({});
     this.isProcessingPayment.set(false);
     this.showPaymentModal.set(true);
   }
 
   closePayment() { this.showPaymentModal.set(false); this.payingBooking.set(null); }
 
+  onCardNumberInput(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 16);
+    this.paymentForm.cardNumber = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+    this.cardBrand.set(this.detectBrand(digits));
+  }
+
+  onExpiryInput(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 4);
+    this.paymentForm.expiry = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+  }
+
+  onCvvInput(value: string) {
+    this.paymentForm.cvv = value.replace(/\D/g, '').slice(0, 4);
+  }
+
+  private detectBrand(digits: string): string {
+    if (/^4/.test(digits)) return 'Visa';
+    if (/^5[1-5]/.test(digits) || /^2[2-7]/.test(digits)) return 'Mastercard';
+    if (/^3[47]/.test(digits)) return 'Amex';
+    if (/^6(?:011|5)/.test(digits)) return 'Discover';
+    if (/^3(?:0[0-5]|[68])/.test(digits)) return 'Diners';
+    return '';
+  }
+
+  private luhnCheck(num: string): boolean {
+    const digits = num.replace(/\D/g, '');
+    let sum = 0;
+    let alternate = false;
+    for (let i = digits.length - 1; i >= 0; i--) {
+      let n = parseInt(digits[i], 10);
+      if (alternate) { n *= 2; if (n > 9) n -= 9; }
+      sum += n;
+      alternate = !alternate;
+    }
+    return sum % 10 === 0;
+  }
+
+  validatePayment(): boolean {
+    const errors: Record<string, string> = {};
+    const digits = this.paymentForm.cardNumber.replace(/\D/g, '');
+    if (digits.length < 13 || digits.length > 16) errors['cardNumber'] = 'Número de tarjeta inválido';
+    else if (!this.luhnCheck(digits)) errors['cardNumber'] = 'Número de tarjeta inválido';
+    if (!this.paymentForm.cardName.trim()) errors['cardName'] = 'Nombre requerido';
+    const expParts = this.paymentForm.expiry.split('/');
+    if (expParts.length !== 2 || parseInt(expParts[0]) < 1 || parseInt(expParts[0]) > 12) errors['expiry'] = 'Fecha inválida (MM/AA)';
+    else {
+      const expMonth = parseInt(expParts[0]);
+      const expYear = parseInt('20' + expParts[1]);
+      const now = new Date();
+      if (expYear < now.getFullYear() || (expYear === now.getFullYear() && expMonth < now.getMonth() + 1)) errors['expiry'] = 'Tarjeta vencida';
+    }
+    const cvvLen = this.cardBrand() === 'Amex' ? 4 : 3;
+    if (this.paymentForm.cvv.length !== cvvLen) errors['cvv'] = `CVV debe tener ${cvvLen} dígitos`;
+    this.cardErrors.set(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   confirmPayment() {
     const booking = this.payingBooking();
-    if (!booking) return;
+    if (!booking || !this.validatePayment()) return;
     this.isProcessingPayment.set(true);
     this.bookingsService.update(booking.id, { status: 'confirmed' } as Partial<Booking>).subscribe({
       next: () => { this.closePayment(); this.loadReservas(); this.showToast(`Pago procesado. Reserva ${booking.booking_code} confirmada.`, 'success'); },

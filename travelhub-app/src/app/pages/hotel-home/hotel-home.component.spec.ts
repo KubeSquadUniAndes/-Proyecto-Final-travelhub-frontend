@@ -22,7 +22,7 @@ describe('HotelHomeComponent', () => {
       imports: [HotelHomeComponent],
       providers: [
         provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
-        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel' } },
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ full_name: 'Hotel Test' }) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(HotelHomeComponent);
@@ -34,7 +34,7 @@ describe('HotelHomeComponent', () => {
 
   it('should create', () => { expect(component).toBeTruthy(); });
 
-  it('should have hotel name', () => { expect(component.hotelName).toBe('Grand Seaside Resort'); });
+  it('should have hotel name', () => { expect(component.hotelName()).toBe('Hotel Test'); });
 
   it('should have menu items', () => {
     expect(component.menuItems.length).toBe(4);

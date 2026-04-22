@@ -8,7 +8,7 @@
         <a (click)="navigate('/manage-rooms')" (keydown.enter)="navigate('/manage-rooms')" tabindex="0">Habitaciones</a>
       </nav>
       <div class="header-right">
-        <span class="hotel-badge">🏨 {{ hotelName }}</span>
+        <span class="hotel-badge">🏨 {{ hotelName() }}</span>
         <a class="btn-link" (click)="logout()" (keydown.enter)="logout()" tabindex="0">Cerrar sesión</a>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
     <main>
       <div class="page-header">
-        <h1>Reservas de {{ hotelName }}</h1>
+        <h1>Reservas de {{ hotelName() }}</h1>
         <p>Gestiona las reservas activas de tu hotel</p>
       </div>
 

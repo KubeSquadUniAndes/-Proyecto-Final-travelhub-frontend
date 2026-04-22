@@ -172,26 +172,43 @@
         </div>
         <div class="form-group">
           <label for="card-number">Número de tarjeta</label>
-          <input id="card-number" type="text" [(ngModel)]="paymentForm.cardNumber" name="cardNumber" placeholder="4242 4242 4242 4242" maxlength="19" />
+          <div class="card-input-wrapper">
+            <input id="card-number" type="text" [value]="paymentForm.cardNumber" (input)="onCardNumberInput($any($event.target).value)" placeholder="4242 4242 4242 4242" maxlength="19" [class.input-error]="cardErrors()['cardNumber']" />
+            @if (cardBrand()) {
+              <span class="card-brand">{{ cardBrand() }}</span>
+            }
+          </div>
+          @if (cardErrors()['cardNumber']) {
+            <span class="field-error">{{ cardErrors()['cardNumber'] }}</span>
+          }
         </div>
         <div class="form-group">
           <label for="card-name">Nombre en la tarjeta</label>
-          <input id="card-name" type="text" [(ngModel)]="paymentForm.cardName" name="cardName" placeholder="JUAN PEREZ" />
+          <input id="card-name" type="text" [(ngModel)]="paymentForm.cardName" name="cardName" placeholder="JUAN PEREZ" [class.input-error]="cardErrors()['cardName']" />
+          @if (cardErrors()['cardName']) {
+            <span class="field-error">{{ cardErrors()['cardName'] }}</span>
+          }
         </div>
         <div class="form-row-modal">
           <div class="form-group">
             <label for="card-expiry">Vencimiento</label>
-            <input id="card-expiry" type="text" [(ngModel)]="paymentForm.expiry" name="expiry" placeholder="MM/AA" maxlength="5" />
+            <input id="card-expiry" type="text" [value]="paymentForm.expiry" (input)="onExpiryInput($any($event.target).value)" placeholder="MM/AA" maxlength="5" [class.input-error]="cardErrors()['expiry']" />
+            @if (cardErrors()['expiry']) {
+              <span class="field-error">{{ cardErrors()['expiry'] }}</span>
+            }
           </div>
           <div class="form-group">
             <label for="card-cvv">CVV</label>
-            <input id="card-cvv" type="text" [(ngModel)]="paymentForm.cvv" name="cvv" placeholder="123" maxlength="4" />
+            <input id="card-cvv" type="password" [value]="paymentForm.cvv" (input)="onCvvInput($any($event.target).value)" placeholder="•••" [attr.maxlength]="cardBrand() === 'Amex' ? 4 : 3" [class.input-error]="cardErrors()['cvv']" />
+            @if (cardErrors()['cvv']) {
+              <span class="field-error">{{ cardErrors()['cvv'] }}</span>
+            }
           </div>
         </div>
         <p class="payment-disclaimer">🔒 Pago simulado — no se realizará ningún cobro real.</p>
         <div class="modal-actions">
           <button class="btn-modal-cancel" (click)="closePayment()" [disabled]="isProcessingPayment()">Cancelar</button>
-          <button class="btn-pay" [disabled]="isProcessingPayment() || !paymentForm.cardNumber || !paymentForm.cardName" (click)="confirmPayment()">
+          <button class="btn-pay" [disabled]="isProcessingPayment()" (click)="confirmPayment()">
             {{ isProcessingPayment() ? 'Procesando...' : 'Confirmar Pago' }}
           </button>
         </div>

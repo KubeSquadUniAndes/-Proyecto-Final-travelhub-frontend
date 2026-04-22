@@ -16,7 +16,7 @@
   <main>
     <button class="btn-back" (click)="goBack()">← Volver a búsqueda</button>
 
-    <h1>Reservar Hospedaje</h1>
+    <h1>Reservar: {{ roomName || 'Hospedaje' }}</h1>
 
     @if (errorMessage()) {
       <div class="alert-error">{{ errorMessage() }}</div>

@@ -1,7 +1,8 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 export interface Reserva {
   id: string;
@@ -21,8 +22,10 @@ export interface Reserva {
   styleUrls: ['./hotel-dashboard.component.css']
 })
 export class HotelDashboardComponent implements OnInit {
+  private authService = inject(AuthService);
+
   readonly PAGE_SIZE = 50;
-  readonly hotelName = 'Grand Seaside Resort';
+  readonly hotelName = computed(() => this.authService.currentUser()?.full_name ?? 'Mi Hotel');
 
   allReservas = signal<Reserva[]>([]);
   currentPage = signal(1);

@@ -19,6 +19,9 @@ export class CheckoutComponent implements OnInit {
   private bookingsService = inject(BookingsService);
 
   hotelId = '';
+  roomName = '';
+  roomType = 'Suite';
+  roomPrice = 200;
   isLoading = signal(false);
   errorMessage = signal('');
 
@@ -36,8 +39,13 @@ export class CheckoutComponent implements OnInit {
   };
 
   ngOnInit() {
-    const rawId = this.route.snapshot.queryParamMap.get('hotelId') ?? '';
-    this.hotelId = rawId.includes('-') ? rawId : crypto.randomUUID();
+    const params = this.route.snapshot.queryParamMap;
+    this.hotelId = params.get('roomId') ?? '';
+    this.roomName = params.get('roomName') ?? '';
+    this.roomType = params.get('roomType') ?? 'Suite';
+    this.roomPrice = Number(params.get('price')) || 200;
+    this.form.room_type = this.roomType;
+    this.form.price_per_night = this.roomPrice;
     const user = this.authService.currentUser();
     if (user) {
       this.form.traveler_name = user.full_name ?? '';

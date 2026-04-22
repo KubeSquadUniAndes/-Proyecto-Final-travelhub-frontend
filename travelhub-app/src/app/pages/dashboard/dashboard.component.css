@@ -109,3 +109,9 @@ tr:hover { background: #f9fafb; }
 .btn-pay:disabled { opacity: 0.4; cursor: default; }
 .form-row-modal { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .payment-disclaimer { font-size: 12px; color: #6a7282; text-align: center; margin: 12px 0 0; padding: 8px; background: #f9fafb; border-radius: 8px; }
+
+.card-input-wrapper { position: relative; }
+.card-input-wrapper input { width: 100%; padding-right: 80px; }
+.card-brand { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 700; color: #155dfc; background: #eff6ff; padding: 2px 8px; border-radius: 4px; }
+.input-error { border-color: #c10007 !important; }
+.field-error { font-size: 12px; color: #c10007; margin-top: 2px; display: block; }

@@ -17,7 +17,7 @@ export class HotelHomeComponent implements OnInit {
   private authService = inject(AuthService);
   private bookingsService = inject(BookingsService);
 
-  readonly hotelName = 'Grand Seaside Resort';
+  readonly hotelName = computed(() => this.authService.currentUser()?.full_name ?? 'Mi Hotel');
   reservas = signal<Booking[]>([]);
   isLoading = signal(true);
   hasError = signal(false);
