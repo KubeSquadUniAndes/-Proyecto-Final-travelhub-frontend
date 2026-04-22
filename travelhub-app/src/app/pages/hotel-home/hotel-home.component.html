@@ -14,13 +14,11 @@
     </div>
   </header>
 
-  <!-- Toast -->
   @if (toastMessage()) {
     <div class="toast" [class.toast-error]="toastType() === 'error'">{{ toastMessage() }}</div>
   }
 
   <div class="content">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Gestión</h3>
       <div class="menu">
@@ -38,55 +36,73 @@
       </div>
     </aside>
 
-    <!-- Main -->
     <main>
       <div class="page-header">
         <h1>Reservas de {{ hotelName }}</h1>
         <p>Gestiona las reservas activas de tu hotel</p>
       </div>
 
-      @if (hasReservas()) {
+      @if (isLoading()) {
+        <div class="loading-state">Cargando reservas...</div>
+      } @else if (hasError()) {
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <h2>Error al cargar reservas</h2>
+          <p>No pudimos obtener las reservas. Verifica tu conexión.</p>
+          <button class="btn-retry" (click)="loadReservas()">Reintentar</button>
+        </div>
+      } @else if (hasReservas()) {
         <div class="reservas-list">
           @for (r of reservas(); track r.id) {
-            <div class="reserva-card" [class.selected]="selectedReserva() === r">
+            <div class="reserva-card" [class.selected]="selectedReserva()?.id === r.id">
               <div class="reserva-main">
                 <div class="reserva-info">
                   <div class="reserva-top">
-                    <span class="reserva-id">{{ r.id }}</span>
-                    <span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span>
+                    <span class="reserva-id">{{ r.booking_code || r.id }}</span>
+                    <span class="status" [ngClass]="estadoClass(r.status)">{{ r.status_display || r.status }}</span>
                   </div>
-                  <h3>{{ r.huesped }}</h3>
-                  <p class="room-type">{{ r.tipoHabitacion }}</p>
+                  <h3>{{ r.traveler_name }}</h3>
+                  <p class="room-type">{{ r.room_type }} · {{ r.num_guests }} huéspedes</p>
                 </div>
                 <div class="reserva-dates">
                   <div class="date-item">
                     <span class="date-label">Check-in</span>
-                    <span class="date-value">{{ r.checkIn }}</span>
+                    <span class="date-value">{{ formatDate(r.start_time) }}</span>
                   </div>
                   <div class="date-item">
                     <span class="date-label">Check-out</span>
-                    <span class="date-value">{{ r.checkOut }}</span>
+                    <span class="date-value">{{ formatDate(r.end_time) }}</span>
                   </div>
+                </div>
+                <div class="reserva-price">
+                  <span class="price-label">Total</span>
+                  <span class="price-value">$ {{ r.final_price || r.price_per_night }}</span>
                 </div>
                 <div class="reserva-actions">
                   <button class="btn-icon" title="Ver detalle" (click)="onMenuAction('detail', r)">📋</button>
-                  @if (r.estado === 'Pendiente') {
+                  @if (r.status === 'pending') {
                     <button class="btn-approve-sm" title="Aprobar" (click)="onMenuAction('approve', r)">✅ Aprobar</button>
                     <button class="btn-reject-sm" title="Rechazar" (click)="onMenuAction('reject', r)">❌ Rechazar</button>
                   }
                 </div>
               </div>
 
-              @if (selectedReserva() === r) {
+              @if (selectedReserva()?.id === r.id) {
                 <div class="reserva-detail">
-                  <div class="detail-row"><span>ID Reserva</span><span>{{ r.id }}</span></div>
-                  <div class="detail-row"><span>Huésped</span><span>{{ r.huesped }}</span></div>
-                  <div class="detail-row"><span>Tipo de habitación</span><span>{{ r.tipoHabitacion }}</span></div>
-                  <div class="detail-row"><span>Check-in</span><span>{{ r.checkIn }}</span></div>
-                  <div class="detail-row"><span>Check-out</span><span>{{ r.checkOut }}</span></div>
-                  <div class="detail-row"><span>Estado</span><span class="status" [ngClass]="estadoClass(r.estado)">{{ r.estado }}</span></div>
-                  @if (r.rejectReason) {
-                    <div class="detail-row"><span>Motivo rechazo</span><span>{{ r.rejectReason }}</span></div>
+                  <div class="detail-row"><span>Código</span><span>{{ r.booking_code }}</span></div>
+                  <div class="detail-row"><span>Viajero</span><span>{{ r.traveler_name }}</span></div>
+                  <div class="detail-row"><span>Email</span><span>{{ r.traveler_email }}</span></div>
+                  <div class="detail-row"><span>Teléfono</span><span>{{ r.traveler_phone }}</span></div>
+                  <div class="detail-row"><span>Documento</span><span>{{ r.traveler_document }}</span></div>
+                  <div class="detail-row"><span>Tipo</span><span>{{ r.room_type }}</span></div>
+                  <div class="detail-row"><span>Noches</span><span>{{ r.total_nights }}</span></div>
+                  <div class="detail-row"><span>Precio/noche</span><span>$ {{ r.price_per_night }}</span></div>
+                  <div class="detail-row"><span>Total</span><span>$ {{ r.final_price }}</span></div>
+                  @if (r.special_requests) {
+                    <div class="detail-row"><span>Solicitudes</span><span>{{ r.special_requests }}</span></div>
+                  }
+                  @if (r.notes) {
+                    <div class="detail-row"><span>Notas</span><span>{{ r.notes }}</span></div>
                   }
                 </div>
               }
@@ -103,12 +119,11 @@
     </main>
   </div>
 
-  <!-- Reject Modal -->
   @if (showRejectModal()) {
     <div class="modal-overlay" (click)="cancelReject()" (keydown.escape)="cancelReject()" tabindex="0">
       <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="cancelReject()" tabindex="0">
         <h2>Rechazar Reserva</h2>
-        <p>Reserva <strong>{{ rejectingReserva()?.id }}</strong> de <strong>{{ rejectingReserva()?.huesped }}</strong></p>
+        <p>Reserva <strong>{{ rejectingReserva()?.booking_code }}</strong> de <strong>{{ rejectingReserva()?.traveler_name }}</strong></p>
         <label for="rejectReason">Motivo del rechazo *</label>
         <textarea id="rejectReason" [(ngModel)]="rejectReason" name="rejectReason" placeholder="Ingresa el motivo del rechazo..." rows="3"></textarea>
         <div class="modal-actions">

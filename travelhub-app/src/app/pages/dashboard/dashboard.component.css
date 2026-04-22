@@ -93,3 +93,19 @@ tr:hover { background: #f9fafb; }
 }
 
 .total-highlight { font-weight: 700; color: #155dfc; font-size: 15px; }
+
+.cancel-info { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cancel-detail { display: flex; flex-direction: column; gap: 2px; }
+.cancel-detail span { font-size: 12px; color: #6a7282; }
+.cancel-detail strong { font-size: 14px; color: #101828; }
+.cancel-detail.refund { grid-column: 1 / -1; background: #dcfce7; padding: 10px; border-radius: 8px; }
+.cancel-detail.refund span { color: #008236; }
+.cancel-detail.refund strong { color: #008236; font-size: 16px; }
+.cancel-warning { font-size: 13px; color: #a66f00; background: #fef9c2; padding: 10px 14px; border-radius: 8px; margin: 12px 0 0; }
+
+.btn-pay-action:hover { background: #dcfce7; border-color: #008236; }
+.btn-pay { padding: 10px 20px; background: #008236; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-pay:hover:not(:disabled) { background: #006b2d; }
+.btn-pay:disabled { opacity: 0.4; cursor: default; }
+.form-row-modal { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.payment-disclaimer { font-size: 12px; color: #6a7282; text-align: center; margin: 12px 0 0; padding: 8px; background: #f9fafb; border-radius: 8px; }

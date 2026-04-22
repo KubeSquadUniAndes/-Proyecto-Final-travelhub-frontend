@@ -137,6 +137,7 @@ describe('DashboardComponent', () => {
     component.ngOnInit();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     component.openCancel(mockBookings[1]);
+    component.cancelReason = 'Cambio de planes';
     component.confirmCancel();
     httpMock.expectOne(r => r.method === 'DELETE').flush(null);
     httpMock.expectOne(r => r.method === 'GET').flush([mockBookings[0], mockBookings[2]]);
@@ -324,6 +325,7 @@ describe('DashboardComponent - Template', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     component.openCancel(mockBookings[1]);
+    component.cancelReason = 'Motivo test';
     component.confirmCancel();
     httpMock.expectOne(r => r.method === 'DELETE').error(new ProgressEvent('error'));
     expect(component.toastType()).toBe('error');

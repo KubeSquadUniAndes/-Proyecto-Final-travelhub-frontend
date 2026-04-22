@@ -39,9 +39,15 @@ export class DashboardComponent implements OnInit {
   editingBooking = signal<Booking | null>(null);
   editForm = { start_time: '', end_time: '', notes: '' };
 
-  // Cancel modal
+  // Payment modal
+  showPaymentModal = signal(false);
+  payingBooking = signal<Booking | null>(null);
+  isProcessingPayment = signal(false);
+  paymentForm = { cardNumber: '', cardName: '', expiry: '', cvv: '' };
   showCancelModal = signal(false);
   cancellingBooking = signal<Booking | null>(null);
+  cancelReason = '';
+  isCancelling = signal(false);
 
   filteredReservas = computed(() => {
     let results = this.allReservas();
@@ -130,20 +136,51 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // Payment
+  openPayment(booking: Booking) {
+    this.payingBooking.set(booking);
+    this.paymentForm = { cardNumber: '', cardName: '', expiry: '', cvv: '' };
+    this.isProcessingPayment.set(false);
+    this.showPaymentModal.set(true);
+  }
+
+  closePayment() { this.showPaymentModal.set(false); this.payingBooking.set(null); }
+
+  confirmPayment() {
+    const booking = this.payingBooking();
+    if (!booking) return;
+    this.isProcessingPayment.set(true);
+    this.bookingsService.update(booking.id, { status: 'confirmed' } as Partial<Booking>).subscribe({
+      next: () => { this.closePayment(); this.loadReservas(); this.showToast(`Pago procesado. Reserva ${booking.booking_code} confirmada.`, 'success'); },
+      error: () => { this.isProcessingPayment.set(false); this.showToast('Error al procesar el pago. Intenta de nuevo.', 'error'); },
+    });
+  }
+
   // Cancel
   openCancel(booking: Booking) {
     this.cancellingBooking.set(booking);
+    this.cancelReason = '';
+    this.isCancelling.set(false);
     this.showCancelModal.set(true);
   }
 
-  closeCancel() { this.showCancelModal.set(false); this.cancellingBooking.set(null); }
+  closeCancel() { this.showCancelModal.set(false); this.cancellingBooking.set(null); this.cancelReason = ''; }
 
   confirmCancel() {
     const booking = this.cancellingBooking();
-    if (!booking) return;
+    if (!booking || !this.cancelReason.trim()) return;
+    this.isCancelling.set(true);
     this.bookingsService.delete(booking.id).subscribe({
-      next: () => { this.closeCancel(); this.loadReservas(); this.showToast('Reserva cancelada.', 'success'); },
-      error: () => this.showToast('Error al cancelar.', 'error'),
+      next: () => {
+        this.closeCancel();
+        this.loadReservas();
+        const refund = booking.final_price ? `Devolución de $${booking.final_price} procesada.` : '';
+        this.showToast(`Reserva ${booking.booking_code} cancelada. Habitación liberada. ${refund}`, 'success');
+      },
+      error: () => {
+        this.isCancelling.set(false);
+        this.showToast('Error al cancelar la reserva. La reserva mantiene su estado original. Intenta de nuevo.', 'error');
+      },
     });
   }
 
