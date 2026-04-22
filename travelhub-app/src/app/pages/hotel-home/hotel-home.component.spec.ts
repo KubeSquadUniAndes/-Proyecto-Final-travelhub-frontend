@@ -170,3 +170,143 @@ describe('HotelHomeComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('.btn-reject-sm').length).toBe(1);
   });
 });
+
+describe('HotelHomeComponent - Template', () => {
+  let component: HotelHomeComponent;
+  let fixture: ComponentFixture<HotelHomeComponent>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HotelHomeComponent],
+      providers: [
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ full_name: 'Hotel Test' }) } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(HotelHomeComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should show loading state', () => {
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Cargando');
+  });
+
+  it('should show error state on failure', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).error(new ProgressEvent('error'));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.empty-state')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Error');
+  });
+
+  it('should show hotel name in badge', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.hotel-badge').textContent).toContain('Hotel Test');
+  });
+
+  it('should show hotel name in page header', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.page-header h1').textContent).toContain('Hotel Test');
+  });
+
+  it('should show traveler name in cards', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('María García');
+  });
+
+  it('should show booking code in cards', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('TH-2026-A1');
+  });
+
+  it('should show detail when clicked', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.onMenuAction('detail', mockBookings[0]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.reserva-detail')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('m@e.com');
+  });
+
+  it('should show reject modal', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.openRejectModal(mockBookings[0]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.modal')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Rechazar Reserva');
+  });
+
+  it('should show toast message', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.toastMessage.set('Test toast');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.toast')).toBeTruthy();
+  });
+
+  it('should show menu items', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('.menu-item').length).toBe(4);
+  });
+
+  it('should show price in cards', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('952.00');
+  });
+
+  it('should show retry button on error', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).error(new ProgressEvent('error'));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.btn-retry')).toBeTruthy();
+  });
+
+  it('should handle approve error', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.approveReserva(mockBookings[0]);
+    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should handle reject error', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.openRejectModal(mockBookings[0]);
+    component.rejectReason = 'Test';
+    component.confirmReject();
+    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should not reject without reason', () => {
+    component.rejectingReserva.set(mockBookings[0]);
+    component.rejectReason = '';
+    component.confirmReject();
+    expect(component.showRejectModal()).toBe(false);
+  });
+
+  it('should format date correctly', () => {
+    expect(component.formatDate('2026-09-01T14:00:00Z')).toBeTruthy();
+    expect(component.formatDate('')).toBe('');
+  });
+});
