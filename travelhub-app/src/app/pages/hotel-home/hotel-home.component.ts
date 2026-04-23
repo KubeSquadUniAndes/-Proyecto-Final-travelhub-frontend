@@ -76,7 +76,7 @@ export class HotelHomeComponent implements OnInit {
       this.showToast('Solo se pueden aprobar reservas pendientes.', 'error');
       return;
     }
-    this.bookingsService.update(reserva.id, { status: 'confirmed' } as Partial<Booking>).subscribe({
+    this.bookingsService.approve(reserva.id).subscribe({
       next: () => { this.loadReservas(); this.showToast(`Reserva ${reserva.booking_code} aprobada. Cobro procesado.`, 'success'); },
       error: () => this.showToast('Error al aprobar la reserva.', 'error'),
     });
@@ -95,7 +95,7 @@ export class HotelHomeComponent implements OnInit {
   confirmReject() {
     const reserva = this.rejectingReserva();
     if (!reserva || !this.rejectReason.trim()) return;
-    this.bookingsService.update(reserva.id, { status: 'cancelled', notes: this.rejectReason.trim() } as Partial<Booking>).subscribe({
+    this.bookingsService.reject(reserva.id, this.rejectReason.trim()).subscribe({
       next: () => {
         this.showRejectModal.set(false);
         this.rejectingReserva.set(null);

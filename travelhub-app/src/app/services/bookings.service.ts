@@ -70,4 +70,12 @@ export class BookingsService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  approve(id: string): Observable<Booking> {
+    return this.http.patch<Booking>(`${this.baseUrl}/${id}/approve`, {});
+  }
+
+  reject(id: string, reason: string): Observable<Booking> {
+    return this.http.patch<Booking>(`${this.baseUrl}/${id}/reject`, { rejection_reason: reason });
+  }
 }

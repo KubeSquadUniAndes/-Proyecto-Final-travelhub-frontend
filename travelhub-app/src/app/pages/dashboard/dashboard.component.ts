@@ -211,7 +211,7 @@ export class DashboardComponent implements OnInit {
     const booking = this.payingBooking();
     if (!booking || !this.validatePayment()) return;
     this.isProcessingPayment.set(true);
-    this.bookingsService.update(booking.id, { status: 'confirmed' } as Partial<Booking>).subscribe({
+    this.bookingsService.approve(booking.id).subscribe({
       next: () => { this.closePayment(); this.loadReservas(); this.showToast(`Pago procesado. Reserva ${booking.booking_code} confirmada.`, 'success'); },
       error: () => { this.isProcessingPayment.set(false); this.showToast('Error al procesar el pago. Intenta de nuevo.', 'error'); },
     });
