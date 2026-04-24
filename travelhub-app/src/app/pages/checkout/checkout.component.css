@@ -47,3 +47,7 @@ main h1 { font-size: 28px; font-weight: 700; color: #101828; margin: 0 0 24px; }
   .checkout-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
 }
+
+.readonly-input { background: #f3f4f6; color: #364153; cursor: not-allowed; }
+
+.summary-divider { border-top: 1px solid #e5e7eb; margin: 8px 0; }

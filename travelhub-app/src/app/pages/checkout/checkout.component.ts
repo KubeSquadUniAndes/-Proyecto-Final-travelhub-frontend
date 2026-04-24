@@ -18,10 +18,12 @@ export class CheckoutComponent implements OnInit {
   private authService = inject(AuthService);
   private bookingsService = inject(BookingsService);
 
+  roomId = '';
   hotelId = '';
   roomName = '';
   roomType = 'Suite';
   roomPrice = 200;
+  today = new Date().toISOString().split('T')[0];
   isLoading = signal(false);
   errorMessage = signal('');
 
@@ -40,7 +42,8 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit() {
     const params = this.route.snapshot.queryParamMap;
-    this.hotelId = params.get('roomId') ?? '';
+    this.roomId = params.get('roomId') ?? '';
+    this.hotelId = params.get('hotelId') ?? '';
     this.roomName = params.get('roomName') ?? '';
     this.roomType = params.get('roomType') ?? 'Suite';
     this.roomPrice = Number(params.get('price')) || 200;
@@ -80,7 +83,8 @@ export class CheckoutComponent implements OnInit {
     this.isLoading.set(true);
 
     this.bookingsService.create({
-      resource_id: this.hotelId || crypto.randomUUID(),
+      hotel_id: this.hotelId,
+      room_id: this.roomId,
       start_time: this.form.start_time + 'T14:00:00',
       end_time: this.form.end_time + 'T12:00:00',
       room_type: this.form.room_type,
@@ -91,7 +95,6 @@ export class CheckoutComponent implements OnInit {
       traveler_phone: this.form.traveler_phone,
       traveler_document: this.form.traveler_document,
       special_requests: this.form.special_requests,
-      additional_guests: [],
     }).subscribe({
       next: () => {
         this.router.navigate(['/booking-confirmed']);
@@ -105,6 +108,24 @@ export class CheckoutComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/search']);
+  }
+
+  totalNights(): number {
+    if (!this.form.start_time || !this.form.end_time) return 0;
+    const diff = new Date(this.form.end_time).getTime() - new Date(this.form.start_time).getTime();
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  }
+
+  subtotal(): number {
+    return this.totalNights() * this.form.price_per_night;
+  }
+
+  taxes(): number {
+    return Math.round(this.subtotal() * 0.19);
+  }
+
+  totalPrice(): number {
+    return this.subtotal() + this.taxes();
   }
 
   navigate(path: string) {

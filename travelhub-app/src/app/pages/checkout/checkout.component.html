@@ -48,7 +48,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="start_time">Check-in *</label>
-            <input id="start_time" type="date" [(ngModel)]="form.start_time" name="start_time" />
+            <input id="start_time" type="date" [(ngModel)]="form.start_time" name="start_time" [min]="today" />
           </div>
           <div class="form-group">
             <label for="end_time">Check-out *</label>
@@ -58,11 +58,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="room_type">Tipo de habitación</label>
-            <select id="room_type" [(ngModel)]="form.room_type" name="room_type">
-              <option value="Suite">Suite</option>
-              <option value="Doble">Doble</option>
-              <option value="Individual">Individual</option>
-            </select>
+            <input id="room_type" type="text" [value]="form.room_type" name="room_type" readonly class="readonly-input" />
           </div>
           <div class="form-group">
             <label for="num_guests">Huéspedes *</label>
@@ -71,7 +67,7 @@
         </div>
         <div class="form-group">
           <label for="price_per_night">Precio por noche ($)</label>
-          <input id="price_per_night" type="number" [(ngModel)]="form.price_per_night" name="price_per_night" min="0" />
+          <input id="price_per_night" type="text" [value]="'$ ' + form.price_per_night" name="price_per_night" readonly class="readonly-input" />
         </div>
         <div class="form-group">
           <label for="special_requests">Solicitudes especiales</label>
@@ -81,11 +77,17 @@
 
       <div class="summary-card">
         <h2>Resumen</h2>
+        <div class="summary-row"><span>Habitación</span><span>{{ roomName }}</span></div>
         <div class="summary-row"><span>Tipo</span><span>{{ form.room_type }}</span></div>
         <div class="summary-row"><span>Huéspedes</span><span>{{ form.num_guests }}</span></div>
         <div class="summary-row"><span>Check-in</span><span>{{ form.start_time || '—' }}</span></div>
         <div class="summary-row"><span>Check-out</span><span>{{ form.end_time || '—' }}</span></div>
-        <div class="summary-row total"><span>Precio/noche</span><span>$ {{ form.price_per_night | number }}</span></div>
+        <div class="summary-row"><span>Noches</span><span>{{ totalNights() }}</span></div>
+        <div class="summary-divider"></div>
+        <div class="summary-row"><span>Precio/noche</span><span>$ {{ form.price_per_night | number }}</span></div>
+        <div class="summary-row"><span>Subtotal</span><span>$ {{ subtotal() | number }}</span></div>
+        <div class="summary-row"><span>Impuestos (19%)</span><span>$ {{ taxes() | number }}</span></div>
+        <div class="summary-row total"><span>Total</span><span>$ {{ totalPrice() | number }}</span></div>
         <button class="btn-confirm" [disabled]="isLoading() || !form.traveler_name || !form.start_time || !form.end_time" (click)="submitBooking()">
           {{ isLoading() ? 'Procesando...' : 'Confirmar Reserva' }}
         </button>

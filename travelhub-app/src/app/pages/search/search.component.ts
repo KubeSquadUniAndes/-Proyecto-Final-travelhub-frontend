@@ -88,7 +88,7 @@ export class SearchComponent implements OnInit {
 
   goToCheckout(room: Room) {
     this.router.navigate(['/checkout'], {
-      queryParams: { roomId: room.id, roomName: room.name, roomType: room.room_type, price: room.price, capacity: room.capacity },
+      queryParams: { roomId: room.id, hotelId: room.hotel_id, roomName: room.name, roomType: room.room_type, price: room.price, capacity: room.capacity },
     });
   }
 

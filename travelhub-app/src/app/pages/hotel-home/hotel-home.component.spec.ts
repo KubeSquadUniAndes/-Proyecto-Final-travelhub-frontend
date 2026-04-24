@@ -22,7 +22,7 @@ describe('HotelHomeComponent', () => {
       imports: [HotelHomeComponent],
       providers: [
         provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
-        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ full_name: 'Hotel Test' }) } },
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ id: 'hotel-uuid', full_name: 'Hotel Test' }) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(HotelHomeComponent);
@@ -181,7 +181,7 @@ describe('HotelHomeComponent - Template', () => {
       imports: [HotelHomeComponent],
       providers: [
         provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
-        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ full_name: 'Hotel Test' }) } },
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ id: 'hotel-uuid', full_name: 'Hotel Test' }) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(HotelHomeComponent);

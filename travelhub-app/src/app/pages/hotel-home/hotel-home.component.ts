@@ -48,7 +48,8 @@ export class HotelHomeComponent implements OnInit {
   loadReservas() {
     this.isLoading.set(true);
     this.hasError.set(false);
-    this.bookingsService.list().subscribe({
+    const userId = this.authService.currentUser()?.id ?? '';
+    this.bookingsService.listByHotel(userId).subscribe({
       next: (bookings) => { this.reservas.set(bookings); this.isLoading.set(false); },
       error: () => { this.hasError.set(true); this.isLoading.set(false); },
     });

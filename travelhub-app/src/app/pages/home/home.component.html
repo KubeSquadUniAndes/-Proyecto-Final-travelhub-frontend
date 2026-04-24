@@ -87,25 +87,29 @@
   <section class="hotels-section">
     <div class="section-header">
       <h2>Hospedajes disponibles</h2>
-      <p>{{ hospedajes.length }} hospedajes ordenados por popularidad</p>
+      @if (isLoading()) {
+        <p>Cargando...</p>
+      } @else {
+        <p>{{ hospedajes().length }} hospedajes disponibles</p>
+      }
     </div>
     <div class="hotels-grid">
-      @for (hotel of hospedajes; track hotel.id) {
+      @for (room of hospedajes(); track room.id; let i = $index) {
         <div class="hotel-card">
           <div class="hotel-image">
-            <img [src]="hotel.image" [alt]="hotel.name" loading="lazy" />
-            <span class="hotel-rating">⭐ {{ hotel.rating }}</span>
+            <img [src]="getImage(i)" [alt]="room.name" loading="lazy" />
+            <span class="hotel-rating">{{ room.room_type }}</span>
           </div>
           <div class="hotel-info">
-            <h3>{{ hotel.name }}</h3>
-            <p class="hotel-location">📍 {{ hotel.location }}</p>
+            <h3>{{ room.name }}</h3>
+            <p class="hotel-location">🛏️ {{ room.beds }} · 📐 {{ room.size }} m² · 👥 {{ room.capacity }} huéspedes</p>
             <div class="hotel-footer">
               <div class="hotel-price">
                 <span class="price-label">Desde</span>
-                <span class="price-value">$ {{ hotel.price | number }}</span>
+                <span class="price-value">$ {{ room.price }}</span>
                 <span class="price-label">/ noche</span>
               </div>
-              <button class="btn-reservar" (click)="goToCheckout(hotel.id)">Reservar</button>
+              <button class="btn-reservar" (click)="goToCheckout(room)">Reservar</button>
             </div>
           </div>
         </div>
