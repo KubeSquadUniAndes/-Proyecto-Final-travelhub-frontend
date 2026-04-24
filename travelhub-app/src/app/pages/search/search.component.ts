@@ -5,19 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { RoomsService, Room } from '../../services/rooms.service';
 
-const FALLBACK_ROOMS: Room[] = [
-  { id: crypto.randomUUID(), name: 'Suite Premium Ocean View', room_type: 'suite', price: '450.00', capacity: 4, beds: '1 king', size: 45, amenities: 'WiFi, AC, TV, Minibar, Vista al mar' },
-  { id: crypto.randomUUID(), name: 'Habitación Deluxe Doble', room_type: 'doble', price: '280.00', capacity: 2, beds: '2 camas dobles', size: 35, amenities: 'WiFi, AC, TV' },
-  { id: crypto.randomUUID(), name: 'Suite Junior con Jacuzzi', room_type: 'suite', price: '380.00', capacity: 3, beds: '1 king + sofá cama', size: 40, amenities: 'WiFi, AC, TV, Jacuzzi' },
-  { id: crypto.randomUUID(), name: 'Habitación Estándar', room_type: 'individual', price: '150.00', capacity: 2, beds: '1 cama doble', size: 25, amenities: 'WiFi, AC' },
-  { id: crypto.randomUUID(), name: 'Suite Presidencial', room_type: 'suite', price: '620.00', capacity: 6, beds: '1 king + 2 individuales', size: 65, amenities: 'WiFi, AC, TV, Minibar, Sala, Terraza' },
-  { id: crypto.randomUUID(), name: 'Habitación Familiar', room_type: 'doble', price: '320.00', capacity: 5, beds: '2 dobles + 1 individual', size: 42, amenities: 'WiFi, AC, TV, Cocina' },
-  { id: crypto.randomUUID(), name: 'Habitación Económica', room_type: 'individual', price: '100.00', capacity: 1, beds: '1 individual', size: 18, amenities: 'WiFi, AC' },
-  { id: crypto.randomUUID(), name: 'Suite Luna de Miel', room_type: 'suite', price: '520.00', capacity: 2, beds: '1 king', size: 50, amenities: 'WiFi, AC, TV, Jacuzzi, Champagne' },
-  { id: crypto.randomUUID(), name: 'Habitación Triple', room_type: 'doble', price: '250.00', capacity: 3, beds: '3 individuales', size: 30, amenities: 'WiFi, AC, TV' },
-  { id: crypto.randomUUID(), name: 'Penthouse', room_type: 'suite', price: '900.00', capacity: 8, beds: '2 king + sofá cama', size: 90, amenities: 'WiFi, AC, TV, Minibar, Terraza, Cocina, Sala' },
-];
-
 const IMAGES = [
   'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
   'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
@@ -84,11 +71,7 @@ export class SearchComponent implements OnInit {
     this.hasError.set(false);
     this.roomsService.list().subscribe({
       next: (rooms) => { this.allRooms.set(rooms); this.isLoading.set(false); },
-      error: () => {
-        // Fallback: si el API falla o no tiene permisos, mostrar habitaciones de ejemplo
-        this.allRooms.set(FALLBACK_ROOMS);
-        this.isLoading.set(false);
-      },
+      error: () => { this.hasError.set(true); this.isLoading.set(false); },
     });
   }
 

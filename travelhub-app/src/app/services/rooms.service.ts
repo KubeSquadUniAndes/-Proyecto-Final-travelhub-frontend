@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 
 export interface Room {
   id: string;
+  hotel_id?: string;
   name: string;
   room_type: string;
   price: string;
