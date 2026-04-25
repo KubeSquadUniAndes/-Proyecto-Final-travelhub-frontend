@@ -6,14 +6,16 @@ import { environment } from '../../environments/environment';
 export interface Room {
   id: string;
   hotel_id?: string;
+  hotel_name?: string;
   name: string;
+  destination?: string;
   room_type: string;
   price: string;
   capacity: number;
   beds: string;
   size: number;
-  amenities: string;
   status?: string;
+  amenities: string;
   created_at?: string;
   updated_at?: string;
 }

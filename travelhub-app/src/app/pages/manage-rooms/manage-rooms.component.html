@@ -24,7 +24,10 @@
         <h1>Gestionar Habitaciones</h1>
         <p>Administra el inventario de habitaciones de tu hotel</p>
       </div>
-      <button class="btn-primary" (click)="openCreateForm()">+ Nueva Habitación</button>
+      <div class="header-buttons">
+        <button class="btn-secondary" (click)="openRates()">💰 Tarifas</button>
+        <button class="btn-primary" (click)="openCreateForm()">+ Nueva Habitación</button>
+      </div>
     </div>
 
     @if (isLoading()) {
@@ -47,6 +50,11 @@
       <div class="rooms-grid">
         @for (room of rooms(); track room.id) {
           <div class="room-card">
+            @if (getRoomImage(room.id)) {
+              <div class="room-image">
+                <img [src]="getRoomImage(room.id)" [alt]="room.name" />
+              </div>
+            }
             <div class="room-header">
               <h3>{{ room.name }}</h3>
               <span class="room-type-badge">{{ room.room_type }}</span>
@@ -65,6 +73,7 @@
             }
             <div class="room-actions">
               <button class="btn-edit" (click)="openEditForm(room)">✏️ Editar</button>
+              <button class="btn-edit" (click)="openImages(room)">📷 Fotos</button>
               <button class="btn-delete" (click)="confirmDelete(room)">🗑️ Eliminar</button>
             </div>
           </div>
@@ -82,6 +91,10 @@
           <div class="form-group">
             <label for="name">Nombre *</label>
             <input id="name" type="text" [(ngModel)]="form.name" name="name" placeholder="Ej: Habitación 101" />
+          </div>
+          <div class="form-group">
+            <label for="destination">Destino</label>
+            <input id="destination" type="text" [(ngModel)]="form.destination" name="destination" placeholder="Ej: Cartagena" />
           </div>
           <div class="form-group">
             <label for="room_type">Tipo *</label>
@@ -129,6 +142,76 @@
         <div class="modal-actions">
           <button class="btn-cancel" (click)="cancelDelete()">Cancelar</button>
           <button class="btn-danger" (click)="deleteRoom()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Images Modal -->
+  @if (showImageModal()) {
+    <div class="modal-overlay" (click)="closeImages()" (keydown.escape)="closeImages()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="closeImages()" tabindex="0">
+        <h2>📷 Fotos de {{ imageRoom()?.name }}</h2>
+        <div class="image-upload">
+          <label for="imageFile" class="btn-secondary">Subir imagen</label>
+          <input id="imageFile" type="file" accept="image/*" (change)="uploadImage($event)" hidden />
+        </div>
+        <div class="images-grid">
+          @for (img of roomImages(); track img.id) {
+            <div class="image-item">
+              <img [src]="img.url" [alt]="imageRoom()?.name" />
+              <button class="btn-delete-img" (click)="deleteImage(img.id)">❌</button>
+            </div>
+          }
+          @if (roomImages().length === 0) {
+            <p class="no-images">No hay imágenes. Sube la primera.</p>
+          }
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeImages()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Rates Modal -->
+  @if (showRateModal()) {
+    <div class="modal-overlay" (click)="closeRates()" (keydown.escape)="closeRates()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="closeRates()" tabindex="0">
+        <h2>💰 Tarifas</h2>
+        <div class="rate-form">
+          <select [(ngModel)]="rateForm.room_type" name="rateRoomType">
+            <option value="individual">Individual</option>
+            <option value="doble">Doble</option>
+            <option value="suite">Suite</option>
+          </select>
+          <select [(ngModel)]="rateForm.season" name="rateSeason">
+            <option value="base">Base</option>
+            <option value="alta">Alta</option>
+            <option value="baja">Baja</option>
+          </select>
+          <input type="number" [(ngModel)]="rateForm.base_price" name="ratePrice" placeholder="Precio" min="0" />
+          <button class="btn-primary" (click)="createRate()" [disabled]="!rateForm.base_price">Crear</button>
+        </div>
+        <div class="rates-list">
+          @for (rate of rates(); track rate.id) {
+            <div class="rate-item">
+              <div>
+                <strong>{{ rate.room_type }}</strong> — {{ rate.season }}
+                <span class="rate-price">$ {{ rate.base_price }}</span>
+                @if (rate.has_discount) {
+                  <span class="rate-discount">→ $ {{ rate.final_price }} ({{ rate.discount_name }})</span>
+                }
+              </div>
+              <button class="btn-delete-sm" (click)="deleteRate(rate.id)">🗑️</button>
+            </div>
+          }
+          @if (rates().length === 0) {
+            <p class="no-rates">No hay tarifas configuradas.</p>
+          }
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeRates()">Cerrar</button>
         </div>
       </div>
     </div>

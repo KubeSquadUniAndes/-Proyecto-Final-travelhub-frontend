@@ -100,7 +100,11 @@ export class CheckoutComponent implements OnInit {
         this.router.navigate(['/booking-confirmed']);
       },
       error: (err) => {
-        this.errorMessage.set(err?.error?.detail ?? 'Error al crear la reserva. Intenta de nuevo.');
+        const detail = err?.error?.detail ?? '';
+        const messages: Record<string, string> = {
+          'A schedule conflict exists for this resource': 'Esta habitación ya está reservada para las fechas seleccionadas. Por favor elige otras fechas u otra habitación.',
+        };
+        this.errorMessage.set(messages[detail] || detail || 'Error al crear la reserva. Intenta de nuevo.');
         this.isLoading.set(false);
       },
     });

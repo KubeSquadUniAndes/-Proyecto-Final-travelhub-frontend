@@ -74,19 +74,22 @@
           @for (room of filteredRooms(); track room.id; let i = $index) {
             <div class="hotel-card">
               <div class="hotel-image">
-                <img [src]="getImage(i)" [alt]="room.name" loading="lazy" />
+                <img [src]="getRoomImage(room.id)" [alt]="room.name" loading="lazy" />
                 <span class="hotel-rating">{{ room.room_type }}</span>
               </div>
               <div class="hotel-info">
                 <h3>{{ room.name }}</h3>
-                <p class="hotel-location">🛏️ {{ room.beds }} · 📐 {{ room.size }} m²</p>
-                <p class="hotel-capacity">👥 Hasta {{ room.capacity }} huéspedes</p>
+                <p class="hotel-location">🏨 {{ room.hotel_name }}</p>
+                @if (room.destination) {
+                  <p class="hotel-location">📍 {{ room.destination }}</p>
+                }
+                <p class="hotel-capacity">🛏️ {{ room.beds }} · 📐 {{ room.size }} m² · 👥 {{ room.capacity }} huéspedes</p>
                 @if (room.amenities) {
                   <p class="hotel-amenities">{{ room.amenities }}</p>
                 }
                 <div class="hotel-footer">
                   <div class="hotel-price">
-                    <span class="price-value">$ {{ room.price }}</span>
+                    <span class="price-value">$ {{ getRoomPrice(room) | number }}</span>
                     <span class="price-label">/ noche</span>
                   </div>
                   <button class="btn-reservar" (click)="goToCheckout(room)">Reservar</button>

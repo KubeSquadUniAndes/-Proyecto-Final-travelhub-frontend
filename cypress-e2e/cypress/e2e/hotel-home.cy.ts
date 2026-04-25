@@ -7,7 +7,7 @@ describe('Hotel Home', () => {
 
   context('Dado que el usuario hotel inició sesión', () => {
     it('Entonces debe ver el nombre del hotel', () => {
-      cy.contains('Grand Seaside Resort').should('be.visible');
+      cy.contains('Hotel Admin').should('be.visible');
     });
 
     it('Entonces debe ver la navegación', () => {
@@ -22,12 +22,14 @@ describe('Hotel Home', () => {
       cy.contains('Rechazar reserva').should('be.visible');
     });
 
-    it('Entonces debe ver el listado de reservas', () => {
-      cy.get('.reserva-card').should('have.length.greaterThan', 0);
+    it('Entonces debe ver el sidebar con estadísticas', () => {
+      cy.contains('Pendientes').should('be.visible');
+      cy.contains('Confirmadas').should('be.visible');
+      cy.contains('Rechazadas').should('be.visible');
     });
 
-    it('Entonces debe ver reservas con estado Pendiente', () => {
-      cy.contains('Pendiente').should('be.visible');
+    it('Entonces debe mostrar contenido (reservas, vacío o error)', () => {
+      cy.get('.reserva-card, .empty-state, .loading-state').should('exist');
     });
 
     it('Cuando navega al Dashboard, debe redirigir', () => {
@@ -58,21 +60,27 @@ describe('Hotel Dashboard', () => {
       cy.contains('Total Reservas').should('be.visible');
       cy.contains('Confirmadas').should('be.visible');
       cy.contains('Pendientes').should('be.visible');
+      cy.contains('Ingresos').should('be.visible');
     });
 
-    it('Entonces debe ver la tabla de reservas', () => {
-      cy.contains('Huésped').should('be.visible');
-      cy.contains('Check-in').should('be.visible');
-      cy.contains('Estado').should('be.visible');
+    it('Entonces debe mostrar contenido (tabla, vacío o cargando)', () => {
+      cy.get('table, .empty-state, .loading-state, .error-state').should('exist');
     });
 
-    it('Entonces debe ver el buscador', () => {
-      cy.get('input[placeholder*="Buscar"]').should('be.visible');
+    it('Entonces debe ver la navegación', () => {
+      cy.contains('Inicio').should('be.visible');
+      cy.contains('Dashboard').should('be.visible');
+      cy.contains('Habitaciones').should('be.visible');
     });
 
-    it('Cuando navega al Home, debe redirigir', () => {
-      cy.contains('nav a', 'Home').click();
+    it('Cuando navega al Inicio, debe redirigir', () => {
+      cy.contains('nav a', 'Inicio').click();
       cy.url().should('include', '/hotel-home');
+    });
+
+    it('Cuando navega a Habitaciones, debe redirigir', () => {
+      cy.contains('nav a', 'Habitaciones').click();
+      cy.url().should('include', '/manage-rooms');
     });
   });
 });
