@@ -41,7 +41,7 @@ describe('BookingsService', () => {
   });
 
   it('create should POST a new booking', () => {
-    const payload = { resource_id: 'r1', start_time: '2026-09-01T14:00:00', end_time: '2026-09-05T12:00:00', room_type: 'Suite', num_guests: 2, price_per_night: 200, traveler_name: 'Juan', traveler_email: 'j@e.com', traveler_phone: '+57300', traveler_document: 'CC-123' };
+    const payload = { hotel_id: 'h1', room_id: 'r1', start_time: '2026-09-01T14:00:00', end_time: '2026-09-05T12:00:00', room_type: 'Suite', num_guests: 2, price_per_night: 200, traveler_name: 'Juan', traveler_email: 'j@e.com', traveler_phone: '+57300', traveler_document: 'CC-123' };
     service.create(payload).subscribe(b => { expect(b.booking_code).toBe('TH-2026-ABC12'); });
     const req = httpMock.expectOne(r => r.method === 'POST');
     req.flush(mockBooking);

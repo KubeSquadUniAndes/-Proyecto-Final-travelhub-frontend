@@ -116,3 +116,10 @@ nav a:hover, nav a.active { color: #2563eb; }
 .btn-modal-cancel { padding: 10px 20px; background: transparent; color: #364153; border: 1px solid #d1d5dc; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
 .btn-modal-reject { padding: 10px 20px; background: #c10007; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
 .btn-modal-reject:disabled { opacity: 0.4; cursor: default; }
+
+.loading-state { text-align: center; padding: 80px; font-size: 16px; color: #4a5565; }
+.btn-retry { padding: 10px 24px; background: #155dfc; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-retry:hover { background: #193cb8; }
+.reserva-price { display: flex; flex-direction: column; gap: 2px; }
+.reserva-price .price-label { font-size: 11px; color: #6a7282; }
+.reserva-price .price-value { font-size: 16px; font-weight: 700; color: #155dfc; }

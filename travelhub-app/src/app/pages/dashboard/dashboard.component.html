@@ -104,6 +104,9 @@
                   <td>
                     <div class="actions">
                       <button class="btn-action" title="Ver detalle" (click)="viewDetail(r)">📋</button>
+                      @if (r.status === 'pending') {
+                        <button class="btn-action btn-pay-action" title="Pagar" (click)="openPayment(r)">💳</button>
+                      }
                       <button class="btn-action" title="Editar" (click)="openEdit(r)">✏️</button>
                       @if (r.cancellable) {
                         <button class="btn-action btn-cancel-action" title="Cancelar" (click)="openCancel(r)">❌</button>
@@ -156,6 +159,63 @@
     }
   </main>
 
+  <!-- Payment Modal -->
+  @if (showPaymentModal()) {
+    <div class="modal-overlay" (click)="closePayment()" (keydown.escape)="closePayment()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="closePayment()" tabindex="0">
+        <h2>💳 Pagar Reserva</h2>
+        <div class="cancel-info">
+          <div class="cancel-detail"><span>Reserva</span><strong>{{ payingBooking()?.booking_code }}</strong></div>
+          <div class="cancel-detail"><span>Tipo</span><strong>{{ payingBooking()?.room_type }}</strong></div>
+          <div class="cancel-detail"><span>Noches</span><strong>{{ payingBooking()?.total_nights }}</strong></div>
+          <div class="cancel-detail refund"><span>💰 Total a pagar</span><strong>$ {{ payingBooking()?.final_price }}</strong></div>
+        </div>
+        <div class="form-group">
+          <label for="card-number">Número de tarjeta</label>
+          <div class="card-input-wrapper">
+            <input id="card-number" type="text" [value]="paymentForm.cardNumber" (input)="onCardNumberInput($any($event.target).value)" placeholder="4242 4242 4242 4242" maxlength="19" [class.input-error]="cardErrors()['cardNumber']" />
+            @if (cardBrand()) {
+              <span class="card-brand">{{ cardBrand() }}</span>
+            }
+          </div>
+          @if (cardErrors()['cardNumber']) {
+            <span class="field-error">{{ cardErrors()['cardNumber'] }}</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="card-name">Nombre en la tarjeta</label>
+          <input id="card-name" type="text" [(ngModel)]="paymentForm.cardName" name="cardName" placeholder="JUAN PEREZ" [class.input-error]="cardErrors()['cardName']" />
+          @if (cardErrors()['cardName']) {
+            <span class="field-error">{{ cardErrors()['cardName'] }}</span>
+          }
+        </div>
+        <div class="form-row-modal">
+          <div class="form-group">
+            <label for="card-expiry">Vencimiento</label>
+            <input id="card-expiry" type="text" [value]="paymentForm.expiry" (input)="onExpiryInput($any($event.target).value)" placeholder="MM/AA" maxlength="5" [class.input-error]="cardErrors()['expiry']" />
+            @if (cardErrors()['expiry']) {
+              <span class="field-error">{{ cardErrors()['expiry'] }}</span>
+            }
+          </div>
+          <div class="form-group">
+            <label for="card-cvv">CVV</label>
+            <input id="card-cvv" type="password" [value]="paymentForm.cvv" (input)="onCvvInput($any($event.target).value)" placeholder="•••" [attr.maxlength]="cardBrand() === 'Amex' ? 4 : 3" [class.input-error]="cardErrors()['cvv']" />
+            @if (cardErrors()['cvv']) {
+              <span class="field-error">{{ cardErrors()['cvv'] }}</span>
+            }
+          </div>
+        </div>
+        <p class="payment-disclaimer">🔒 Pago simulado — no se realizará ningún cobro real.</p>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" (click)="closePayment()" [disabled]="isProcessingPayment()">Cancelar</button>
+          <button class="btn-pay" [disabled]="isProcessingPayment()" (click)="confirmPayment()">
+            {{ isProcessingPayment() ? 'Procesando...' : 'Confirmar Pago' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- Edit Modal -->
   @if (showEditModal()) {
     <div class="modal-overlay" (click)="closeEdit()" (keydown.escape)="closeEdit()" tabindex="0">
@@ -185,12 +245,26 @@
   <!-- Cancel Modal -->
   @if (showCancelModal()) {
     <div class="modal-overlay" (click)="closeCancel()" (keydown.escape)="closeCancel()" tabindex="0">
-      <div class="modal modal-sm" (click)="$event.stopPropagation()" (keydown.escape)="closeCancel()" tabindex="0">
+      <div class="modal" (click)="$event.stopPropagation()" (keydown.escape)="closeCancel()" tabindex="0">
         <h2>Cancelar Reserva</h2>
-        <p>¿Estás seguro de cancelar la reserva <strong>{{ cancellingBooking()?.booking_code }}</strong>? Esta acción no se puede deshacer.</p>
+        <div class="cancel-info">
+          <div class="cancel-detail"><span>Reserva</span><strong>{{ cancellingBooking()?.booking_code }}</strong></div>
+          <div class="cancel-detail"><span>Tipo</span><strong>{{ cancellingBooking()?.room_type }}</strong></div>
+          <div class="cancel-detail"><span>Fechas</span><strong>{{ formatDate(cancellingBooking()?.start_time ?? '') }} → {{ formatDate(cancellingBooking()?.end_time ?? '') }}</strong></div>
+          @if (cancellingBooking()?.final_price) {
+            <div class="cancel-detail refund"><span>💰 Devolución estimada (100%)</span><strong>$ {{ cancellingBooking()?.final_price }}</strong></div>
+          }
+        </div>
+        <div class="form-group">
+          <label for="cancel-reason">Motivo de cancelación *</label>
+          <textarea id="cancel-reason" [(ngModel)]="cancelReason" name="cancelReason" rows="3" placeholder="Indica el motivo de la cancelación..."></textarea>
+        </div>
+        <p class="cancel-warning">⚠️ Esta acción no se puede deshacer. La habitación será liberada y se procesará la devolución automáticamente.</p>
         <div class="modal-actions">
-          <button class="btn-modal-cancel" (click)="closeCancel()">Volver</button>
-          <button class="btn-danger" (click)="confirmCancel()">Cancelar Reserva</button>
+          <button class="btn-modal-cancel" (click)="closeCancel()" [disabled]="isCancelling()">Volver</button>
+          <button class="btn-danger" [disabled]="!cancelReason.trim() || isCancelling()" (click)="confirmCancel()">
+            {{ isCancelling() ? 'Procesando...' : 'Confirmar Cancelación' }}
+          </button>
         </div>
       </div>
     </div>

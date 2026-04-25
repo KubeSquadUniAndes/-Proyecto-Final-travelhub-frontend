@@ -65,3 +65,25 @@ main { max-width: 1142px; margin: 32px auto; padding: 0 32px; }
 
 @media (max-width: 1024px) { .rooms-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) { .rooms-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } }
+
+.header-buttons { display: flex; gap: 12px; }
+.btn-secondary { padding: 10px 24px; background: #eff6ff; color: #155dfc; border: 1px solid #155dfc; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-secondary:hover { background: #155dfc; color: #fff; }
+
+.image-upload { margin-bottom: 16px; }
+.images-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.image-item { position: relative; border-radius: 8px; overflow: hidden; height: 120px; }
+.image-item img { width: 100%; height: 100%; object-fit: cover; }
+.btn-delete-img { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 12px; cursor: pointer; }
+.no-images, .no-rates { text-align: center; color: #6a7282; font-size: 14px; padding: 20px; }
+
+.rate-form { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.rate-form select, .rate-form input { padding: 8px 12px; border: 1px solid #d1d5dc; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; }
+.rates-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+.rate-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9fafb; border-radius: 8px; font-size: 14px; }
+.rate-price { font-weight: 700; color: #155dfc; margin-left: 8px; }
+.rate-discount { color: #008236; font-weight: 600; margin-left: 4px; }
+.btn-delete-sm { background: none; border: none; cursor: pointer; font-size: 16px; }
+
+.room-image { height: 160px; overflow: hidden; border-radius: 14px 14px 0 0; margin: -24px -24px 16px; }
+.room-image img { width: 100%; height: 100%; object-fit: cover; }

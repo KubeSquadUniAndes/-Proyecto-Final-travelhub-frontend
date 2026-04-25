@@ -3,16 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-
-export interface HotelReserva {
-  id: string;
-  huesped: string;
-  checkIn: string;
-  checkOut: string;
-  estado: 'Pendiente' | 'Confirmada' | 'En curso' | 'Completada' | 'Cancelada' | 'Rechazada';
-  tipoHabitacion: string;
-  rejectReason?: string;
-}
+import { BookingsService, Booking } from '../../services/bookings.service';
 
 @Component({
   selector: 'app-hotel-home',
@@ -24,21 +15,24 @@ export interface HotelReserva {
 export class HotelHomeComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private bookingsService = inject(BookingsService);
 
-  readonly hotelName = 'Grand Seaside Resort';
-  reservas = signal<HotelReserva[]>([]);
+  readonly hotelName = computed(() => this.authService.currentUser()?.full_name ?? 'Mi Hotel');
+  reservas = signal<Booking[]>([]);
+  isLoading = signal(true);
+  hasError = signal(false);
   hasReservas = computed(() => this.reservas().length > 0);
-  selectedReserva = signal<HotelReserva | null>(null);
+  selectedReserva = signal<Booking | null>(null);
 
   toastMessage = signal('');
   toastType = signal<'success' | 'error'>('success');
   showRejectModal = signal(false);
-  rejectingReserva = signal<HotelReserva | null>(null);
+  rejectingReserva = signal<Booking | null>(null);
   rejectReason = '';
 
-  pendingCount = computed(() => this.reservas().filter(r => r.estado === 'Pendiente').length);
-  confirmedCount = computed(() => this.reservas().filter(r => r.estado === 'Confirmada').length);
-  rejectedCount = computed(() => this.reservas().filter(r => r.estado === 'Rechazada').length);
+  pendingCount = computed(() => this.reservas().filter(r => r.status === 'pending').length);
+  confirmedCount = computed(() => this.reservas().filter(r => r.status === 'confirmed').length);
+  rejectedCount = computed(() => this.reservas().filter(r => r.status === 'cancelled').length);
 
   menuItems = [
     { label: 'Ver detalle', icon: '📋', action: 'detail' },
@@ -48,19 +42,23 @@ export class HotelHomeComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.reservas.set([
-      { id: 'BK-2401', huesped: 'María García', checkIn: '15 Mar 2026', checkOut: '18 Mar 2026', estado: 'Confirmada', tipoHabitacion: 'Suite Deluxe' },
-      { id: 'BK-2402', huesped: 'Carlos Rodríguez', checkIn: '20 Mar 2026', checkOut: '25 Mar 2026', estado: 'Pendiente', tipoHabitacion: 'Habitación Doble' },
-      { id: 'BK-2403', huesped: 'Ana Martínez', checkIn: '22 Mar 2026', checkOut: '24 Mar 2026', estado: 'Pendiente', tipoHabitacion: 'Suite Junior' },
-      { id: 'BK-2404', huesped: 'Luis Pérez', checkIn: '10 Mar 2026', checkOut: '13 Mar 2026', estado: 'Completada', tipoHabitacion: 'Habitación Estándar' },
-      { id: 'BK-2405', huesped: 'Sofia Torres', checkIn: '05 Mar 2026', checkOut: '08 Mar 2026', estado: 'Pendiente', tipoHabitacion: 'Suite Presidencial' },
-    ]);
+    this.loadReservas();
   }
 
-  onMenuAction(action: string, reserva?: HotelReserva) {
+  loadReservas() {
+    this.isLoading.set(true);
+    this.hasError.set(false);
+    const userId = this.authService.currentUser()?.id ?? '';
+    this.bookingsService.listByHotel(userId).subscribe({
+      next: (bookings) => { this.reservas.set(bookings); this.isLoading.set(false); },
+      error: () => { this.hasError.set(true); this.isLoading.set(false); },
+    });
+  }
+
+  onMenuAction(action: string, reserva?: Booking) {
     switch (action) {
       case 'detail':
-        if (reserva) this.selectedReserva.set(this.selectedReserva() === reserva ? null : reserva);
+        if (reserva) this.selectedReserva.set(this.selectedReserva()?.id === reserva.id ? null : reserva);
         break;
       case 'approve':
         if (reserva) this.approveReserva(reserva);
@@ -74,18 +72,20 @@ export class HotelHomeComponent implements OnInit {
     }
   }
 
-  approveReserva(reserva: HotelReserva) {
-    if (reserva.estado !== 'Pendiente') {
-      this.showToast('Solo se pueden aprobar reservas en estado Pendiente.', 'error');
+  approveReserva(reserva: Booking) {
+    if (reserva.status !== 'pending') {
+      this.showToast('Solo se pueden aprobar reservas pendientes.', 'error');
       return;
     }
-    this.reservas.update(list => list.map(r => r.id === reserva.id ? { ...r, estado: 'Confirmada' as const } : r));
-    this.showToast(`Reserva ${reserva.id} aprobada. Cobro procesado.`, 'success');
+    this.bookingsService.approve(reserva.id).subscribe({
+      next: () => { this.loadReservas(); this.showToast(`Reserva ${reserva.booking_code} aprobada. Cobro procesado.`, 'success'); },
+      error: () => this.showToast('Error al aprobar la reserva.', 'error'),
+    });
   }
 
-  openRejectModal(reserva: HotelReserva) {
-    if (reserva.estado !== 'Pendiente') {
-      this.showToast('Solo se pueden rechazar reservas en estado Pendiente.', 'error');
+  openRejectModal(reserva: Booking) {
+    if (reserva.status !== 'pending') {
+      this.showToast('Solo se pueden rechazar reservas pendientes.', 'error');
       return;
     }
     this.rejectingReserva.set(reserva);
@@ -96,10 +96,15 @@ export class HotelHomeComponent implements OnInit {
   confirmReject() {
     const reserva = this.rejectingReserva();
     if (!reserva || !this.rejectReason.trim()) return;
-    this.reservas.update(list => list.map(r => r.id === reserva.id ? { ...r, estado: 'Rechazada' as const, rejectReason: this.rejectReason.trim() } : r));
-    this.showRejectModal.set(false);
-    this.rejectingReserva.set(null);
-    this.showToast(`Reserva ${reserva.id} rechazada. Habitación liberada.`, 'success');
+    this.bookingsService.reject(reserva.id, this.rejectReason.trim()).subscribe({
+      next: () => {
+        this.showRejectModal.set(false);
+        this.rejectingReserva.set(null);
+        this.loadReservas();
+        this.showToast(`Reserva ${reserva.booking_code} rechazada. Habitación liberada.`, 'success');
+      },
+      error: () => this.showToast('Error al rechazar la reserva.', 'error'),
+    });
   }
 
   cancelReject() {
@@ -114,12 +119,17 @@ export class HotelHomeComponent implements OnInit {
     setTimeout(() => this.toastMessage.set(''), 4000);
   }
 
-  estadoClass(estado: string): string {
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  estadoClass(estado: string | undefined): string {
     const map: Record<string, string> = {
-      Pendiente: 'status-pending', Confirmada: 'status-confirmed', 'En curso': 'status-ongoing',
-      Completada: 'status-completed', Cancelada: 'status-cancelled', Rechazada: 'status-rejected',
+      pending: 'status-pending', confirmed: 'status-confirmed',
+      completed: 'status-completed', cancelled: 'status-cancelled',
     };
-    return map[estado] ?? '';
+    return map[estado ?? ''] ?? '';
   }
 
   navigate(path: string) { this.router.navigate([path]); }

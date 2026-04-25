@@ -73,7 +73,7 @@ resource "aws_cloudfront_distribution" "frontend" {
 
   # Origin 2: ELB del backend
   origin {
-    domain_name = "k8s-workload-travelhu-6ebf4c6317-8eaeeae129c46548.elb.us-east-1.amazonaws.com"
+    domain_name = "k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com"
     origin_id   = "ELB-backend"
 
     custom_origin_config {
