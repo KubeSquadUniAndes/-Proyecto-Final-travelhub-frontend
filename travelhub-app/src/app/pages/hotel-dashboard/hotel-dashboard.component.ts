@@ -1,17 +1,9 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface Reserva {
-  id: string;
-  huesped: string;
-  checkIn: Date;
-  checkOut: Date;
-  estado: 'Pendiente' | 'Confirmada' | 'En curso' | 'Completada' | 'Cancelada' | 'Rechazada';
-  monto: number;
-  huespedes: number;
-}
+import { AuthService } from '../../services/auth.service';
+import { BookingsService, Booking } from '../../services/bookings.service';
 
 @Component({
   selector: 'app-hotel-dashboard',
@@ -21,18 +13,24 @@ export interface Reserva {
   styleUrls: ['./hotel-dashboard.component.css']
 })
 export class HotelDashboardComponent implements OnInit {
-  readonly PAGE_SIZE = 50;
-  readonly hotelName = 'Grand Seaside Resort';
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private bookingsService = inject(BookingsService);
 
-  allReservas = signal<Reserva[]>([]);
+  readonly PAGE_SIZE = 50;
+  readonly hotelName = computed(() => this.authService.currentUser()?.full_name ?? 'Mi Hotel');
+
+  allReservas = signal<Booking[]>([]);
+  isLoading = signal(true);
+  hasError = signal(false);
   currentPage = signal(1);
   searchQuery = signal('');
 
   filteredReservas = computed(() => {
     const q = this.searchQuery().toLowerCase();
     return this.allReservas()
-      .filter(r => !q || r.huesped.toLowerCase().includes(q) || r.id.toLowerCase().includes(q))
-      .sort((a, b) => b.checkIn.getTime() - a.checkIn.getTime());
+      .filter(r => !q || r.traveler_name.toLowerCase().includes(q) || (r.booking_code ?? '').toLowerCase().includes(q) || r.id.toLowerCase().includes(q))
+      .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
   });
 
   paginatedReservas = computed(() => {
@@ -40,10 +38,11 @@ export class HotelDashboardComponent implements OnInit {
     return this.filteredReservas().slice(start, start + this.PAGE_SIZE);
   });
 
-  totalPages = computed(() => Math.ceil(this.filteredReservas().length / this.PAGE_SIZE));
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredReservas().length / this.PAGE_SIZE)));
 
   paginationLabel = computed(() => {
     const total = this.filteredReservas().length;
+    if (total === 0) return 'Sin reservas';
     const start = (this.currentPage() - 1) * this.PAGE_SIZE + 1;
     const end = Math.min(this.currentPage() * this.PAGE_SIZE, total);
     return `Mostrando ${start}-${end} de ${total} reservas`;
@@ -53,64 +52,49 @@ export class HotelDashboardComponent implements OnInit {
     const r = this.allReservas();
     return {
       total: r.length,
-      confirmadas: r.filter(x => x.estado === 'Confirmada').length,
-      pendientes: r.filter(x => x.estado === 'Pendiente').length,
-      ingresos: r.filter(x => ['Confirmada', 'Completada', 'En curso'].includes(x.estado))
-                  .reduce((acc, x) => acc + x.monto, 0)
+      confirmadas: r.filter(x => x.status === 'confirmed').length,
+      pendientes: r.filter(x => x.status === 'pending').length,
+      ingresos: r.filter(x => ['confirmed', 'completed'].includes(x.status ?? ''))
+                  .reduce((acc, x) => acc + (parseFloat(x.final_price ?? '0') || Number(x.price_per_night) || 0), 0)
     };
   });
 
-  constructor(private router: Router) {}
+  ngOnInit() { this.loadReservas(); }
 
-  ngOnInit() {
-    const now = new Date();
-    const mock: Reserva[] = Array.from({ length: 120 }, (_, i) => {
-      const checkIn = new Date(now);
-      checkIn.setDate(now.getDate() - Math.floor(Math.random() * 30));
-      const checkOut = new Date(checkIn);
-      checkOut.setDate(checkIn.getDate() + Math.floor(Math.random() * 7) + 1);
-      const estados: Reserva['estado'][] = ['Pendiente', 'Confirmada', 'En curso', 'Completada', 'Cancelada', 'Rechazada'];
-      return {
-        id: `BK-${2400 + i}`,
-        huesped: ['María García', 'Carlos Rodríguez', 'Ana Martínez', 'Luis Pérez', 'Sofia Torres'][i % 5],
-        checkIn,
-        checkOut,
-        estado: estados[i % estados.length],
-        monto: (Math.floor(Math.random() * 20) + 5) * 100,
-        huespedes: Math.floor(Math.random() * 4) + 1
-      };
+  loadReservas() {
+    this.isLoading.set(true);
+    this.hasError.set(false);
+    const userId = this.authService.currentUser()?.id ?? '';
+    this.bookingsService.listByHotel(userId).subscribe({
+      next: (bookings) => { this.allReservas.set(bookings); this.isLoading.set(false); },
+      error: () => { this.hasError.set(true); this.isLoading.set(false); },
     });
-    this.allReservas.set(mock);
   }
 
-  onSearch(q: string) {
-    this.searchQuery.set(q);
-    this.currentPage.set(1);
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page);
-  }
+  onSearch(q: string) { this.searchQuery.set(q); this.currentPage.set(1); }
+  goToPage(page: number) { if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page); }
 
   getPages(): number[] {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
+    const total = this.totalPages(), current = this.currentPage(), pages: number[] = [];
     for (let i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) pages.push(i);
     return pages;
   }
 
-  estadoClass(estado: string): string {
-    const map: Record<string, string> = {
-      'Pendiente': 'status-pending',
-      'Confirmada': 'status-confirmed',
-      'En curso': 'status-ongoing',
-      'Completada': 'status-completed',
-      'Cancelada': 'status-cancelled',
-      'Rechazada': 'status-rejected'
-    };
-    return map[estado] ?? '';
+  estadoClass(estado: string | undefined): string {
+    const map: Record<string, string> = { pending: 'status-pending', confirmed: 'status-confirmed', completed: 'status-completed', cancelled: 'status-cancelled' };
+    return map[estado ?? ''] ?? '';
+  }
+
+  estadoLabel(estado: string | undefined): string {
+    const map: Record<string, string> = { pending: 'Pendiente', confirmed: 'Confirmada', completed: 'Completada', cancelled: 'Cancelada' };
+    return map[estado ?? ''] ?? estado ?? '';
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
   navigate(path: string) { this.router.navigate([path]); }
+  logout() { this.authService.logout(); }
 }

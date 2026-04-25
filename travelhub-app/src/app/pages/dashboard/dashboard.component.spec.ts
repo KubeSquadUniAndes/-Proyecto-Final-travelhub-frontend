@@ -137,6 +137,7 @@ describe('DashboardComponent', () => {
     component.ngOnInit();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     component.openCancel(mockBookings[1]);
+    component.cancelReason = 'Cambio de planes';
     component.confirmCancel();
     httpMock.expectOne(r => r.method === 'DELETE').flush(null);
     httpMock.expectOne(r => r.method === 'GET').flush([mockBookings[0], mockBookings[2]]);
@@ -324,6 +325,7 @@ describe('DashboardComponent - Template', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     component.openCancel(mockBookings[1]);
+    component.cancelReason = 'Motivo test';
     component.confirmCancel();
     httpMock.expectOne(r => r.method === 'DELETE').error(new ProgressEvent('error'));
     expect(component.toastType()).toBe('error');
@@ -372,5 +374,205 @@ describe('DashboardComponent - Template', () => {
     component.selectedBooking.set(mockBookings[0]);
     component.closeDetail();
     expect(component.selectedBooking()).toBeNull();
+  });
+});
+
+describe('DashboardComponent - Payment & Cancel', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DashboardComponent],
+      providers: [
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'traveler' } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should open payment modal', () => {
+    component.openPayment(mockBookings[1]);
+    expect(component.showPaymentModal()).toBe(true);
+    expect(component.payingBooking()?.id).toBe('b2');
+  });
+
+  it('should close payment modal', () => {
+    component.openPayment(mockBookings[1]);
+    component.closePayment();
+    expect(component.showPaymentModal()).toBe(false);
+  });
+
+  it('should detect Visa brand', () => {
+    component.onCardNumberInput('4242424242424242');
+    expect(component.cardBrand()).toBe('Visa');
+  });
+
+  it('should detect Mastercard brand', () => {
+    component.onCardNumberInput('5555555555554444');
+    expect(component.cardBrand()).toBe('Mastercard');
+  });
+
+  it('should detect Amex brand', () => {
+    component.onCardNumberInput('378282246310005');
+    expect(component.cardBrand()).toBe('Amex');
+  });
+
+  it('should format card number with spaces', () => {
+    component.onCardNumberInput('4242424242424242');
+    expect(component.paymentForm.cardNumber).toBe('4242 4242 4242 4242');
+  });
+
+  it('should format expiry with slash', () => {
+    component.onExpiryInput('1228');
+    expect(component.paymentForm.expiry).toBe('12/28');
+  });
+
+  it('should limit CVV to digits only', () => {
+    component.onCvvInput('12a3');
+    expect(component.paymentForm.cvv).toBe('123');
+  });
+
+  it('should fail validation with empty fields', () => {
+    expect(component.validatePayment()).toBe(false);
+    expect(Object.keys(component.cardErrors()).length).toBeGreaterThan(0);
+  });
+
+  it('should fail validation with invalid card number', () => {
+    component.onCardNumberInput('1234567890123456');
+    component.paymentForm.cardName = 'Test';
+    component.onExpiryInput('1228');
+    component.onCvvInput('123');
+    expect(component.validatePayment()).toBe(false);
+    expect(component.cardErrors()['cardNumber']).toBeTruthy();
+  });
+
+  it('should fail validation with expired card', () => {
+    component.onCardNumberInput('4242424242424242');
+    component.paymentForm.cardName = 'Test';
+    component.onExpiryInput('0120');
+    component.onCvvInput('123');
+    expect(component.validatePayment()).toBe(false);
+    expect(component.cardErrors()['expiry']).toContain('vencida');
+  });
+
+  it('should pass validation with valid data', () => {
+    component.onCardNumberInput('4242424242424242');
+    component.paymentForm.cardName = 'Test User';
+    component.onExpiryInput('1228');
+    component.onCvvInput('123');
+    expect(component.validatePayment()).toBe(true);
+  });
+
+  it('should require 4 digit CVV for Amex', () => {
+    component.onCardNumberInput('378282246310005');
+    component.paymentForm.cardName = 'Test';
+    component.onExpiryInput('1228');
+    component.onCvvInput('123');
+    expect(component.validatePayment()).toBe(false);
+    expect(component.cardErrors()['cvv']).toContain('4');
+  });
+
+  it('should process payment successfully', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.openPayment(mockBookings[1]);
+    component.onCardNumberInput('4242424242424242');
+    component.paymentForm.cardName = 'Test';
+    component.onExpiryInput('1228');
+    component.onCvvInput('123');
+    component.confirmPayment();
+    httpMock.expectOne(r => r.method === 'PATCH').flush({ ...mockBookings[1], status: 'confirmed' });
+    httpMock.expectOne(r => r.method === 'GET').flush(mockBookings);
+    expect(component.showPaymentModal()).toBe(false);
+    expect(component.toastMessage()).toContain('Pago procesado');
+  });
+
+  it('should handle payment error', () => {
+    component.openPayment(mockBookings[1]);
+    component.onCardNumberInput('4242424242424242');
+    component.paymentForm.cardName = 'Test';
+    component.onExpiryInput('1228');
+    component.onCvvInput('123');
+    component.confirmPayment();
+    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
+    expect(component.toastType()).toBe('error');
+    expect(component.isProcessingPayment()).toBe(false);
+  });
+
+  it('should not confirm payment without validation', () => {
+    component.openPayment(mockBookings[1]);
+    component.confirmPayment();
+    expect(component.isProcessingPayment()).toBe(false);
+  });
+
+  it('should open cancel with empty reason', () => {
+    component.openCancel(mockBookings[1]);
+    expect(component.cancelReason).toBe('');
+    expect(component.isCancelling()).toBe(false);
+  });
+
+  it('should not cancel without reason', () => {
+    component.openCancel(mockBookings[1]);
+    component.cancelReason = '';
+    component.confirmCancel();
+    expect(component.showCancelModal()).toBe(true);
+  });
+
+  it('should show refund in cancel toast', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    component.openCancel(mockBookings[0]);
+    component.cancelReason = 'Cambio de planes';
+    component.confirmCancel();
+    httpMock.expectOne(r => r.method === 'DELETE').flush(null);
+    httpMock.expectOne(r => r.method === 'GET').flush([]);
+    expect(component.toastMessage()).toContain('952.00');
+  });
+
+  it('should render payment modal', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.openPayment(mockBookings[1]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.modal')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Pagar Reserva');
+  });
+
+  it('should render cancel modal with reason field', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    component.openCancel(mockBookings[1]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('#cancel-reason')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Motivo de cancelación');
+  });
+
+  it('should render pay button only for pending', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('.btn-pay-action').length).toBe(1);
+  });
+
+  it('should detect Discover brand', () => {
+    component.onCardNumberInput('6011111111111117');
+    expect(component.cardBrand()).toBe('Discover');
+  });
+
+  it('should detect Diners brand', () => {
+    component.onCardNumberInput('30569309025904');
+    expect(component.cardBrand()).toBe('Diners');
+  });
+
+  it('should return empty brand for unknown', () => {
+    component.onCardNumberInput('9999');
+    expect(component.cardBrand()).toBe('');
   });
 });

@@ -32,7 +32,8 @@ export interface Booking {
 }
 
 export interface CreateBookingRequest {
-  resource_id: string;
+  hotel_id: string;
+  room_id: string;
   start_time: string;
   end_time: string;
   room_type: string;
@@ -43,7 +44,7 @@ export interface CreateBookingRequest {
   traveler_phone: string;
   traveler_document: string;
   special_requests?: string;
-  additional_guests?: string[];
+  notes?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -69,5 +70,21 @@ export class BookingsService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  approve(id: string): Observable<Booking> {
+    return this.http.patch<Booking>(`${this.baseUrl}/${id}/approve`, {});
+  }
+
+  reject(id: string, reason: string): Observable<Booking> {
+    return this.http.patch<Booking>(`${this.baseUrl}/${id}/reject`, { rejection_reason: reason });
+  }
+
+  listByHotel(hotelId: string): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${this.baseUrl}/hotel/${hotelId}`);
+  }
+
+  checkAvailability(roomId: string, startTime: string, endTime: string): Observable<unknown> {
+    return this.http.get(`${this.baseUrl}/availability?room_id=${roomId}&start_time=${startTime}&end_time=${endTime}`);
   }
 }
