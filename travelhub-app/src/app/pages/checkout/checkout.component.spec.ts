@@ -15,7 +15,7 @@ describe('CheckoutComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CheckoutComponent],
       providers: [
-        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: 'booking-confirmed', component: CheckoutComponent }]),
         { provide: AuthService, useValue: { logout: vi.fn(), currentUser: () => ({ full_name: 'Test User', email: 'test@test.com' }) } },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: (k: string) => ({ roomId: 'r1', hotelId: 'h1', roomName: 'Suite', roomType: 'suite', price: '500000', capacity: '2' }[k] ?? null) } } } },
       ],
