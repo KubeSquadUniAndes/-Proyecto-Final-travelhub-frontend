@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { ManageRoomsComponent } from './manage-rooms.component';
 import { AuthService } from '../../services/auth.service';
 import { Room } from '../../services/rooms.service';
+import { RoomImage } from '../../services/images.service';
 
 const mockRooms: Room[] = [
   { id: 'r1', hotel_id: 'h1', name: 'Habitación 101', room_type: 'individual', price: '150.00', capacity: 2, beds: '1 cama doble', size: 25, amenities: 'WiFi, AC' },
@@ -412,7 +413,7 @@ describe('ManageRoomsComponent - Images & Rates', () => {
   });
 
   it('should create rate and update matching rooms', () => {
-    component.rooms.set(mockRooms as any);
+    component.rooms.set(mockRooms as Room[]);
     component.rateForm = { room_type: 'suite', season: 'base', base_price: 1000000 };
     component.createRate();
 
@@ -454,7 +455,7 @@ describe('ManageRoomsComponent - Images & Rates', () => {
   });
 
   it('should get room image from map', () => {
-    component.roomImagesMap.set({ r1: [{ id: 'i1', room_id: 'r1', url: 'http://img.jpg' }] } as any);
+    component.roomImagesMap.set({ r1: [{ id: 'i1', room_id: 'r1', url: 'http://img.jpg' }] } as Record<string, RoomImage[]>);
     expect(component.getRoomImage('r1')).toBe('http://img.jpg');
   });
 

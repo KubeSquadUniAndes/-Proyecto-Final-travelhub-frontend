@@ -66,7 +66,7 @@ export class ManageRoomsComponent implements OnInit {
         rooms.forEach(room => {
           this.imagesService.listByRoom(room.id).subscribe({
             next: (imgs) => this.roomImagesMap.set({ ...this.roomImagesMap(), [room.id]: imgs }),
-            error: () => {},
+            error: () => { /* no-op */ },
           });
         });
       },
@@ -183,7 +183,7 @@ export class ManageRoomsComponent implements OnInit {
         matching.forEach(room => {
           this.roomsService.update(room.id, { price: String(base_price) }).subscribe({
             next: () => { updated++; if (updated === matching.length) this.loadRooms(); },
-            error: () => {},
+            error: () => { /* no-op */ },
           });
         });
         const count = matching.length;

@@ -5,6 +5,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { SearchComponent } from './search.component';
 import { AuthService } from '../../services/auth.service';
+import { Room } from '../../services/rooms.service';
 
 const mockRooms = [
   { id: 'r1', hotel_id: 'h1', hotel_name: 'Hotel A', name: 'Suite 1', destination: 'Bogotá', room_type: 'suite', price: '300000', capacity: 2, beds: '1 king', size: 30, amenities: 'WiFi' },
@@ -46,14 +47,14 @@ describe('SearchComponent', () => {
   });
 
   it('should filter by destination', () => {
-    component.allRooms.set(mockRooms as any);
+    component.allRooms.set(mockRooms as Room[]);
     component.destino.set('Bogotá');
     expect(component.filteredRooms().length).toBe(1);
     expect(component.filteredRooms()[0].name).toBe('Suite 1');
   });
 
   it('should filter by capacity', () => {
-    component.allRooms.set(mockRooms as any);
+    component.allRooms.set(mockRooms as Room[]);
     component.huespedes.set(3);
     expect(component.filteredRooms().length).toBe(1);
     expect(component.filteredRooms()[0].name).toBe('Doble 1');
@@ -72,7 +73,7 @@ describe('SearchComponent', () => {
   });
 
   it('should get room price', () => {
-    expect(component.getRoomPrice(mockRooms[0] as any)).toBe(300000);
+    expect(component.getRoomPrice(mockRooms[0] as Room)).toBe(300000);
   });
 
   it('should detect hasFilters', () => {

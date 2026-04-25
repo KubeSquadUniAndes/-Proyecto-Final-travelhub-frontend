@@ -5,6 +5,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { AuthService } from '../../services/auth.service';
+import { Room } from '../../services/rooms.service';
 
 const mockRooms = [
   { id: 'r1', hotel_id: 'h1', hotel_name: 'Hotel A', name: 'Suite 1', destination: 'Bogotá', room_type: 'suite', price: '300000', capacity: 2, beds: '1 king', size: 30, amenities: 'WiFi' },
@@ -55,7 +56,7 @@ describe('HomeComponent', () => {
   });
 
   it('should get room price from room.price', () => {
-    expect(component.getRoomPrice(mockRooms[0] as any)).toBe(300000);
+    expect(component.getRoomPrice(mockRooms[0] as Room)).toBe(300000);
   });
 
   it('should render hotel cards', () => {

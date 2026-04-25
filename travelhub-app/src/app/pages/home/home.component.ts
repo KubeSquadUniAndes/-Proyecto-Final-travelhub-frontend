@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
             next: (imgs) => {
               if (imgs.length) this.roomImagesMap.set({ ...this.roomImagesMap(), [room.id]: imgs[0].url });
             },
-            error: () => {},
+            error: () => { /* no-op */ },
           });
         });
       },

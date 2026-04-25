@@ -5,6 +5,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { HotelDashboardComponent } from './hotel-dashboard.component';
 import { AuthService } from '../../services/auth.service';
+import { Booking } from '../../services/bookings.service';
 
 const mockBookings = [
   { id: 'b1', booking_code: 'BK-001', traveler_name: 'Juan', start_time: '2026-05-01T14:00:00', end_time: '2026-05-03T12:00:00', room_type: 'suite', num_guests: 2, price_per_night: 500000, status: 'pending', final_price: '1000000' },
@@ -46,7 +47,7 @@ describe('HotelDashboardComponent', () => {
   });
 
   it('should compute stats', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     expect(component.stats().total).toBe(2);
     expect(component.stats().pendientes).toBe(1);
     expect(component.stats().confirmadas).toBe(1);
@@ -54,18 +55,18 @@ describe('HotelDashboardComponent', () => {
   });
 
   it('should filter by search query', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     component.searchQuery.set('Juan');
     expect(component.filteredReservas().length).toBe(1);
   });
 
   it('should return all when no search', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     expect(component.filteredReservas().length).toBe(2);
   });
 
   it('should paginate', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     expect(component.paginatedReservas().length).toBe(2);
     expect(component.totalPages()).toBe(1);
   });
@@ -100,12 +101,12 @@ describe('HotelDashboardComponent', () => {
   });
 
   it('should get pages array', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     expect(component.getPages()).toEqual([1]);
   });
 
   it('should show pagination label', () => {
-    component.allReservas.set(mockBookings as any);
+    component.allReservas.set(mockBookings as Booking[]);
     expect(component.paginationLabel()).toContain('1-2');
   });
 
