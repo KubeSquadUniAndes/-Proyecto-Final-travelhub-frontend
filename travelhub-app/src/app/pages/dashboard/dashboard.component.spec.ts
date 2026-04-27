@@ -22,7 +22,7 @@ describe('DashboardComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       providers: [
-        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: "booking-confirmed", component: DashboardComponent }]),
         { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'traveler' } },
       ],
     }).compileComponents();
@@ -204,7 +204,7 @@ describe('DashboardComponent - Template', () => {
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       providers: [
-        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: "booking-confirmed", component: DashboardComponent }]),
         { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'traveler' } },
       ],
     }).compileComponents();
@@ -386,7 +386,7 @@ describe('DashboardComponent - Payment & Cancel', () => {
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       providers: [
-        provideHttpClient(), provideHttpClientTesting(), provideRouter([]),
+        provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: "booking-confirmed", component: DashboardComponent }]),
         { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'traveler' } },
       ],
     }).compileComponents();
@@ -487,21 +487,26 @@ describe('DashboardComponent - Payment & Cancel', () => {
     component.onCvvInput('123');
     component.confirmPayment();
     httpMock.expectOne(r => r.method === 'PATCH').flush({ ...mockBookings[1], status: 'confirmed' });
-    httpMock.expectOne(r => r.method === 'GET').flush(mockBookings);
     expect(component.showPaymentModal()).toBe(false);
-    expect(component.toastMessage()).toContain('Pago procesado');
   });
 
-  it('should handle payment error', () => {
+  it('should handle payment error with retry', () => {
+    vi.useFakeTimers();
     component.openPayment(mockBookings[1]);
     component.onCardNumberInput('4242424242424242');
     component.paymentForm.cardName = 'Test';
     component.onExpiryInput('1228');
     component.onCvvInput('123');
     component.confirmPayment();
+    // Fail 3 times
     httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
-    expect(component.toastType()).toBe('error');
+    vi.advanceTimersByTime(1000);
+    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
+    vi.advanceTimersByTime(1000);
+    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
     expect(component.isProcessingPayment()).toBe(false);
+    expect(component.toastMessage()).toContain('varios intentos');
+    vi.useRealTimers();
   });
 
   it('should not confirm payment without validation', () => {

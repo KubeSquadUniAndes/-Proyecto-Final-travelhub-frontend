@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { BookingsService, Booking } from '../../services/bookings.service';
+import { BookingsService, Booking, PaymentConfirmation } from '../../services/bookings.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -211,9 +211,37 @@ export class DashboardComponent implements OnInit {
     const booking = this.payingBooking();
     if (!booking || !this.validatePayment()) return;
     this.isProcessingPayment.set(true);
-    this.bookingsService.approve(booking.id).subscribe({
-      next: () => { this.closePayment(); this.loadReservas(); this.showToast(`Pago procesado. Reserva ${booking.booking_code} confirmada.`, 'success'); },
-      error: () => { this.isProcessingPayment.set(false); this.showToast('Error al procesar el pago. Intenta de nuevo.', 'error'); },
+
+    const digits = this.paymentForm.cardNumber.replace(/\D/g, '');
+    const paymentData: PaymentConfirmation = {
+      payment_provider: this.cardBrand() || 'Card',
+      transaction_id: `TXN-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      amount: parseFloat(booking.final_price ?? '0') || Number(booking.price_per_night) || 0,
+      currency: 'COP',
+      payment_method: `${this.cardBrand()} ****${digits.slice(-4)}`,
+      card_last_four: digits.slice(-4),
+      paid_at: new Date().toISOString(),
+    };
+
+    this.executePaymentWithRetry(booking, paymentData, 3);
+  }
+
+  private executePaymentWithRetry(booking: Booking, paymentData: PaymentConfirmation, retries: number) {
+    this.bookingsService.confirmPayment(booking.id, paymentData).subscribe({
+      next: () => {
+        this.closePayment();
+        this.router.navigate(['/booking-confirmed'], {
+          queryParams: { code: booking.booking_code, txn: paymentData.transaction_id },
+        });
+      },
+      error: () => {
+        if (retries > 1) {
+          setTimeout(() => this.executePaymentWithRetry(booking, paymentData, retries - 1), 1000);
+        } else {
+          this.isProcessingPayment.set(false);
+          this.showToast('Error al procesar el pago después de varios intentos. Contacta soporte.', 'error');
+        }
+      },
     });
   }
 

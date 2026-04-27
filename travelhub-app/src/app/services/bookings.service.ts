@@ -47,6 +47,16 @@ export interface CreateBookingRequest {
   notes?: string;
 }
 
+export interface PaymentConfirmation {
+  payment_provider: string;
+  transaction_id: string;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  card_last_four: string;
+  paid_at: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class BookingsService {
   private http = inject(HttpClient);
@@ -74,6 +84,10 @@ export class BookingsService {
 
   approve(id: string): Observable<Booking> {
     return this.http.patch<Booking>(`${this.baseUrl}/${id}/approve`, {});
+  }
+
+  confirmPayment(id: string, paymentData: PaymentConfirmation): Observable<Booking> {
+    return this.http.patch<Booking>(`${this.baseUrl}/${id}/approve`, paymentData);
   }
 
   reject(id: string, reason: string): Observable<Booking> {
