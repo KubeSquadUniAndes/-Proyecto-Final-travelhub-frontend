@@ -69,7 +69,7 @@
 
             <!-- Status dropdown overlay -->
             @if (showStatusDropdown()) {
-              <div class="dropdown-overlay" (click)="closeStatusDropdown()"></div>
+              <div class="dropdown-overlay" role="button" tabindex="0" aria-label="Cerrar menú de estado" (click)="closeStatusDropdown()" (keydown.enter)="closeStatusDropdown()" (keydown.escape)="closeStatusDropdown()"></div>
             }
 
             <div class="status-dropdown-wrapper">
@@ -94,11 +94,11 @@
 
           <div class="filter-row date-filter-row">
             <div class="date-range">
-              <label class="date-label">Desde</label>
-              <input type="date" class="date-input" [value]="filterDateFrom()" [max]="filterDateTo() || ''" (change)="onDateFromChange($any($event.target).value)" />
+              <label class="date-label" for="dateFrom">Desde</label>
+              <input id="dateFrom" type="date" class="date-input" [value]="filterDateFrom()" [max]="filterDateTo() || ''" (change)="onDateFromChange($any($event.target).value)" />
               <span class="date-separator">—</span>
-              <label class="date-label">Hasta</label>
-              <input type="date" class="date-input" [value]="filterDateTo()" [min]="filterDateFrom() || ''" (change)="onDateToChange($any($event.target).value)" />
+              <label class="date-label" for="dateTo">Hasta</label>
+              <input id="dateTo" type="date" class="date-input" [value]="filterDateTo()" [min]="filterDateFrom() || ''" (change)="onDateToChange($any($event.target).value)" />
             </div>
             @if (hasActiveFilters()) {
               <button class="btn-clear" (click)="clearFilters()" type="button">Limpiar Filtros</button>

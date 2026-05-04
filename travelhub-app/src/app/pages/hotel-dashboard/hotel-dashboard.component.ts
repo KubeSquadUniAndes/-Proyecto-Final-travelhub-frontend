@@ -46,7 +46,7 @@ export class HotelDashboardComponent implements OnInit {
     const statuses = this.filterStatuses();
     return this.allReservas()
       .filter(r => {
-        if (q && !r.traveler_name.toLowerCase().includes(q) && !(r.booking_code ?? '').toLowerCase().includes(q) && !r.id.toLowerCase().includes(q) && !r.traveler_email.toLowerCase().includes(q)) return false;
+        if (q && !r.traveler_name.toLowerCase().includes(q) && !(r.booking_code ?? '').toLowerCase().includes(q) && !r.id.toLowerCase().includes(q) && !(r.traveler_email ?? '').toLowerCase().includes(q)) return false;
         if (statuses.length > 0 && !statuses.includes(r.status ?? '')) return false;
         const rDate = (r.start_time ?? '').substring(0, 10);
         if (from && rDate < from) return false;
