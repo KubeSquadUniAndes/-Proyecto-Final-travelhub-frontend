@@ -33,8 +33,40 @@ nav a:hover, nav a.active { color: #2563eb; }
 .table-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 .table-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .table-top h2 { font-size: 18px; font-weight: 700; color: #101828; }
-.table-top input { padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; width: 280px; font-family: 'Inter', sans-serif; }
-.table-top input:focus { outline: none; border-color: #2563eb; }
+
+/* Filter Bar */
+.filter-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; padding: 16px; background: #f9fafb; border-radius: 10px; border: 1px solid #e5e7eb; }
+.filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.date-filter-row { flex-wrap: wrap; }
+
+/* Search */
+.search-wrapper { flex: 1; min-width: 240px; position: relative; display: flex; align-items: center; }
+.search-icon { position: absolute; left: 12px; width: 16px; height: 16px; pointer-events: none; }
+.search-wrapper input { width: 100%; padding: 10px 14px 10px 36px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; background: #fff; }
+.search-wrapper input:focus { outline: none; border-color: #2563eb; }
+
+/* Status Dropdown */
+.dropdown-overlay { position: fixed; inset: 0; z-index: 9; }
+.status-dropdown-wrapper { position: relative; z-index: 10; }
+.status-dropdown-btn { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 14px; font-family: 'Inter', sans-serif; color: #364153; cursor: pointer; white-space: nowrap; transition: border-color .2s; }
+.status-dropdown-btn:hover, .status-dropdown-btn.has-selection { border-color: #2563eb; color: #2563eb; }
+.chevron { width: 16px; height: 16px; transition: transform .2s; }
+.chevron.open { transform: rotate(180deg); }
+.status-dropdown-menu { position: absolute; top: calc(100% + 4px); right: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.1); min-width: 180px; padding: 6px; z-index: 10; }
+.status-option { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; cursor: pointer; }
+.status-option:hover { background: #f3f4f6; }
+.status-option input[type="checkbox"] { accent-color: #2563eb; width: 16px; height: 16px; cursor: pointer; }
+
+/* Date Range */
+.date-range { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.date-label { font-size: 13px; font-weight: 500; color: #6a7282; white-space: nowrap; }
+.date-input { padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; color: #364153; background: #fff; cursor: pointer; }
+.date-input:focus { outline: none; border-color: #2563eb; }
+.date-separator { color: #9ca3af; font-size: 14px; }
+
+/* Clear Filters */
+.btn-clear { padding: 9px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; color: #6a7282; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s; white-space: nowrap; margin-left: auto; }
+.btn-clear:hover { border-color: #ef4444; color: #ef4444; }
 .table-wrapper { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 700px; }
 th { text-align: left; padding: 12px 10px; font-size: 12px; font-weight: 600; color: #6a7282; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
@@ -66,7 +98,13 @@ td { padding: 14px 10px; font-size: 14px; color: #364153; border-bottom: 1px sol
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: 1fr; }
   .table-top { flex-direction: column; gap: 12px; align-items: stretch; }
-  .table-top input { width: 100%; }
+  .filter-row { flex-direction: column; align-items: stretch; }
+  .status-dropdown-wrapper { width: 100%; }
+  .status-dropdown-btn { width: 100%; justify-content: space-between; }
+  .status-dropdown-menu { right: auto; left: 0; width: 100%; }
+  .date-range { flex-direction: column; align-items: stretch; }
+  .date-input { width: 100%; }
+  .btn-clear { width: 100%; margin-left: 0; }
   .table-footer { flex-direction: column; gap: 12px; align-items: center; }
   nav { display: none; }
   .header-right { gap: 8px; }

@@ -1,9 +1,16 @@
 import { Component, OnInit, computed, signal, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { BookingsService, Booking } from '../../services/bookings.service';
+
+const STATUS_OPTIONS = [
+  { value: 'pending', label: 'Pendiente' },
+  { value: 'confirmed', label: 'Confirmada' },
+  { value: 'completed', label: 'Completada' },
+  { value: 'cancelled', label: 'Cancelada' },
+];
 
 @Component({
   selector: 'app-hotel-dashboard',
@@ -14,24 +21,44 @@ import { BookingsService, Booking } from '../../services/bookings.service';
 })
 export class HotelDashboardComponent implements OnInit {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private bookingsService = inject(BookingsService);
 
   readonly PAGE_SIZE = 50;
   readonly hotelName = computed(() => this.authService.currentUser()?.full_name ?? 'Mi Hotel');
+  readonly statusOptions = STATUS_OPTIONS;
 
   allReservas = signal<Booking[]>([]);
   isLoading = signal(true);
   hasError = signal(false);
   currentPage = signal(1);
   searchQuery = signal('');
+  filterDateFrom = signal('');
+  filterDateTo = signal('');
+  filterStatuses = signal<string[]>([]);
+  showStatusDropdown = signal(false);
 
   filteredReservas = computed(() => {
     const q = this.searchQuery().toLowerCase();
+    const from = this.filterDateFrom();
+    const to = this.filterDateTo();
+    const statuses = this.filterStatuses();
     return this.allReservas()
-      .filter(r => !q || r.traveler_name.toLowerCase().includes(q) || (r.booking_code ?? '').toLowerCase().includes(q) || r.id.toLowerCase().includes(q))
+      .filter(r => {
+        if (q && !r.traveler_name.toLowerCase().includes(q) && !(r.booking_code ?? '').toLowerCase().includes(q) && !r.id.toLowerCase().includes(q) && !(r.traveler_email ?? '').toLowerCase().includes(q)) return false;
+        if (statuses.length > 0 && !statuses.includes(r.status ?? '')) return false;
+        const rDate = (r.start_time ?? '').substring(0, 10);
+        if (from && rDate < from) return false;
+        if (to && rDate > to) return false;
+        return true;
+      })
       .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
   });
+
+  hasActiveFilters = computed(() =>
+    this.filterDateFrom() !== '' || this.filterDateTo() !== '' || this.filterStatuses().length > 0
+  );
 
   paginatedReservas = computed(() => {
     const start = (this.currentPage() - 1) * this.PAGE_SIZE;
@@ -49,7 +76,7 @@ export class HotelDashboardComponent implements OnInit {
   });
 
   stats = computed(() => {
-    const r = this.allReservas();
+    const r = this.filteredReservas();
     return {
       total: r.length,
       confirmadas: r.filter(x => x.status === 'confirmed').length,
@@ -59,7 +86,23 @@ export class HotelDashboardComponent implements OnInit {
     };
   });
 
-  ngOnInit() { this.loadReservas(); }
+  statusDropdownLabel = computed(() => {
+    const selected = this.filterStatuses();
+    if (selected.length === 0) return 'Todos los estados';
+    if (selected.length === 1) return STATUS_OPTIONS.find(s => s.value === selected[0])?.label ?? selected[0];
+    return `${selected.length} estados`;
+  });
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.searchQuery.set(params['search'] ?? '');
+      this.filterDateFrom.set(params['dateFrom'] ?? '');
+      this.filterDateTo.set(params['dateTo'] ?? '');
+      const statusParam = params['statuses'];
+      this.filterStatuses.set(statusParam ? statusParam.split(',').filter(Boolean) : []);
+    });
+    this.loadReservas();
+  }
 
   loadReservas() {
     this.isLoading.set(true);
@@ -71,7 +114,65 @@ export class HotelDashboardComponent implements OnInit {
     });
   }
 
-  onSearch(q: string) { this.searchQuery.set(q); this.currentPage.set(1); }
+  onSearch(q: string) {
+    this.searchQuery.set(q);
+    this.currentPage.set(1);
+    this.syncQueryParams();
+  }
+
+  onDateFromChange(val: string) {
+    this.filterDateFrom.set(val);
+    this.currentPage.set(1);
+    this.syncQueryParams();
+  }
+
+  onDateToChange(val: string) {
+    this.filterDateTo.set(val);
+    this.currentPage.set(1);
+    this.syncQueryParams();
+  }
+
+  toggleStatus(status: string) {
+    const current = this.filterStatuses();
+    const updated = current.includes(status)
+      ? current.filter(s => s !== status)
+      : [...current, status];
+    this.filterStatuses.set(updated);
+    this.currentPage.set(1);
+    this.syncQueryParams();
+  }
+
+  isStatusSelected(status: string): boolean {
+    return this.filterStatuses().includes(status);
+  }
+
+  clearFilters() {
+    this.searchQuery.set('');
+    this.filterDateFrom.set('');
+    this.filterDateTo.set('');
+    this.filterStatuses.set([]);
+    this.showStatusDropdown.set(false);
+    this.currentPage.set(1);
+    this.router.navigate([], { queryParams: {}, replaceUrl: true });
+  }
+
+  toggleStatusDropdown() {
+    this.showStatusDropdown.update(v => !v);
+  }
+
+  closeStatusDropdown() {
+    this.showStatusDropdown.set(false);
+  }
+
+  private syncQueryParams() {
+    const params: Record<string, string> = {};
+    if (this.searchQuery()) params['search'] = this.searchQuery();
+    if (this.filterDateFrom()) params['dateFrom'] = this.filterDateFrom();
+    if (this.filterDateTo()) params['dateTo'] = this.filterDateTo();
+    if (this.filterStatuses().length > 0) params['statuses'] = this.filterStatuses().join(',');
+    this.router.navigate([], { queryParams: params, replaceUrl: true });
+  }
+
   goToPage(page: number) { if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page); }
 
   getPages(): number[] {
