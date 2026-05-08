@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { RoomsService, Room } from '../../services/rooms.service';
 import { ImagesService, RoomImage } from '../../services/images.service';
 import { RatesService, Rate } from '../../services/rates.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-manage-rooms',
@@ -21,12 +22,21 @@ export class ManageRoomsComponent implements OnInit {
   private imagesService = inject(ImagesService);
   private ratesService = inject(RatesService);
 
+  activeTab = signal<'rooms' | 'gallery'>('rooms');
   rooms = signal<Room[]>([]);
   roomImagesMap = signal<Record<string, RoomImage[]>>({});
   isLoading = signal(true);
   hasError = signal(false);
   toastMessage = signal('');
   toastType = signal<'success' | 'error'>('success');
+
+  // Gallery
+  galleryLoading = signal(false);
+  galleryRoom = signal<string>('');
+  uploadQueue = signal<{ file: File; status: 'pending' | 'uploading' | 'done' | 'error'; progress: number }[]>([]);
+  isDragging = signal(false);
+  readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+  readonly MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
   showForm = signal(false);
   editingRoom = signal<Room | null>(null);
@@ -52,6 +62,156 @@ export class ManageRoomsComponent implements OnInit {
 
   ngOnInit() {
     this.loadRooms();
+  }
+
+  switchTab(tab: 'rooms' | 'gallery') {
+    this.activeTab.set(tab);
+    if (tab === 'gallery') this.loadGallery();
+  }
+
+  // Gallery methods
+  loadGallery() {
+    this.galleryLoading.set(true);
+    const hotelRooms = this.rooms();
+    if (!hotelRooms.length) {
+      this.galleryLoading.set(false);
+      return;
+    }
+    const requests = hotelRooms.map(r => this.imagesService.listByRoom(r.id));
+    forkJoin(requests).subscribe({
+      next: (results) => {
+        const map: Record<string, RoomImage[]> = {};
+        hotelRooms.forEach((room, i) => { map[room.id] = results[i]; });
+        this.roomImagesMap.set(map);
+        this.galleryLoading.set(false);
+      },
+      error: () => this.galleryLoading.set(false),
+    });
+  }
+
+  getTotalImages(): number {
+    return Object.values(this.roomImagesMap()).reduce((sum, imgs) => sum + imgs.length, 0);
+  }
+
+  getSelectedRoomName(): string {
+    const room = this.rooms().find(r => r.id === this.galleryRoom());
+    return room?.name || '';
+  }
+
+  getAllImages(): (RoomImage & { roomName: string })[] {
+    const map = this.roomImagesMap();
+    const rooms = this.rooms();
+    const all: (RoomImage & { roomName: string })[] = [];
+    for (const room of rooms) {
+      const imgs = map[room.id] || [];
+      imgs.forEach(img => all.push({ ...img, roomName: room.name }));
+    }
+    return all;
+  }
+
+  getFilteredImages(): (RoomImage & { roomName: string })[] {
+    const selected = this.galleryRoom();
+    if (!selected) return this.getAllImages();
+    const map = this.roomImagesMap();
+    const room = this.rooms().find(r => r.id === selected);
+    return (map[selected] || []).map(img => ({ ...img, roomName: room?.name || '' }));
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging.set(true);
+  }
+
+  onDragLeave() {
+    this.isDragging.set(false);
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging.set(false);
+    const files = event.dataTransfer?.files;
+    if (files) this.addFiles(Array.from(files));
+  }
+
+  onFileSelect(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) this.addFiles(Array.from(input.files));
+    input.value = '';
+  }
+
+  addFiles(files: File[]) {
+    const valid = files.filter(f => {
+      if (!this.ALLOWED_TYPES.includes(f.type)) {
+        this.showToast(`"${f.name}" no es un formato válido (JPG, PNG, WebP).`, 'error');
+        return false;
+      }
+      if (f.size > this.MAX_SIZE) {
+        this.showToast(`"${f.name}" excede 5MB.`, 'error');
+        return false;
+      }
+      return true;
+    });
+    const queue = valid.map(f => ({ file: f, status: 'pending' as const, progress: 0 }));
+    this.uploadQueue.set([...this.uploadQueue(), ...queue]);
+  }
+
+  uploadAll() {
+    const roomId = this.galleryRoom();
+    if (!roomId) {
+      this.showToast('Selecciona una habitación primero.', 'error');
+      return;
+    }
+    const queue = this.uploadQueue();
+    queue.forEach((item, index) => {
+      if (item.status !== 'pending') return;
+      const updated = [...this.uploadQueue()];
+      updated[index] = { ...item, status: 'uploading', progress: 50 };
+      this.uploadQueue.set(updated);
+
+      this.imagesService.upload(roomId, item.file).subscribe({
+        next: () => {
+          const current = [...this.uploadQueue()];
+          current[index] = { ...current[index], status: 'done', progress: 100 };
+          this.uploadQueue.set(current);
+          this.checkUploadComplete();
+        },
+        error: () => {
+          const current = [...this.uploadQueue()];
+          current[index] = { ...current[index], status: 'error', progress: 0 };
+          this.uploadQueue.set(current);
+          this.checkUploadComplete();
+        },
+      });
+    });
+  }
+
+  private checkUploadComplete() {
+    const queue = this.uploadQueue();
+    const allDone = queue.every(i => i.status === 'done' || i.status === 'error');
+    if (allDone) {
+      const success = queue.filter(i => i.status === 'done').length;
+      const errors = queue.filter(i => i.status === 'error').length;
+      if (errors > 0) {
+        this.showToast(`${success} subida(s), ${errors} error(es).`, 'error');
+      } else {
+        this.showToast(`${success} imagen(es) subida(s) exitosamente.`, 'success');
+      }
+      setTimeout(() => this.uploadQueue.set([]), 2000);
+      this.loadGallery();
+    }
+  }
+
+  removeFromQueue(index: number) {
+    const queue = [...this.uploadQueue()];
+    queue.splice(index, 1);
+    this.uploadQueue.set(queue);
+  }
+
+  deleteGalleryImage(imageId: string) {
+    this.imagesService.delete(imageId).subscribe({
+      next: () => { this.loadGallery(); this.showToast('Imagen eliminada.', 'success'); },
+      error: () => this.showToast('Error al eliminar imagen.', 'error'),
+    });
   }
 
   loadRooms() {

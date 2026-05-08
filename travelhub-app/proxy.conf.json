@@ -1,26 +1,27 @@
 {
-  "/users": {
-    "target": "https://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
-    "secure": false,
-    "changeOrigin": true,
-    "headers": { "Host": "api.travelhub.com" }
-  },
   "/login-handler": {
-    "target": "https://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
     "secure": false,
-    "changeOrigin": true,
-    "headers": { "Host": "api.travelhub.com" }
+    "changeOrigin": true
+  },
+  "/users": {
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "secure": false,
+    "changeOrigin": true
   },
   "/hospedajes": {
-    "target": "https://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
     "secure": false,
-    "changeOrigin": true,
-    "headers": { "Host": "api.travelhub.com" }
+    "changeOrigin": true
   },
   "/reservas": {
-    "target": "https://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
     "secure": false,
-    "changeOrigin": true,
-    "headers": { "Host": "api.travelhub.com" }
+    "changeOrigin": true
+  },
+  "/notificaciones": {
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "secure": false,
+    "changeOrigin": true
   }
 }
