@@ -593,3 +593,249 @@ describe('ManageRoomsComponent - Modal Templates', () => {
     expect(component.toastMessage()).toContain('subida');
   });
 });
+
+describe('ManageRoomsComponent - Gallery Tab', () => {
+  let component: ManageRoomsComponent;
+  let fixture: ComponentFixture<ManageRoomsComponent>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ManageRoomsComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: AuthService, useValue: { logout: vi.fn(), userType: () => 'hotel', currentUser: () => ({ id: 'h1' }) } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(ManageRoomsComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should start on rooms tab', () => {
+    expect(component.activeTab()).toBe('rooms');
+  });
+
+  it('should switch to gallery tab', () => {
+    component.rooms.set(mockRooms);
+    component.switchTab('gallery');
+    httpMock.match(r => r.url.includes('/images')).forEach(r => r.flush([]));
+    expect(component.activeTab()).toBe('gallery');
+  });
+
+  it('should load gallery images for all rooms on tab switch', () => {
+    component.rooms.set(mockRooms);
+    component.switchTab('gallery');
+    const reqs = httpMock.match(r => r.url.includes('/images'));
+    expect(reqs.length).toBe(2);
+    reqs[0].flush([{ id: 'i1', room_id: 'r1', url: 'http://img1.jpg' }]);
+    reqs[1].flush([{ id: 'i2', room_id: 'r2', url: 'http://img2.jpg' }]);
+    expect(component.getTotalImages()).toBe(2);
+  });
+
+  it('should return correct total images count', () => {
+    component.roomImagesMap.set({
+      r1: [{ id: 'i1', room_id: 'r1', url: 'http://a.jpg' }, { id: 'i2', room_id: 'r1', url: 'http://b.jpg' }] as RoomImage[],
+      r2: [{ id: 'i3', room_id: 'r2', url: 'http://c.jpg' }] as RoomImage[],
+    });
+    expect(component.getTotalImages()).toBe(3);
+  });
+
+  it('should get selected room name', () => {
+    component.rooms.set(mockRooms);
+    component.galleryRoom.set('r1');
+    expect(component.getSelectedRoomName()).toBe('Habitación 101');
+  });
+
+  it('should return empty string when no room selected', () => {
+    component.rooms.set(mockRooms);
+    component.galleryRoom.set('');
+    expect(component.getSelectedRoomName()).toBe('');
+  });
+
+  it('should get all images with room names', () => {
+    component.rooms.set(mockRooms);
+    component.roomImagesMap.set({
+      r1: [{ id: 'i1', room_id: 'r1', url: 'http://a.jpg' }] as RoomImage[],
+      r2: [{ id: 'i2', room_id: 'r2', url: 'http://b.jpg' }] as RoomImage[],
+    });
+    const all = component.getAllImages();
+    expect(all.length).toBe(2);
+    expect(all[0].roomName).toBe('Habitación 101');
+    expect(all[1].roomName).toBe('Suite 201');
+  });
+
+  it('should filter images by selected room', () => {
+    component.rooms.set(mockRooms);
+    component.roomImagesMap.set({
+      r1: [{ id: 'i1', room_id: 'r1', url: 'http://a.jpg' }] as RoomImage[],
+      r2: [{ id: 'i2', room_id: 'r2', url: 'http://b.jpg' }] as RoomImage[],
+    });
+    component.galleryRoom.set('r1');
+    const filtered = component.getFilteredImages();
+    expect(filtered.length).toBe(1);
+    expect(filtered[0].id).toBe('i1');
+  });
+
+  it('should return all images when no room filter', () => {
+    component.rooms.set(mockRooms);
+    component.roomImagesMap.set({
+      r1: [{ id: 'i1', room_id: 'r1', url: 'http://a.jpg' }] as RoomImage[],
+      r2: [{ id: 'i2', room_id: 'r2', url: 'http://b.jpg' }] as RoomImage[],
+    });
+    component.galleryRoom.set('');
+    expect(component.getFilteredImages().length).toBe(2);
+  });
+
+  it('should set isDragging on dragover', () => {
+    const event = { preventDefault: vi.fn() } as unknown as DragEvent;
+    component.onDragOver(event);
+    expect(component.isDragging()).toBe(true);
+  });
+
+  it('should unset isDragging on dragleave', () => {
+    component.isDragging.set(true);
+    component.onDragLeave();
+    expect(component.isDragging()).toBe(false);
+  });
+
+  it('should add valid files to upload queue', () => {
+    const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 1024 * 1024 });
+    component.addFiles([file]);
+    expect(component.uploadQueue().length).toBe(1);
+    expect(component.uploadQueue()[0].status).toBe('pending');
+  });
+
+  it('should reject files with invalid type', () => {
+    const file = new File(['data'], 'doc.pdf', { type: 'application/pdf' });
+    component.addFiles([file]);
+    expect(component.uploadQueue().length).toBe(0);
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should reject files exceeding 5MB', () => {
+    const file = new File(['data'], 'big.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 6 * 1024 * 1024 });
+    component.addFiles([file]);
+    expect(component.uploadQueue().length).toBe(0);
+    expect(component.toastType()).toBe('error');
+  });
+
+  it('should remove file from queue', () => {
+    const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    component.addFiles([file]);
+    expect(component.uploadQueue().length).toBe(1);
+    component.removeFromQueue(0);
+    expect(component.uploadQueue().length).toBe(0);
+  });
+
+  it('should not upload without room selected', () => {
+    component.galleryRoom.set('');
+    component.uploadAll();
+    expect(component.toastType()).toBe('error');
+    expect(component.toastMessage()).toContain('habitación');
+  });
+
+  it('should upload files when room is selected', () => {
+    component.galleryRoom.set('r1');
+    component.rooms.set(mockRooms);
+    const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    component.addFiles([file]);
+    component.uploadAll();
+
+    const req = httpMock.expectOne(r => r.method === 'POST' && r.url.includes('/rooms/r1/images'));
+    req.flush({ id: 'new1', room_id: 'r1', url: 'http://new.jpg' });
+
+    httpMock.match(r => r.url.includes('/images') && r.method === 'GET').forEach(r => r.flush([]));
+
+    expect(component.uploadQueue().some(i => i.status === 'done')).toBe(true);
+  });
+
+  it('should handle upload error', () => {
+    component.galleryRoom.set('r1');
+    component.rooms.set(mockRooms);
+    const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    component.addFiles([file]);
+    component.uploadAll();
+
+    httpMock.expectOne(r => r.method === 'POST').error(new ProgressEvent('error'));
+    httpMock.match(r => r.method === 'GET').forEach(r => r.flush([]));
+
+    expect(component.uploadQueue().some(i => i.status === 'error')).toBe(true);
+  });
+
+  it('should delete gallery image', () => {
+    component.rooms.set(mockRooms);
+    component.roomImagesMap.set({ r1: [{ id: 'i1', room_id: 'r1', url: 'http://a.jpg' }] as RoomImage[] });
+    component.deleteGalleryImage('i1');
+    httpMock.expectOne(r => r.method === 'DELETE' && r.url.includes('/images/i1')).flush(null);
+    httpMock.match(r => r.method === 'GET').forEach(r => r.flush([]));
+    expect(component.toastMessage()).toContain('eliminada');
+  });
+
+  it('should handle delete gallery image error', () => {
+    component.deleteGalleryImage('i1');
+    httpMock.expectOne(r => r.method === 'DELETE').error(new ProgressEvent('error'));
+    expect(component.toastMessage()).toContain('Error');
+  });
+
+  it('should handle drop event with files', () => {
+    const file = new File(['data'], 'photo.png', { type: 'image/png' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    const event = {
+      preventDefault: vi.fn(),
+      dataTransfer: { files: [file] },
+    } as unknown as DragEvent;
+    component.onDrop(event);
+    expect(component.isDragging()).toBe(false);
+    expect(component.uploadQueue().length).toBe(1);
+  });
+
+  it('should handle file select event', () => {
+    const file = new File(['data'], 'photo.webp', { type: 'image/webp' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    const event = { target: { files: [file], value: '' } } as unknown as Event;
+    component.onFileSelect(event);
+    expect(component.uploadQueue().length).toBe(1);
+  });
+
+  it('should render gallery tab with room selector cards', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    httpMock.match(r => r.url.includes('/images')).forEach(r => r.flush([]));
+    fixture.detectChanges();
+
+    component.switchTab('gallery');
+    httpMock.match(r => r.url.includes('/images')).forEach(r => r.flush([]));
+    fixture.detectChanges();
+
+    const cards = fixture.nativeElement.querySelectorAll('.room-selector-card');
+    expect(cards.length).toBe(2);
+    expect(fixture.nativeElement.textContent).toContain('Habitación 101');
+    expect(fixture.nativeElement.textContent).toContain('Suite 201');
+  });
+
+  it('should show drop zone only when room is selected', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url.includes('/rooms')).flush(mockRooms);
+    httpMock.match(r => r.url.includes('/images')).forEach(r => r.flush([]));
+    fixture.detectChanges();
+
+    component.switchTab('gallery');
+    httpMock.match(r => r.url.includes('/images')).forEach(r => r.flush([]));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.drop-zone')).toBeFalsy();
+
+    component.galleryRoom.set('r1');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.drop-zone')).toBeTruthy();
+  });
+});

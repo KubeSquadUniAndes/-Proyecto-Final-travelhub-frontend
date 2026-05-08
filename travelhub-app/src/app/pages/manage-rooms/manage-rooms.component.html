@@ -25,28 +25,129 @@
         <p>Administra el inventario de habitaciones de tu hotel</p>
       </div>
       <div class="header-buttons">
-        <button class="btn-secondary" (click)="openRates()">💰 Tarifas</button>
-        <button class="btn-primary" (click)="openCreateForm()">+ Nueva Habitación</button>
+        @if (activeTab() === 'rooms') {
+          <button class="btn-secondary" (click)="openRates()">💰 Tarifas</button>
+          <button class="btn-primary" (click)="openCreateForm()">+ Nueva Habitación</button>
+        }
       </div>
     </div>
 
-    @if (isLoading()) {
+    <div class="tabs">
+      <button class="tab" [class.tab-active]="activeTab() === 'rooms'" (click)="switchTab('rooms')">🏨 Habitaciones</button>
+      <button class="tab" [class.tab-active]="activeTab() === 'gallery'" (click)="switchTab('gallery')">🖼️ Galería</button>
+    </div>
+
+    <!-- GALLERY TAB -->
+    @if (activeTab() === 'gallery') {
+      <div class="gallery-container">
+        <div class="gallery-header">
+          <div class="gallery-stats">
+            <span class="stat-badge">📷 {{ getTotalImages() }} imágenes</span>
+          </div>
+        </div>
+
+        <!-- Room selector cards -->
+        <div class="room-selector">
+          <p class="room-selector-label">Selecciona una habitación para subir imágenes:</p>
+          <div class="room-selector-grid">
+            @for (room of rooms(); track room.id) {
+              <div class="room-selector-card" [class.room-selector-active]="galleryRoom() === room.id" (click)="galleryRoom.set(room.id)" (keydown.enter)="galleryRoom.set(room.id)" tabindex="0" role="button">
+                @if (getRoomImage(room.id)) {
+                  <img [src]="getRoomImage(room.id)" [alt]="room.name" class="room-selector-img" />
+                } @else {
+                  <div class="room-selector-placeholder">🏨</div>
+                }
+                <div class="room-selector-info">
+                  <strong>{{ room.name }}</strong>
+                  <span class="room-selector-meta">{{ room.room_type }} · {{ room.capacity }} huésp. · {{ (roomImagesMap()[room.id] || []).length }} fotos</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Drop zone -->
+        @if (galleryRoom()) {
+          <div class="drop-zone" [class.drop-zone-active]="isDragging()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+            <div class="drop-zone-content">
+              <span class="drop-icon">📁</span>
+              <p><strong>Arrastra imágenes para "{{ getSelectedRoomName() }}"</strong></p>
+              <p class="drop-hint">JPG, PNG o WebP — máximo 5MB por archivo</p>
+              <label for="galleryFileInput" class="btn-secondary">Seleccionar archivos</label>
+              <input id="galleryFileInput" type="file" accept=".jpg,.jpeg,.png,.webp" multiple (change)="onFileSelect($event)" hidden />
+            </div>
+          </div>
+        }
+
+        <!-- Upload queue -->
+        @if (uploadQueue().length > 0) {
+          <div class="upload-queue">
+            <div class="queue-header">
+              <h3>Archivos para subir ({{ uploadQueue().length }})</h3>
+              <button class="btn-primary" (click)="uploadAll()" [disabled]="!galleryRoom()">⬆️ Subir todos</button>
+            </div>
+
+            @for (item of uploadQueue(); track $index) {
+              <div class="queue-item" [class.queue-done]="item.status === 'done'" [class.queue-error]="item.status === 'error'">
+                <span class="queue-name">{{ item.file.name }}</span>
+                <span class="queue-size">{{ (item.file.size / 1024 / 1024).toFixed(2) }} MB</span>
+                @if (item.status === 'pending') {
+                  <button class="btn-delete-sm" (click)="removeFromQueue($index)">❌</button>
+                } @else if (item.status === 'uploading') {
+                  <span class="queue-status uploading">⏳</span>
+                } @else if (item.status === 'done') {
+                  <span class="queue-status done">✅</span>
+                } @else {
+                  <span class="queue-status error">❌</span>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Images grid -->
+        @if (galleryLoading()) {
+          <div class="loading">Cargando galería...</div>
+        } @else if (getFilteredImages().length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">🖼️</div>
+            <h2>No hay imágenes</h2>
+            <p>Sube la primera imagen arrastrándola o seleccionándola arriba.</p>
+          </div>
+        } @else {
+          <div class="gallery-grid">
+            @for (img of getFilteredImages(); track img.id) {
+              <div class="gallery-item">
+                <img [src]="img.url" [alt]="img.roomName" />
+                <div class="gallery-item-overlay">
+                  <span class="gallery-item-room">{{ img.roomName }}</span>
+                  <button class="btn-delete-img" (click)="deleteGalleryImage(img.id)">🗑️</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ROOMS TAB -->
+    @if (activeTab() === 'rooms' && isLoading()) {
       <div class="loading">Cargando habitaciones...</div>
-    } @else if (hasError()) {
+    } @else if (activeTab() === 'rooms' && hasError()) {
       <div class="error-state">
         <div class="error-icon">⚠️</div>
         <h2>Error al cargar</h2>
         <p>No pudimos obtener las habitaciones. Verifica tu conexión.</p>
         <button class="btn-primary" (click)="loadRooms()">Reintentar</button>
       </div>
-    } @else if (rooms().length === 0) {
+    } @else if (activeTab() === 'rooms' && rooms().length === 0) {
       <div class="empty-state">
         <div class="empty-icon">🏨</div>
         <h2>No hay habitaciones</h2>
         <p>Agrega tu primera habitación para comenzar.</p>
         <button class="btn-primary" (click)="openCreateForm()">+ Crear Habitación</button>
       </div>
-    } @else {
+    } @else if (activeTab() === 'rooms') {
       <div class="rooms-grid">
         @for (room of rooms(); track room.id) {
           <div class="room-card">
