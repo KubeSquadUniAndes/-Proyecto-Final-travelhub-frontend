@@ -51,7 +51,7 @@
           <p class="room-selector-label">Selecciona una habitación para subir imágenes:</p>
           <div class="room-selector-grid">
             @for (room of rooms(); track room.id) {
-              <div class="room-selector-card" [class.room-selector-active]="galleryRoom() === room.id" (click)="galleryRoom.set(room.id)">
+              <div class="room-selector-card" [class.room-selector-active]="galleryRoom() === room.id" (click)="galleryRoom.set(room.id)" (keydown.enter)="galleryRoom.set(room.id)" tabindex="0" role="button">
                 @if (getRoomImage(room.id)) {
                   <img [src]="getRoomImage(room.id)" [alt]="room.name" class="room-selector-img" />
                 } @else {
