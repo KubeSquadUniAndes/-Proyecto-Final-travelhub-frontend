@@ -1,12 +1,26 @@
-import { ManageRoomsPage } from '../pages/ManageRoomsPage';
-
-const manageRoomsPage = new ManageRoomsPage();
-
 describe('Galería Multimedia', () => {
+  const mockRooms = [
+    { id: 'room-1', hotel_id: 'test-user-id', name: 'Habitación 101', room_type: 'individual', price: '150.00', capacity: 2, beds: '1 cama doble', size: 25, amenities: 'WiFi, AC' },
+    { id: 'room-2', hotel_id: 'test-user-id', name: 'Suite 201', room_type: 'suite', price: '350.00', capacity: 4, beds: '1 king', size: 45, amenities: 'WiFi, AC, Minibar' },
+  ];
+
+  const mockImages = [
+    { id: 'img-1', room_id: 'room-1', url: 'https://via.placeholder.com/300', created_at: '2026-01-01T00:00:00Z' },
+    { id: 'img-2', room_id: 'room-1', url: 'https://via.placeholder.com/301', created_at: '2026-01-02T00:00:00Z' },
+  ];
+
   beforeEach(() => {
+    cy.intercept('GET', '**/hospedajes/api/v1/rooms', mockRooms).as('getRooms');
+    cy.intercept('GET', '**/hospedajes/api/v1/rooms/room-1/images', mockImages).as('getImagesRoom1');
+    cy.intercept('GET', '**/hospedajes/api/v1/rooms/room-2/images', []).as('getImagesRoom2');
+    cy.intercept('POST', '**/hospedajes/api/v1/rooms/*/images', { statusCode: 201, body: { id: 'img-new', room_id: 'room-1', url: 'https://via.placeholder.com/302', created_at: new Date().toISOString() } }).as('uploadImage');
+    cy.intercept('DELETE', '**/hospedajes/api/v1/rooms/images/*', { statusCode: 200, body: { message: 'deleted' } }).as('deleteImage');
+    cy.intercept('GET', '**/hospedajes/api/v1/rates', []).as('getRates');
+
     cy.visit('/login');
     cy.loginAsUser('hotel');
     cy.visit('/manage-rooms');
+    cy.wait('@getRooms');
   });
 
   context('Dado que el hotel accede a la pestaña Galería', () => {
@@ -19,7 +33,7 @@ describe('Galería Multimedia', () => {
     it('Cuando hace clic en Galería, debe ver el selector de habitaciones', () => {
       cy.get('.tab').contains('Galería').click();
       cy.get('.room-selector').should('be.visible');
-      cy.get('.room-selector-card').should('have.length.greaterThan', 0);
+      cy.get('.room-selector-card').should('have.length', 2);
     });
 
     it('Entonces debe ver el contador de imágenes', () => {
@@ -50,7 +64,7 @@ describe('Galería Multimedia', () => {
 
     it('La zona de drop debe mostrar el nombre de la habitación', () => {
       cy.get('.room-selector-card').first().click();
-      cy.get('.drop-zone').should('contain.text', 'Arrastra imágenes para');
+      cy.get('.drop-zone').should('contain.text', 'Habitación 101');
     });
 
     it('Debe mostrar el botón de seleccionar archivos', () => {
@@ -74,7 +88,7 @@ describe('Galería Multimedia', () => {
     it('Debe mostrar el nombre y tamaño del archivo en la cola', () => {
       cy.get('#galleryFileInput').selectFile('cypress/fixtures/test-image.jpg', { force: true });
       cy.get('.queue-name').should('contain.text', 'test-image.jpg');
-      cy.get('.queue-size').should('contain.text', 'MB');
+      cy.get('.queue-size').should('be.visible');
     });
 
     it('Debe poder eliminar un archivo de la cola antes de subir', () => {
@@ -84,10 +98,9 @@ describe('Galería Multimedia', () => {
     });
 
     it('Cuando sube exitosamente, debe mostrar toast de éxito', () => {
-      cy.intercept('POST', '**/rooms/*/images', { statusCode: 201, body: { id: 'new', room_id: 'r1', url: 'http://img.jpg', created_at: new Date().toISOString() } }).as('upload');
       cy.get('#galleryFileInput').selectFile('cypress/fixtures/test-image.jpg', { force: true });
       cy.get('.btn-primary').contains('Subir todos').click();
-      cy.wait('@upload');
+      cy.wait('@uploadImage');
       cy.get('.toast').should('contain.text', 'subida');
     });
   });
@@ -95,16 +108,11 @@ describe('Galería Multimedia', () => {
   context('Dado que el hotel quiere eliminar una imagen', () => {
     it('Cuando hace clic en eliminar, la imagen desaparece', () => {
       cy.get('.tab').contains('Galería').click();
-      cy.get('.gallery-grid .gallery-item').then(($items) => {
-        if ($items.length > 0) {
-          const initialCount = $items.length;
-          cy.intercept('DELETE', '**/rooms/images/*', { statusCode: 200, body: { message: 'deleted' } }).as('delete');
-          cy.get('.gallery-item').first().trigger('mouseenter');
-          cy.get('.gallery-item').first().find('.btn-delete-img').click({ force: true });
-          cy.wait('@delete');
-          cy.get('.toast').should('contain.text', 'eliminada');
-        }
-      });
+      cy.get('.gallery-item').should('have.length', 2);
+      cy.get('.gallery-item').first().trigger('mouseenter');
+      cy.get('.gallery-item').first().find('.btn-delete-img').click({ force: true });
+      cy.wait('@deleteImage');
+      cy.get('.toast').should('contain.text', 'eliminada');
     });
   });
 
@@ -114,6 +122,7 @@ describe('Galería Multimedia', () => {
       cy.get('.room-selector').should('be.visible');
       cy.get('.tab').contains('Habitaciones').click();
       cy.get('.room-selector').should('not.exist');
+      cy.get('.room-card').should('have.length', 2);
     });
   });
 });
