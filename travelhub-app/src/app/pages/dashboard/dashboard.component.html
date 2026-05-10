@@ -47,13 +47,24 @@
           <input id="search" type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); currentPage.set(1)" name="search" placeholder="ID, nombre o tipo..." />
         </div>
         <div class="filter-group">
-          <label for="estado">Estado</label>
+          <label for="estado">Estado Reserva</label>
           <select id="estado" [ngModel]="estadoFilter()" (ngModelChange)="estadoFilter.set($event); currentPage.set(1)" name="estado">
             <option value="">Todos</option>
             <option value="pending">Pendiente</option>
             <option value="confirmed">Confirmada</option>
             <option value="cancelled">Cancelada</option>
             <option value="completed">Completada</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="pago">Estado Pago</label>
+          <select id="pago" [ngModel]="pagoFilter()" (ngModelChange)="pagoFilter.set($event); currentPage.set(1)" name="pago">
+            <option value="">Todos</option>
+            <option value="pending">Sin pago</option>
+            <option value="processing">Procesando</option>
+            <option value="confirmed">Pagado</option>
+            <option value="failed">Fallido</option>
+            <option value="refunded">Reembolsado</option>
           </select>
         </div>
         <div class="filter-group">
@@ -87,7 +98,9 @@
                 <th>Check-out</th>
                 <th>Huéspedes</th>
                 <th>Total</th>
-                <th>Estado</th>
+                <th>Estado Reserva</th>
+                <th>Estado Pago</th>
+                <th>Creación</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -101,14 +114,16 @@
                   <td>{{ r.num_guests }}</td>
                   <td class="monto">$ {{ r.final_price || r.price_per_night }}</td>
                   <td><span class="status" [ngClass]="estadoClass(r.status)">{{ r.status_display || estadoLabel(r.status) }}</span></td>
+                  <td><span class="status" [ngClass]="pagoClass(r.payment_status)">{{ r.payment_status_display || pagoLabel(r.payment_status) }}</span></td>
+                  <td class="fecha-creacion">{{ formatDate(r.created_at ?? '') }}</td>
                   <td>
                     <div class="actions">
                       <button class="btn-action" title="Ver detalle" (click)="viewDetail(r)">📋</button>
-                      @if (r.status === 'pending') {
+                      @if (r.status !== 'cancelled' && r.status !== 'completed' && r.payment_status !== 'confirmed') {
                         <button class="btn-action btn-pay-action" title="Pagar" (click)="openPayment(r)">💳</button>
                       }
                       <button class="btn-action" title="Editar" (click)="openEdit(r)">✏️</button>
-                      @if (r.cancellable) {
+                      @if (r.cancellable && r.status !== 'confirmed' && r.payment_status !== 'confirmed') {
                         <button class="btn-action btn-cancel-action" title="Cancelar" (click)="openCancel(r)">❌</button>
                       }
                     </div>
@@ -116,7 +131,7 @@
                 </tr>
                 @if (selectedBooking()?.id === r.id) {
                   <tr class="detail-row">
-                    <td colspan="8">
+                    <td colspan="10">
                       <div class="detail-grid">
                         <div class="detail-item"><span>Código</span><span>{{ r.booking_code }}</span></div>
                         <div class="detail-item"><span>Viajero</span><span>{{ r.traveler_name }}</span></div>

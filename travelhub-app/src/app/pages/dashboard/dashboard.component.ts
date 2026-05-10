@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { BookingsService, Booking } from '../../services/bookings.service';
+import { PaymentService } from '../../services/payment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +17,7 @@ export class DashboardComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private bookingsService = inject(BookingsService);
+  private paymentService = inject(PaymentService);
 
   readonly PAGE_SIZE = 20;
 
@@ -28,6 +30,7 @@ export class DashboardComponent implements OnInit {
 
   searchQuery = signal('');
   estadoFilter = signal('');
+  pagoFilter = signal('');
   fechaDesde = signal('');
   fechaHasta = signal('');
 
@@ -66,6 +69,10 @@ export class DashboardComponent implements OnInit {
     if (estado) {
       results = results.filter(r => r.status === estado);
     }
+    const pago = this.pagoFilter();
+    if (pago) {
+      results = results.filter(r => (r.payment_status ?? 'pending') === pago);
+    }
     const desde = this.fechaDesde();
     if (desde) {
       results = results.filter(r => r.start_time >= desde);
@@ -74,7 +81,7 @@ export class DashboardComponent implements OnInit {
     if (hasta) {
       results = results.filter(r => r.start_time <= hasta);
     }
-    return results.sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
+    return results.sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime());
   });
 
   paginatedReservas = computed(() => {
@@ -92,7 +99,7 @@ export class DashboardComponent implements OnInit {
     return `${start}-${end} de ${total} reservas`;
   });
 
-  hasFilters = computed(() => !!this.searchQuery().trim() || !!this.estadoFilter() || !!this.fechaDesde() || !!this.fechaHasta());
+  hasFilters = computed(() => !!this.searchQuery().trim() || !!this.estadoFilter() || !!this.pagoFilter() || !!this.fechaDesde() || !!this.fechaHasta());
 
   ngOnInit() { this.loadReservas(); }
 
@@ -211,9 +218,28 @@ export class DashboardComponent implements OnInit {
     const booking = this.payingBooking();
     if (!booking || !this.validatePayment()) return;
     this.isProcessingPayment.set(true);
-    this.bookingsService.approve(booking.id).subscribe({
-      next: () => { this.closePayment(); this.loadReservas(); this.showToast(`Pago procesado. Reserva ${booking.booking_code} confirmada.`, 'success'); },
-      error: () => { this.isProcessingPayment.set(false); this.showToast('Error al procesar el pago. Intenta de nuevo.', 'error'); },
+
+    const cardDigits = this.paymentForm.cardNumber.replace(/\D/g, '');
+    const cardLastFour = cardDigits.slice(-4);
+    const amount = booking.final_price ? parseFloat(booking.final_price) : 0;
+    const email = booking.traveler_email ?? this.authService.currentUser()?.email ?? '';
+
+    this.paymentService.processCardPayment(
+      booking.id,
+      amount,
+      cardLastFour,
+      this.paymentForm.cardName,
+      email,
+    ).subscribe({
+      next: () => {
+        this.closePayment();
+        this.loadReservas();
+        this.showToast(`Pago procesado. Se enviará el voucher a ${email}.`, 'success');
+      },
+      error: () => {
+        this.isProcessingPayment.set(false);
+        this.showToast('Error al procesar el pago. Intenta de nuevo.', 'error');
+      },
     });
   }
 
@@ -252,7 +278,7 @@ export class DashboardComponent implements OnInit {
   }
 
   clearFilters() {
-    this.searchQuery.set(''); this.estadoFilter.set('');
+    this.searchQuery.set(''); this.estadoFilter.set(''); this.pagoFilter.set('');
     this.fechaDesde.set(''); this.fechaHasta.set('');
     this.currentPage.set(1);
   }
@@ -278,6 +304,16 @@ export class DashboardComponent implements OnInit {
   estadoLabel(estado: string | undefined): string {
     const map: Record<string, string> = { 'pending': 'Pendiente', 'confirmed': 'Confirmada', 'cancelled': 'Cancelada', 'completed': 'Completada' };
     return map[estado ?? ''] ?? estado ?? '';
+  }
+
+  pagoClass(status: string | null | undefined): string {
+    const map: Record<string, string> = { 'pending': 'pay-pending', 'processing': 'pay-processing', 'confirmed': 'pay-confirmed', 'failed': 'pay-failed', 'refunded': 'pay-refunded' };
+    return map[status ?? ''] ?? 'pay-pending';
+  }
+
+  pagoLabel(status: string | null | undefined): string {
+    const map: Record<string, string> = { 'pending': 'Sin pago', 'processing': 'Procesando', 'confirmed': 'Pagado', 'failed': 'Fallido', 'refunded': 'Reembolsado' };
+    return map[status ?? ''] ?? 'Sin pago';
   }
 
   navigate(path: string) { this.router.navigate([path]); }

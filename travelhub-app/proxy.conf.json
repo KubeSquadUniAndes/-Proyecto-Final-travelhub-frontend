@@ -23,5 +23,10 @@
     "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
     "secure": false,
     "changeOrigin": true
+  },
+  "/pagos": {
+    "target": "http://k8s-workload-travelhu-f26ddf980b-5888409b6dd7c4c7.elb.us-east-1.amazonaws.com",
+    "secure": false,
+    "changeOrigin": true
   }
 }

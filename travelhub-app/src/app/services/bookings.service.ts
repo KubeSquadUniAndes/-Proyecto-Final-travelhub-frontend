@@ -20,6 +20,9 @@ export interface Booking {
   additional_guests?: string[];
   status?: string;
   status_display?: string;
+  payment_id?: string | null;
+  payment_status?: string | null;
+  payment_status_display?: string | null;
   booking_code?: string;
   total_nights?: number;
   total_price?: string;
