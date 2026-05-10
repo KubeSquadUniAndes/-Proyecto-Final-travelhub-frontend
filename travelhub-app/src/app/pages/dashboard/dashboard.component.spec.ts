@@ -318,7 +318,8 @@ describe('DashboardComponent - Template', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('.status').length).toBe(3);
+    // 2 badges per row (estado reserva + estado pago) × 3 rows = 6
+    expect(fixture.nativeElement.querySelectorAll('.status').length).toBe(6);
   });
 
   it('should handle cancel error', () => {
@@ -486,7 +487,8 @@ describe('DashboardComponent - Payment & Cancel', () => {
     component.onExpiryInput('1228');
     component.onCvvInput('123');
     component.confirmPayment();
-    httpMock.expectOne(r => r.method === 'PATCH').flush({ ...mockBookings[1], status: 'confirmed' });
+    httpMock.expectOne(r => r.method === 'POST' && r.url.includes('/payments') && !r.url.includes('/confirm')).flush({ id: 'pay1', booking_id: 'b2', status: 'pending' });
+    httpMock.expectOne(r => r.method === 'POST' && r.url.includes('/confirm')).flush({ id: 'pay1', booking_id: 'b2', status: 'confirmed' });
     httpMock.expectOne(r => r.method === 'GET').flush(mockBookings);
     expect(component.showPaymentModal()).toBe(false);
     expect(component.toastMessage()).toContain('Pago procesado');
@@ -499,7 +501,7 @@ describe('DashboardComponent - Payment & Cancel', () => {
     component.onExpiryInput('1228');
     component.onCvvInput('123');
     component.confirmPayment();
-    httpMock.expectOne(r => r.method === 'PATCH').error(new ProgressEvent('error'));
+    httpMock.expectOne(r => r.method === 'POST' && r.url.includes('/payments') && !r.url.includes('/confirm')).error(new ProgressEvent('error'));
     expect(component.toastType()).toBe('error');
     expect(component.isProcessingPayment()).toBe(false);
   });
@@ -558,7 +560,8 @@ describe('DashboardComponent - Payment & Cancel', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('.btn-pay-action').length).toBe(1);
+    // confirmed (no payment) + pending (no payment) = 2; cancelled = 0
+    expect(fixture.nativeElement.querySelectorAll('.btn-pay-action').length).toBe(2);
   });
 
   it('should detect Discover brand', () => {
