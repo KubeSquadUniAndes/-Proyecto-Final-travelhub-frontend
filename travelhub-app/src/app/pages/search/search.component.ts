@@ -64,7 +64,20 @@ export class SearchComponent implements OnInit {
   loadRooms() {
     this.isLoading.set(true);
     this.hasError.set(false);
-    this.roomsService.list().subscribe({
+    const destino = this.destino().trim();
+    const checkIn = this.checkIn();
+    const checkOut = this.checkOut();
+    const guests = this.huespedes();
+    const hasFilters = !!destino || !!checkIn || !!checkOut || guests > 1;
+    const request$ = hasFilters
+      ? this.roomsService.search({
+          checkin: checkIn || undefined,
+          checkout: checkOut || undefined,
+          destination: destino || undefined,
+          guests: guests > 0 ? guests : undefined,
+        })
+      : this.roomsService.list();
+    request$.subscribe({
       next: (rooms) => {
         this.allRooms.set(rooms);
         this.isLoading.set(false);
@@ -94,6 +107,7 @@ export class SearchComponent implements OnInit {
     this.checkIn.set('');
     this.checkOut.set('');
     this.huespedes.set(1);
+    this.loadRooms();
   }
 
   goToCheckout(room: Room) {

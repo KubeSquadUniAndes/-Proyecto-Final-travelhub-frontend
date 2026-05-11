@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -33,6 +33,15 @@ export class RoomsService {
 
   list(): Observable<Room[]> {
     return this.http.get<Room[]>(this.baseUrl);
+  }
+
+  search(filters: { checkin?: string; checkout?: string; destination?: string; guests?: number }): Observable<Room[]> {
+    let params = new HttpParams();
+    if (filters.checkin) params = params.set('checkin', filters.checkin);
+    if (filters.checkout) params = params.set('checkout', filters.checkout);
+    if (filters.destination) params = params.set('destination', filters.destination);
+    if (filters.guests != null && filters.guests > 0) params = params.set('guests', filters.guests.toString());
+    return this.http.get<Room[]>(`${this.baseUrl}/search`, { params });
   }
 
   getById(id: string): Observable<Room> {
