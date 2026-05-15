@@ -58,26 +58,29 @@ export class SearchComponent implements OnInit {
     if (params.get('checkIn')) this.checkIn.set(params.get('checkIn')!);
     if (params.get('checkOut')) this.checkOut.set(params.get('checkOut')!);
     if (params.get('huespedes')) this.huespedes.set(Number(params.get('huespedes')));
+
+    // Set default check-in and check-out dates if not provided
+    if (!this.checkIn()) {
+      const today = new Date();
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(today.getMonth() + 1);
+      this.checkIn.set(today.toISOString().split('T')[0]);
+      this.checkOut.set(nextMonth.toISOString().split('T')[0]);
+    }
+
     this.loadRooms();
   }
 
   loadRooms() {
     this.isLoading.set(true);
     this.hasError.set(false);
-    const destino = this.destino().trim();
-    const checkIn = this.checkIn();
-    const checkOut = this.checkOut();
-    const guests = this.huespedes();
-    const hasFilters = !!destino || !!checkIn || !!checkOut || guests > 1;
-    const request$ = hasFilters
-      ? this.roomsService.search({
-          checkin: checkIn || undefined,
-          checkout: checkOut || undefined,
-          destination: destino || undefined,
-          guests: guests > 0 ? guests : undefined,
-        })
-      : this.roomsService.list();
-    request$.subscribe({
+
+    this.roomsService.search({
+      destination: this.destino(),
+      checkin: this.checkIn(),
+      checkout: this.checkOut(),
+      guests: this.huespedes(),
+    }).subscribe({
       next: (rooms) => {
         this.allRooms.set(rooms);
         this.isLoading.set(false);
@@ -107,7 +110,6 @@ export class SearchComponent implements OnInit {
     this.checkIn.set('');
     this.checkOut.set('');
     this.huespedes.set(1);
-    this.loadRooms();
   }
 
   goToCheckout(room: Room) {
