@@ -17,145 +17,224 @@
   <div class="container">
     <div class="page-header">
       <div>
-        <h1>Dashboard de Reservas</h1>
-        <p>Control centralizado de tu operación diaria</p>
+        <h1>Dashboard Analítico</h1>
+        <p>KPIs, tendencias y rendimiento de tu hotel</p>
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <p class="stat-label">Total Reservas</p>
-        <p class="stat-value">{{ stats().total }}</p>
+    <!-- Period Filter -->
+    <div class="period-bar">
+      <div class="period-buttons">
+        <button [class.active]="selectedPeriod() === 'today'" (click)="setPeriod('today')">Hoy</button>
+        <button [class.active]="selectedPeriod() === '7days'" (click)="setPeriod('7days')">7 días</button>
+        <button [class.active]="selectedPeriod() === 'month'" (click)="setPeriod('month')">Mes</button>
+        <button [class.active]="selectedPeriod() === 'year'" (click)="setPeriod('year')">Año</button>
+        <button [class.active]="selectedPeriod() === 'custom'" (click)="setPeriod('custom')">Personalizado</button>
       </div>
-      <div class="stat-card">
-        <p class="stat-label">Confirmadas</p>
-        <p class="stat-value green">{{ stats().confirmadas }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Pendientes</p>
-        <p class="stat-value yellow">{{ stats().pendientes }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Ingresos</p>
-        <p class="stat-value blue">$ {{ stats().ingresos | number }}</p>
-      </div>
+      <button class="btn-report" (click)="openReportModal()">📄 Generar Reporte</button>
+      @if (selectedPeriod() === 'custom') {
+        <div class="custom-range">
+          <input type="date" [ngModel]="customFrom()" (ngModelChange)="customFrom.set($event); onCustomDateChange()" name="from" />
+          <span>—</span>
+          <input type="date" [ngModel]="customTo()" (ngModelChange)="customTo.set($event); onCustomDateChange()" name="to" />
+        </div>
+      }
     </div>
 
     @if (isLoading()) {
-      <div class="loading-state">Cargando reservas...</div>
+      <div class="loading-state">Cargando datos...</div>
     } @else if (hasError()) {
       <div class="error-state">
-        <p>⚠️ Error al cargar reservas.</p>
-        <button class="btn-retry" (click)="loadReservas()">Reintentar</button>
+        <p>⚠️ Error al cargar datos.</p>
+        <button class="btn-retry" (click)="loadData()">Reintentar</button>
       </div>
     } @else {
-      <!-- Table -->
-      <div class="table-card">
-        <div class="table-top">
-          <h2>Reservas</h2>
-        </div>
-
-        <!-- Filter Bar -->
-        <div class="filter-bar">
-          <div class="filter-row">
-            <div class="search-wrapper">
-              <svg class="search-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="9" cy="9" r="6" stroke="#9ca3af" stroke-width="1.5"/>
-                <path d="M13.5 13.5L17 17" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <input type="text" placeholder="Buscar por nombre, email o ID de reserva..." [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
-            </div>
-
-            <!-- Status dropdown overlay -->
-            @if (showStatusDropdown()) {
-              <div class="dropdown-overlay" role="button" tabindex="0" aria-label="Cerrar menú de estado" (click)="closeStatusDropdown()" (keydown.enter)="closeStatusDropdown()" (keydown.escape)="closeStatusDropdown()"></div>
-            }
-
-            <div class="status-dropdown-wrapper">
-              <button class="status-dropdown-btn" [class.has-selection]="filterStatuses().length > 0" (click)="toggleStatusDropdown()" type="button">
-                {{ statusDropdownLabel() }}
-                <svg class="chevron" [class.open]="showStatusDropdown()" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-              @if (showStatusDropdown()) {
-                <div class="status-dropdown-menu">
-                  @for (option of statusOptions; track option.value) {
-                    <label class="status-option">
-                      <input type="checkbox" [checked]="isStatusSelected(option.value)" (change)="toggleStatus(option.value)" />
-                      <span class="status" [ngClass]="estadoClass(option.value)">{{ option.label }}</span>
-                    </label>
-                  }
-                </div>
-              }
-            </div>
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-icon">💰</span>
+            <span class="kpi-label">Ingresos Brutos</span>
           </div>
-
-          <div class="filter-row date-filter-row">
-            <div class="date-range">
-              <label class="date-label" for="dateFrom">Desde</label>
-              <input id="dateFrom" type="date" class="date-input" [value]="filterDateFrom()" [max]="filterDateTo() || ''" (change)="onDateFromChange($any($event.target).value)" />
-              <span class="date-separator">—</span>
-              <label class="date-label" for="dateTo">Hasta</label>
-              <input id="dateTo" type="date" class="date-input" [value]="filterDateTo()" [min]="filterDateFrom() || ''" (change)="onDateToChange($any($event.target).value)" />
-            </div>
-            @if (hasActiveFilters()) {
-              <button class="btn-clear" (click)="clearFilters()" type="button">Limpiar Filtros</button>
-            }
+          <p class="kpi-value">{{ formatCurrency(kpis().grossRevenue) }}</p>
+          <p class="kpi-sub">Neto: {{ formatCurrency(kpis().netRevenue) }}</p>
+          <div class="kpi-delta" [class.up]="comparison().revenue.direction === 'up'" [class.down]="comparison().revenue.direction === 'down'">
+            <span class="delta-arrow">{{ comparison().revenue.direction === 'up' ? '↑' : comparison().revenue.direction === 'down' ? '↓' : '→' }}</span>
+            <span>{{ comparison().revenue.value }}% vs periodo anterior</span>
           </div>
         </div>
 
-        @if (filteredReservas().length === 0 && hasActiveFilters()) {
-          <div class="empty-state">
-            <p>No se encontraron reservas con los criterios seleccionados.</p>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-icon">🏨</span>
+            <span class="kpi-label">Tasa de Ocupación</span>
           </div>
-        } @else if (filteredReservas().length === 0) {
-          <div class="empty-state">
-            <p>🏨 No hay reservas registradas aún.</p>
+          <p class="kpi-value">{{ kpis().occupancy | number:'1.1-1' }}%</p>
+          <p class="kpi-sub">{{ kpis().confirmed }} reservas confirmadas</p>
+          <div class="kpi-delta" [class.up]="comparison().occupancy.direction === 'up'" [class.down]="comparison().occupancy.direction === 'down'">
+            <span class="delta-arrow">{{ comparison().occupancy.direction === 'up' ? '↑' : comparison().occupancy.direction === 'down' ? '↓' : '→' }}</span>
+            <span>{{ comparison().occupancy.value }}% vs periodo anterior</span>
           </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-icon">📊</span>
+            <span class="kpi-label">ADR (Tarifa Promedio)</span>
+          </div>
+          <p class="kpi-value">{{ formatCurrency(kpis().adr) }}</p>
+          <p class="kpi-sub">Por noche ocupada</p>
+          <div class="kpi-delta" [class.up]="comparison().adr.direction === 'up'" [class.down]="comparison().adr.direction === 'down'">
+            <span class="delta-arrow">{{ comparison().adr.direction === 'up' ? '↑' : comparison().adr.direction === 'down' ? '↓' : '→' }}</span>
+            <span>{{ comparison().adr.value }}% vs periodo anterior</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-icon">📈</span>
+            <span class="kpi-label">RevPAR</span>
+          </div>
+          <p class="kpi-value">{{ formatCurrency(kpis().revpar) }}</p>
+          <p class="kpi-sub">Ingreso por habitación disponible</p>
+          <div class="kpi-delta" [class.up]="comparison().bookings.direction === 'up'" [class.down]="comparison().bookings.direction === 'down'">
+            <span class="delta-arrow">{{ comparison().bookings.direction === 'up' ? '↑' : comparison().bookings.direction === 'down' ? '↓' : '→' }}</span>
+            <span>{{ comparison().bookings.value }}% reservas vs anterior</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>📈 Tendencia de Reservas</h3>
+          <canvas #lineChart class="line-chart"></canvas>
+        </div>
+        <div class="chart-card pie-card">
+          <h3>🥧 Distribución por Tipo</h3>
+          <canvas #pieChart class="pie-chart"></canvas>
+          <div class="pie-legend">
+            @for (item of roomTypeDistribution(); track item.type; let i = $index) {
+              <div class="legend-item">
+                <span class="legend-dot" [style.background]="['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899'][i % 6]"></span>
+                <span>{{ item.type }} ({{ item.count }})</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Rooms -->
+      <div class="popular-card">
+        <h3>⭐ Habitaciones Más Populares</h3>
+        @if (popularRooms().length === 0) {
+          <p class="no-data">Sin datos de reservas confirmadas en este periodo.</p>
         } @else {
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Código</th>
-                  <th>Huésped</th>
-                  <th>Check-in</th>
-                  <th>Check-out</th>
-                  <th>Huéspedes</th>
-                  <th>Total</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (r of paginatedReservas(); track r.id) {
-                  <tr>
-                    <td class="id-cell">{{ r.booking_code || (r.id | slice:0:8) }}</td>
-                    <td>{{ r.traveler_name }}</td>
-                    <td>{{ formatDate(r.start_time) }}</td>
-                    <td>{{ formatDate(r.end_time) }}</td>
-                    <td>{{ r.num_guests }}</td>
-                    <td>$ {{ r.final_price || r.price_per_night }}</td>
-                    <td><span class="status" [ngClass]="estadoClass(r.status)">{{ r.status_display || estadoLabel(r.status) }}</span></td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-footer">
-            <p>{{ paginationLabel() }}</p>
-            <div class="pagination">
-              <button [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">Anterior</button>
-              @for (p of getPages(); track p) {
-                <button [class.active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
-              }
-              <button [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">Siguiente</button>
-            </div>
+          <div class="popular-list">
+            @for (room of popularRooms(); track room.name; let i = $index) {
+              <div class="popular-item">
+                <span class="popular-rank">#{{ i + 1 }}</span>
+                <div class="popular-info">
+                  <span class="popular-name">{{ room.type }}</span>
+                  <span class="popular-meta">{{ room.count }} reservas · {{ formatCurrency(room.revenue) }}</span>
+                </div>
+                <div class="popular-bar">
+                  <div class="popular-bar-fill" [style.width.%]="(room.count / popularRooms()[0].count) * 100"></div>
+                </div>
+              </div>
+            }
           </div>
         }
       </div>
     }
   </div>
+
+  <!-- Report Modal -->
+  @if (showReportModal()) {
+    <div class="modal-overlay" (click)="closeReportModal()" (keydown.escape)="closeReportModal()" tabindex="0">
+      <div class="modal report-modal" (click)="$event.stopPropagation()" (keydown.escape)="closeReportModal()" tabindex="0">
+        <h2>📄 Generar Reporte de Ingresos</h2>
+
+        <div class="report-form">
+          <div class="report-row">
+            <div class="report-field">
+              <label for="rFrom">Desde</label>
+              <input id="rFrom" type="date" [ngModel]="reportFrom()" (ngModelChange)="reportFrom.set($event)" name="rFrom" />
+            </div>
+            <div class="report-field">
+              <label for="rTo">Hasta</label>
+              <input id="rTo" type="date" [ngModel]="reportTo()" (ngModelChange)="reportTo.set($event)" name="rTo" />
+            </div>
+          </div>
+          <div class="report-row">
+            <div class="report-field">
+              <label for="rGroup">Agrupación</label>
+              <select id="rGroup" [ngModel]="reportGrouping()" (ngModelChange)="reportGrouping.set($event)" name="rGroup">
+                <option value="daily">Diario</option>
+                <option value="weekly">Semanal</option>
+                <option value="monthly">Mensual</option>
+              </select>
+            </div>
+            <div class="report-field">
+              <label for="rType">Tipo de habitación</label>
+              <select id="rType" [ngModel]="reportRoomType()" (ngModelChange)="reportRoomType.set($event)" name="rType">
+                <option value="all">Todas las habitaciones</option>
+                @for (type of availableRoomTypes(); track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <button class="btn-generate" (click)="generateReport()">Generar Reporte</button>
+        </div>
+
+        @if (reportGenerated()) {
+          <div class="report-results">
+            <div class="report-kpis">
+              <div class="report-kpi">
+                <span class="rk-label">Total Ingresos</span>
+                <span class="rk-value">{{ formatCurrency(reportData().totalRevenue) }}</span>
+              </div>
+              <div class="report-kpi">
+                <span class="rk-label">Reservas</span>
+                <span class="rk-value">{{ reportData().totalBookings }}</span>
+              </div>
+              <div class="report-kpi">
+                <span class="rk-label">Promedio/Reserva</span>
+                <span class="rk-value">{{ formatCurrency(reportData().avgPerBooking) }}</span>
+              </div>
+              <div class="report-kpi">
+                <span class="rk-label">vs Periodo Anterior</span>
+                <span class="rk-value" [class.up]="reportData().compPct >= 0" [class.down]="reportData().compPct < 0">
+                  {{ reportData().compPct >= 0 ? '+' : '' }}{{ reportData().compPct }}%
+                </span>
+              </div>
+            </div>
+
+            <div class="report-table">
+              <table>
+                <thead>
+                  <tr><th>Periodo</th><th>Reservas</th><th>Ingresos</th></tr>
+                </thead>
+                <tbody>
+                  @for (row of reportData().breakdown; track row.label) {
+                    <tr><td>{{ row.label }}</td><td>{{ row.count }}</td><td>{{ formatCurrency(row.revenue) }}</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <div class="report-export">
+              <button class="btn-pdf" (click)="exportPDF()">📥 Descargar PDF</button>
+              <button class="btn-excel" (click)="exportExcel()">📊 Descargar Excel</button>
+            </div>
+          </div>
+        }
+
+        <div class="modal-footer">
+          <button class="btn-close" (click)="closeReportModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
