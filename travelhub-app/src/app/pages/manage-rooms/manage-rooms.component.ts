@@ -214,11 +214,21 @@ export class ManageRoomsComponent implements OnInit {
     });
   }
 
+  private defaultCheckin(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  private defaultCheckout(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 2);
+    return d.toISOString().split('T')[0];
+  }
+
   loadRooms() {
     this.isLoading.set(true);
     this.hasError.set(false);
     const hotelId = this.authService.currentUser()?.id ?? '';
-    this.roomsService.list().subscribe({
+    this.roomsService.search({ checkin: this.defaultCheckin(), checkout: this.defaultCheckout() }).subscribe({
       next: (allRooms) => {
         const rooms = hotelId ? allRooms.filter(r => r.hotel_id === hotelId) : allRooms;
         this.rooms.set(rooms);

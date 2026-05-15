@@ -32,8 +32,18 @@ export class HomeComponent implements OnInit {
   checkOut = '';
   huespedes = 1;
 
+  private defaultCheckin(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  private defaultCheckout(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 2);
+    return d.toISOString().split('T')[0];
+  }
+
   ngOnInit() {
-    this.roomsService.list().subscribe({
+    this.roomsService.search({ checkin: this.defaultCheckin(), checkout: this.defaultCheckout() }).subscribe({
       next: (rooms) => {
         this.hospedajes.set(rooms);
         this.isLoading.set(false);
