@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Manual de Usuario - TravelHub</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; line-height: 1.7; padding: 40px; max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 32px; color: #2563eb; margin-bottom: 8px; border-bottom: 3px solid #2563eb; padding-bottom: 12px; }
+    h2 { font-size: 24px; color: #1e40af; margin-top: 40px; margin-bottom: 16px; border-left: 4px solid #2563eb; padding-left: 12px; }
+    h3 { font-size: 18px; color: #374151; margin-top: 24px; margin-bottom: 12px; }
+    p { margin-bottom: 12px; font-size: 15px; }
+    .cover { text-align: center; padding: 80px 20px; margin-bottom: 60px; background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; border-radius: 16px; }
+    .cover h1 { color: #fff; border: none; font-size: 42px; }
+    .cover p { color: #dbeafe; font-size: 18px; }
+    .cover .version { margin-top: 20px; font-size: 14px; color: #93c5fd; }
+    .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px 32px; margin-bottom: 40px; }
+    .toc h2 { border: none; margin-top: 0; padding-left: 0; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; font-size: 15px; }
+    .toc a { color: #2563eb; text-decoration: none; }
+    .step { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; }
+    .step-number { display: inline-block; width: 28px; height: 28px; background: #2563eb; color: #fff; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 14px; margin-right: 10px; }
+    .tip { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 14px; }
+    .tip::before { content: "💡 Tip: "; font-weight: 700; }
+    .warning { background: #fee2e2; border-left: 4px solid #ef4444; padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 14px; }
+    .warning::before { content: "⚠️ Importante: "; font-weight: 700; }
+    .screen { background: #fff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; margin: 20px 0; }
+    .screen-title { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 600; }
+    .screen-url { font-size: 12px; color: #6b7280; background: #f3f4f6; padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; display: inline-block; }
+    /* Mockup base */
+    .mock { background: #f9fafb; border-radius: 10px; padding: 0; overflow: hidden; border: 1px solid #e5e7eb; }
+    .mock-nav { background: #1e40af; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .mock-nav-logo { color: #fff; font-weight: 700; font-size: 14px; }
+    .mock-nav-links { display: flex; gap: 12px; }
+    .mock-nav-link { color: #bfdbfe; font-size: 12px; }
+    .mock-nav-link.active { color: #fff; font-weight: 600; border-bottom: 2px solid #fff; }
+    .mock-nav-btn { background: #fff; color: #1e40af; font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 600; }
+    .mock-body { padding: 16px 20px; }
+    .mock-hero { background: linear-gradient(135deg, #2563eb, #1e40af); border-radius: 8px; padding: 24px; color: #fff; text-align: center; margin-bottom: 14px; }
+    .mock-hero h4 { font-size: 16px; margin-bottom: 8px; }
+    .mock-search-bar { display: flex; gap: 8px; background: #fff; border-radius: 6px; padding: 8px; }
+    .mock-search-field { flex: 1; background: #f3f4f6; border-radius: 4px; padding: 6px 8px; font-size: 11px; color: #374151; }
+    .mock-search-btn { background: #f59e0b; color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .mock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+    .mock-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .mock-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+    .mock-card-img { height: 60px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .mock-card-body { padding: 8px; }
+    .mock-card-title { font-size: 11px; font-weight: 600; color: #111827; }
+    .mock-card-sub { font-size: 10px; color: #6b7280; }
+    .mock-card-price { font-size: 12px; font-weight: 700; color: #2563eb; margin-top: 4px; }
+    .mock-btn { display: inline-block; background: #2563eb; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; margin-top: 4px; }
+    .mock-btn-green { background: #16a34a; }
+    .mock-btn-red { background: #dc2626; }
+    .mock-btn-yellow { background: #d97706; }
+    .mock-sidebar { display: flex; gap: 12px; }
+    .mock-aside { width: 160px; flex-shrink: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; }
+    .mock-aside h5 { font-size: 11px; font-weight: 700; color: #374151; margin-bottom: 8px; }
+    .mock-menu-item { font-size: 10px; color: #4b5563; padding: 4px 6px; border-radius: 4px; margin-bottom: 3px; background: #f9fafb; }
+    .mock-stat { display: flex; justify-content: space-between; font-size: 10px; padding: 3px 0; border-bottom: 1px solid #f3f4f6; }
+    .mock-main { flex: 1; }
+    .mock-reserva-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .mock-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .mock-badge-yellow { background: #fef9c3; color: #854d0e; }
+    .mock-badge-green { background: #dcfce7; color: #166534; }
+    .mock-badge-red { background: #fee2e2; color: #991b1b; }
+    .mock-badge-blue { background: #dbeafe; color: #1e40af; }
+    .mock-form { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+    .mock-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .mock-field { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 8px; font-size: 11px; color: #9ca3af; }
+    .mock-label { font-size: 10px; font-weight: 600; color: #374151; margin-bottom: 2px; }
+    .mock-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+    .mock-kpi { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; text-align: center; }
+    .mock-kpi-val { font-size: 16px; font-weight: 700; color: #1e40af; }
+    .mock-kpi-label { font-size: 10px; color: #6b7280; margin-top: 2px; }
+    .mock-kpi-change { font-size: 10px; color: #16a34a; font-weight: 600; }
+    .mock-chart { background: #f0f9ff; border-radius: 6px; height: 80px; display: flex; align-items: flex-end; padding: 8px; gap: 4px; margin-bottom: 12px; }
+    .mock-bar-chart { flex: 1; background: #2563eb; border-radius: 3px 3px 0 0; opacity: 0.7; }
+    .mock-confirmed { display: flex; flex-direction: column; align-items: center; padding: 20px; text-align: center; }
+    .mock-confirmed-icon { font-size: 40px; margin-bottom: 8px; }
+    .mock-filters { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { padding: 10px 14px; border: 1px solid #e5e7eb; text-align: left; }
+    th { background: #f1f5f9; font-weight: 600; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-yellow { background: #fef9c3; color: #854d0e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 13px; color: #6b7280; }
+    @media print { body { padding: 20px; } .cover { page-break-after: always; } h2 { page-break-before: always; } }
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>📘 Manual de Usuario</h1>
+  <p>Plataforma TravelHub</p>
+  <p>Guía completa para viajeros y hoteles</p>
+  <div class="version">Versión 1.1 — Mayo 2026</div>
+</div>
+
+<!-- TABLA DE CONTENIDO -->
+<div class="toc">
+  <h2>Tabla de Contenido</h2>
+  <ol>
+    <li><a href="#intro">Introducción</a></li>
+    <li><a href="#requisitos">Requisitos del Sistema</a></li>
+    <li><a href="#registro">Registro de Usuario</a></li>
+    <li><a href="#login">Inicio de Sesión</a></li>
+    <li><a href="#viajero">Módulo Viajero</a>
+      <ol style="margin-top:4px">
+        <li><a href="#home">Página de Inicio (Home)</a></li>
+        <li><a href="#search">Búsqueda de Hospedajes</a></li>
+        <li><a href="#checkout">Proceso de Reserva (Checkout)</a></li>
+        <li><a href="#checkout2">Paso 2: Información de Contacto</a></li>
+        <li><a href="#confirmed">Confirmación de Reserva</a></li>
+        <li><a href="#dashboard">Mis Reservas</a></li>
+        <li><a href="#cancel">Cancelación de Reserva</a></li>
+      </ol>
+    </li>
+    <li><a href="#hotel">Módulo Hotel</a>
+      <ol style="margin-top:4px">
+        <li><a href="#hotel-home">Panel de Reservas</a></li>
+        <li><a href="#manage-rooms">Gestión de Habitaciones</a></li>
+        <li><a href="#hotel-dashboard">Dashboard Analítico</a></li>
+        <li><a href="#reportes">Generación de Reportes</a></li>
+      </ol>
+    </li>
+    <li><a href="#faq">Preguntas Frecuentes</a></li>
+  </ol>
+</div>
+
+<!-- 1. INTRODUCCIÓN -->
+<h2 id="intro">1. Introducción</h2>
+<p>TravelHub es una plataforma web que conecta viajeros con hoteles. Los viajeros pueden buscar, comparar y reservar hospedajes en Colombia y el mundo. Los hoteles pueden gestionar sus habitaciones, tarifas, reservas y analizar su rendimiento con dashboards y reportes.</p>
+
+<h3>Roles del Sistema</h3>
+<table>
+  <tr><th>Rol</th><th>Descripción</th><th>Pantallas disponibles</th></tr>
+  <tr><td><span class="badge badge-blue">Viajero</span></td><td>Busca y reserva hospedajes</td><td>/home, /search, /checkout, /checkout-step2, /booking-confirmed, /dashboard, /cancel-booking</td></tr>
+  <tr><td><span class="badge badge-green">Hotel</span></td><td>Gestiona habitaciones y reservas</td><td>/hotel-home, /hotel-dashboard, /manage-rooms</td></tr>
+</table>
+
+<!-- 2. REQUISITOS -->
+<h2 id="requisitos">2. Requisitos del Sistema</h2>
+<ul>
+  <li>Navegador web moderno (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)</li>
+  <li>Conexión a internet</li>
+  <li>Resolución mínima: 768px de ancho</li>
+</ul>
+<p><strong>URL de acceso:</strong> <code>https://d1iioxb0yhodky.cloudfront.net</code></p>
+
+<!-- 3. REGISTRO -->
+<h2 id="registro">3. Registro de Usuario</h2>
+
+<h3>3.1 Pantalla de Registro</h3>
+<div class="screen">
+  <div class="screen-title">Pantalla: Registro de Usuario</div>
+  <div class="screen-url">URL: /register</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">TravelHub — Únete</span>
+    </div>
+    <div class="mock-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:#1e40af;border-radius:8px;padding:16px;color:#fff">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">Beneficios exclusivos</div>
+        <div style="font-size:11px;margin-bottom:4px">🎁 Descuentos especiales — Hasta 30% OFF</div>
+        <div style="font-size:11px;margin-bottom:4px">⚡ Check-in rápido</div>
+        <div style="font-size:11px;margin-bottom:4px">📱 Gestión fácil de reservas</div>
+        <div style="font-size:11px">🌟 Programa de puntos</div>
+      </div>
+      <div class="mock-form">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">Información personal</div>
+        <div class="mock-form-row">
+          <div><div class="mock-label">Nombre *</div><div class="mock-field">Juan</div></div>
+          <div><div class="mock-label">Apellido *</div><div class="mock-field">Pérez</div></div>
+        </div>
+        <div style="margin-bottom:6px"><div class="mock-label">Email *</div><div class="mock-field">tu@email.com</div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Teléfono *</div><div class="mock-field">+57 300 123 4567</div></div>
+        <div class="mock-form-row">
+          <div><div class="mock-label">País *</div><div class="mock-field">Colombia</div></div>
+          <div><div class="mock-label">Ciudad *</div><div class="mock-field">Bogotá</div></div>
+        </div>
+        <div style="margin-bottom:6px"><div class="mock-label">Tipo de cuenta *</div><div class="mock-field" style="background:#e0e7ff;color:#1e40af">▼ Viajero / Hotel</div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Contraseña *</div><div class="mock-field">••••••••</div></div>
+        <div style="text-align:center;margin-top:10px"><span class="mock-btn" style="padding:6px 20px;font-size:12px">Crear cuenta</span></div>
+        <div style="text-align:center;font-size:10px;margin-top:6px;color:#6b7280">¿Ya tienes cuenta? <span style="color:#2563eb">Inicia sesión</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>3.2 Registro como Viajero</h3>
+<div class="step"><span class="step-number">1</span>Accede a la página principal y haz clic en <strong>"Registrarse"</strong>.</div>
+<div class="step"><span class="step-number">2</span>Completa todos los campos: nombre, apellido, email, teléfono, país, ciudad, fecha de nacimiento, tipo y número de identificación.</div>
+<div class="step"><span class="step-number">3</span>Selecciona <strong>"Viajero"</strong> en el campo "Tipo de cuenta".</div>
+<div class="step"><span class="step-number">4</span>Ingresa y confirma tu contraseña (mínimo 8 caracteres).</div>
+<div class="step"><span class="step-number">5</span>Haz clic en <strong>"Crear cuenta"</strong> y serás redirigido al login.</div>
+
+<h3>3.3 Registro como Hotel</h3>
+<div class="step"><span class="step-number">1</span>Sigue los mismos pasos anteriores.</div>
+<div class="step"><span class="step-number">2</span>Selecciona <strong>"Administrador de hotel"</strong> en el campo "Tipo de cuenta".</div>
+<div class="step"><span class="step-number">3</span>Haz clic en <strong>"Crear cuenta"</strong>.</div>
+<div class="tip">El registro de hotel puede tomar unos segundos adicionales mientras se configura tu perfil.</div>
+
+<table>
+  <tr><th>Campo</th><th>Obligatorio</th><th>Descripción</th></tr>
+  <tr><td>Nombre / Apellido</td><td>✅</td><td>Nombre completo del usuario</td></tr>
+  <tr><td>Email</td><td>✅</td><td>Correo electrónico válido</td></tr>
+  <tr><td>Teléfono</td><td>✅</td><td>Mínimo 7 caracteres</td></tr>
+  <tr><td>País / Ciudad</td><td>✅</td><td>Ubicación del usuario</td></tr>
+  <tr><td>Fecha de nacimiento</td><td>✅</td><td>Formato YYYY-MM-DD</td></tr>
+  <tr><td>Tipo de ID</td><td>✅</td><td>CC, CE o Pasaporte</td></tr>
+  <tr><td>Número de ID</td><td>✅</td><td>Número de identificación</td></tr>
+  <tr><td>Tipo de cuenta</td><td>✅</td><td>Viajero o Administrador de hotel</td></tr>
+  <tr><td>Contraseña</td><td>✅</td><td>Mínimo 8 caracteres</td></tr>
+</table>
+
+<!-- 4. LOGIN -->
+<h2 id="login">4. Inicio de Sesión</h2>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Login</div>
+  <div class="screen-url">URL: /login</div>
+  <div class="mock">
+    <div class="mock-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0">
+      <div style="background:linear-gradient(135deg,#1e40af,#1e3a8a);padding:24px;color:#fff;border-radius:10px 0 0 10px">
+        <div style="font-size:18px;font-weight:700;margin-bottom:6px">TravelHub</div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Tu próxima aventura comienza aquí</div>
+        <div style="font-size:11px;margin-bottom:6px">🏨 Miles de hoteles — más de 100 países</div>
+        <div style="font-size:11px;margin-bottom:6px">💰 Mejores precios garantizados</div>
+        <div style="font-size:11px">⭐ Experiencias únicas</div>
+      </div>
+      <div style="padding:20px;background:#fff">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Bienvenido de nuevo</div>
+        <div style="font-size:11px;color:#6b7280;margin-bottom:12px">Inicia sesión para continuar</div>
+        <div style="margin-bottom:8px"><div class="mock-label">Email</div><div class="mock-field">tu@email.com</div></div>
+        <div style="margin-bottom:8px"><div class="mock-label">Contraseña</div><div class="mock-field">••••••••</div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:10px;color:#6b7280">
+          <span>☐ Recordarme</span><span style="color:#2563eb">¿Olvidaste tu contraseña?</span>
+        </div>
+        <div style="text-align:center"><span class="mock-btn" style="padding:6px 20px;font-size:12px">Iniciar sesión</span></div>
+        <div style="text-align:center;font-size:10px;margin-top:8px;color:#6b7280">¿No tienes cuenta? <span style="color:#2563eb">Regístrate</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>Ingresa tu <strong>email</strong> y <strong>contraseña</strong>.</div>
+<div class="step"><span class="step-number">2</span>Haz clic en <strong>"Iniciar sesión"</strong>.</div>
+<div class="step"><span class="step-number">3</span>El sistema detecta tu rol automáticamente y te redirige:
+  <ul>
+    <li>Viajero → Página de inicio (<code>/home</code>)</li>
+    <li>Hotel → Panel de reservas (<code>/hotel-home</code>)</li>
+  </ul>
+</div>
+<div class="warning">Si olvidas tu contraseña, contacta al administrador del sistema.</div>
+
+<!-- 5. MÓDULO VIAJERO -->
+<h2 id="viajero">5. Módulo Viajero</h2>
+
+<h3 id="home">5.1 Página de Inicio (Home)</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Home del Viajero</div>
+  <div class="screen-url">URL: /home</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links">
+        <span class="mock-nav-link active">Home</span>
+        <span class="mock-nav-link">Hoteles</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <span class="mock-nav-btn">Mis Reservas</span>
+        <span class="mock-nav-btn" style="background:transparent;color:#93c5fd;border:1px solid #93c5fd">Cerrar sesión</span>
+      </div>
+    </div>
+    <div class="mock-body">
+      <div class="mock-hero">
+        <h4>Encuentra tu hospedaje ideal</h4>
+        <div class="mock-search-bar">
+          <div class="mock-search-field">📍 Destino o nombre</div>
+          <div class="mock-search-field">📅 Check-in</div>
+          <div class="mock-search-field">📅 Check-out</div>
+          <div class="mock-search-field">👤 Huéspedes</div>
+          <div class="mock-search-btn">Buscar</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div style="flex:1;background:#f0f9ff;border-radius:6px;padding:10px;text-align:center;font-size:11px">👥<br><strong>Mejor precio</strong></div>
+        <div style="flex:1;background:#f0fdf4;border-radius:6px;padding:10px;text-align:center;font-size:11px">📍<br><strong>Miles de destinos</strong></div>
+        <div style="flex:1;background:#fef9c3;border-radius:6px;padding:10px;text-align:center;font-size:11px">🔍<br><strong>Búsqueda fácil</strong></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">🏨 Hospedajes disponibles — N resultados</div>
+      <div class="mock-grid">
+        <div class="mock-card"><div class="mock-card-img">🏨</div><div class="mock-card-body"><div class="mock-card-title">Habitación Doble</div><div class="mock-card-sub">🏨 Hotel Caribe</div><div class="mock-card-sub">📍 Cartagena</div><div class="mock-card-price">$ 250.000/noche</div><span class="mock-btn">Reservar</span></div></div>
+        <div class="mock-card"><div class="mock-card-img">🛏️</div><div class="mock-card-body"><div class="mock-card-title">Suite Deluxe</div><div class="mock-card-sub">🏨 Hotel Bogotá</div><div class="mock-card-sub">📍 Bogotá</div><div class="mock-card-price">$ 450.000/noche</div><span class="mock-btn">Reservar</span></div></div>
+        <div class="mock-card"><div class="mock-card-img">🌅</div><div class="mock-card-body"><div class="mock-card-title">Individual Premium</div><div class="mock-card-sub">🏨 Hotel Medellín</div><div class="mock-card-sub">📍 Medellín</div><div class="mock-card-price">$ 180.000/noche</div><span class="mock-btn">Reservar</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Al iniciar sesión como viajero encontrarás:</p>
+<ul>
+  <li><strong>Barra de búsqueda hero:</strong> Busca por destino, fechas y número de huéspedes</li>
+  <li><strong>Feature cards:</strong> Beneficios destacados de la plataforma</li>
+  <li><strong>Grilla de hospedajes:</strong> Todas las habitaciones disponibles con imagen, nombre, hotel, ubicación, precio y botón "Reservar"</li>
+</ul>
+<div class="tip">Haz clic en "Buscar" para ir a la pantalla de búsqueda con filtros avanzados.</div>
+
+<h3 id="search">5.2 Búsqueda de Hospedajes</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Búsqueda y Filtros</div>
+  <div class="screen-url">URL: /search</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links">
+        <span class="mock-nav-link">Home</span>
+        <span class="mock-nav-link active">Hoteles</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <span class="mock-nav-btn">Mis Reservas</span>
+        <span class="mock-nav-btn" style="background:transparent;color:#93c5fd;border:1px solid #93c5fd">Cerrar sesión</span>
+      </div>
+    </div>
+    <div class="mock-body">
+      <div class="mock-sidebar">
+        <div class="mock-aside">
+          <h5>Filtros de búsqueda</h5>
+          <div class="mock-label">Buscar</div>
+          <div class="mock-field" style="margin-bottom:6px">🔍 Nombre, tipo...</div>
+          <div class="mock-label">Check-in</div>
+          <div class="mock-field" style="margin-bottom:6px">📅 Fecha</div>
+          <div class="mock-label">Check-out</div>
+          <div class="mock-field" style="margin-bottom:6px">📅 Fecha</div>
+          <div class="mock-label">Huéspedes</div>
+          <div class="mock-field" style="margin-bottom:8px">👤 1</div>
+          <div style="text-align:center"><span class="mock-btn mock-btn-red" style="font-size:10px">Limpiar filtros</span></div>
+        </div>
+        <div class="mock-main">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">Hospedajes disponibles</div>
+          <div style="font-size:11px;color:#6b7280;margin-bottom:8px">N resultados encontrados</div>
+          <div class="mock-grid">
+            <div class="mock-card"><div class="mock-card-img">🏨</div><div class="mock-card-body"><div class="mock-card-title">Suite Deluxe</div><div class="mock-card-sub">🏨 Hotel XYZ · 📍 Cartagena</div><div class="mock-card-sub">🛏️ 2 camas · 📐 35m² · 👥 3</div><div class="mock-card-price">$ 350.000</div><span class="mock-btn">Reservar</span></div></div>
+            <div class="mock-card"><div class="mock-card-img">🌅</div><div class="mock-card-body"><div class="mock-card-title">Doble Estándar</div><div class="mock-card-sub">🏨 Hotel ABC · 📍 Bogotá</div><div class="mock-card-sub">🛏️ 1 cama · 📐 25m² · 👥 2</div><div class="mock-card-price">$ 200.000</div><span class="mock-btn">Reservar</span></div></div>
+            <div class="mock-card"><div class="mock-card-img">🛏️</div><div class="mock-card-body"><div class="mock-card-title">Individual</div><div class="mock-card-sub">🏨 Hotel 123 · 📍 Medellín</div><div class="mock-card-sub">🛏️ 1 cama · 📐 18m² · 👥 1</div><div class="mock-card-price">$ 150.000</div><span class="mock-btn">Reservar</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>Navega a <strong>"Hoteles"</strong> en el menú o usa la barra de búsqueda del Home.</div>
+<div class="step"><span class="step-number">2</span>Aplica filtros en el panel lateral: destino/nombre, check-in, check-out, huéspedes.</div>
+<div class="step"><span class="step-number">3</span>Los resultados se actualizan en tiempo real.</div>
+<div class="step"><span class="step-number">4</span>Haz clic en <strong>"Reservar"</strong> en la habitación deseada para continuar.</div>
+<div class="tip">Puedes limpiar todos los filtros con el botón "Limpiar filtros" del panel lateral.</div>
+
+<h3 id="checkout">5.3 Proceso de Reserva — Paso 1 (Checkout)</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Checkout — Datos de la Reserva</div>
+  <div class="screen-url">URL: /checkout</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links"><span class="mock-nav-link">Home</span><span class="mock-nav-link">Hoteles</span></div>
+    </div>
+    <div class="mock-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">📋 Datos de la Reserva</div>
+        <div style="margin-bottom:6px"><div class="mock-label">Nombre completo *</div><div class="mock-field">Juan Pérez</div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Email *</div><div class="mock-field">juan@email.com</div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Teléfono *</div><div class="mock-field">+57 300 000 0000</div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Número de documento *</div><div class="mock-field">12345678</div></div>
+        <div class="mock-form-row">
+          <div><div class="mock-label">Check-in *</div><div class="mock-field">📅 2026-06-01</div></div>
+          <div><div class="mock-label">Check-out *</div><div class="mock-field">📅 2026-06-05</div></div>
+        </div>
+        <div style="margin-top:6px"><div class="mock-label">Solicitudes especiales</div><div class="mock-field" style="height:40px">Piso alto, cama extra...</div></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">🏨 Resumen</div>
+        <div style="background:#f0f9ff;border-radius:8px;padding:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px">Suite Deluxe — Hotel XYZ</div>
+          <div style="font-size:11px;color:#4b5563;margin-bottom:4px">📍 Cartagena · 👥 2 huéspedes</div>
+          <hr style="margin:8px 0;border-color:#e0e7ff">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>Noches</span><span>4</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>Precio/noche</span><span>$ 350.000</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>Subtotal</span><span>$ 1.400.000</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>IVA (19%)</span><span>$ 266.000</span></div>
+          <hr style="margin:8px 0;border-color:#e0e7ff">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#1e40af"><span>Total</span><span>$ 1.666.000</span></div>
+        </div>
+        <div style="text-align:center;margin-top:12px"><span class="mock-btn mock-btn-green" style="padding:8px 24px;font-size:12px">Confirmar Reserva →</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>Verifica los datos de la habitación seleccionada en el resumen.</div>
+<div class="step"><span class="step-number">2</span>Completa tus datos personales: nombre, email, teléfono, documento.</div>
+<div class="step"><span class="step-number">3</span>Selecciona las fechas de check-in y check-out.</div>
+<div class="step"><span class="step-number">4</span>El sistema calcula automáticamente: noches, subtotal, IVA (19%) y total.</div>
+<div class="step"><span class="step-number">5</span>Agrega solicitudes especiales si lo deseas (opcional).</div>
+<div class="step"><span class="step-number">6</span>Haz clic en <strong>"Confirmar Reserva"</strong>.</div>
+
+<h3 id="checkout2">5.4 Proceso de Reserva — Paso 2 (Pago)</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Checkout Paso 2 — Pago con Tarjeta</div>
+  <div class="screen-url">URL: /checkout-step2</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+    </div>
+    <div class="mock-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">💳 Información de Pago</div>
+        <div style="background:#f0f9ff;border-radius:8px;padding:12px;margin-bottom:10px;font-size:11px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Reserva</span><span style="font-weight:600">#TH-20260601</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#1e40af"><span>Total a pagar</span><span>$ 1.666.000</span></div>
+        </div>
+        <div style="margin-bottom:6px"><div class="mock-label">Número de tarjeta *</div><div class="mock-field">💳 4111 1111 1111 1111 <span style="color:#2563eb">VISA</span></div></div>
+        <div style="margin-bottom:6px"><div class="mock-label">Nombre en la tarjeta *</div><div class="mock-field">JUAN PEREZ</div></div>
+        <div class="mock-form-row">
+          <div><div class="mock-label">Vencimiento *</div><div class="mock-field">MM/AA</div></div>
+          <div><div class="mock-label">CVV *</div><div class="mock-field">•••</div></div>
+        </div>
+        <div style="text-align:center;margin-top:12px"><span class="mock-btn mock-btn-green" style="padding:8px 24px;font-size:12px">🔒 Confirmar Pago</span></div>
+        <div style="text-align:center;font-size:10px;color:#6b7280;margin-top:6px">🔐 Pago seguro simulado</div>
+      </div>
+      <div style="background:#f9fafb;border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px">Resumen de Reserva</div>
+        <div style="font-size:11px;color:#4b5563;margin-bottom:4px">Suite Deluxe — Hotel XYZ</div>
+        <div style="font-size:11px;color:#4b5563;margin-bottom:4px">📅 01 Jun → 05 Jun 2026 (4 noches)</div>
+        <div style="font-size:11px;color:#4b5563;margin-bottom:4px">👥 2 huéspedes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>Ingresa el número de tarjeta — el sistema detecta automáticamente Visa, Mastercard o Amex.</div>
+<div class="step"><span class="step-number">2</span>Completa el nombre tal como aparece en la tarjeta.</div>
+<div class="step"><span class="step-number">3</span>Ingresa la fecha de vencimiento y el código CVV.</div>
+<div class="step"><span class="step-number">4</span>Haz clic en <strong>"Confirmar Pago"</strong>.</div>
+<div class="step"><span class="step-number">5</span>Si el pago es exitoso, serás redirigido a la confirmación.</div>
+<div class="warning">El pago es simulado — no se realizan cobros reales a tarjetas.</div>
+<div class="tip">El sistema valida el número de tarjeta con el algoritmo de Luhn y reintenta automáticamente hasta 3 veces si hay un error de conexión.</div>
+
+<h3 id="confirmed">5.5 Confirmación de Reserva</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Reserva Confirmada</div>
+  <div class="screen-url">URL: /booking-confirmed</div>
+  <div class="mock">
+    <div class="mock-nav"><span class="mock-nav-logo">🌐 TravelHub</span></div>
+    <div class="mock-body">
+      <div class="mock-confirmed">
+        <div class="mock-confirmed-icon">✅</div>
+        <div style="font-size:16px;font-weight:700;color:#166534;margin-bottom:4px">¡Reserva Confirmada!</div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:12px">Tu reserva ha sido procesada exitosamente</div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;width:100%;max-width:400px;text-align:left">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Código de reserva</span><span style="font-weight:700;color:#1e40af">#TH-20260601</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Habitación</span><span>Suite Deluxe</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Hotel</span><span>Hotel XYZ</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Check-in</span><span>01 Jun 2026</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Check-out</span><span>05 Jun 2026</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#1e40af"><span>Total pagado</span><span>$ 1.666.000</span></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <span class="mock-btn" style="padding:6px 16px">Mis Reservas</span>
+          <span class="mock-btn" style="background:#6b7280;padding:6px 16px">🖨️ Imprimir</span>
+          <span class="mock-btn" style="background:#16a34a;padding:6px 16px">Buscar más</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Al completar el pago verás la pantalla de confirmación con:</p>
+<ul>
+  <li><strong>Código de reserva</strong> único generado por el sistema</li>
+  <li><strong>Detalle completo:</strong> habitación, hotel, fechas y total pagado</li>
+  <li><strong>Acciones:</strong> Ver mis reservas, Imprimir comprobante, Buscar más hospedajes</li>
+</ul>
+
+<h3 id="dashboard">5.6 Mis Reservas (Dashboard del Viajero)</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Dashboard del Viajero — Mis Reservas</div>
+  <div class="screen-url">URL: /dashboard</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links"><span class="mock-nav-link">Home</span><span class="mock-nav-link">Hoteles</span></div>
+      <div style="display:flex;gap:8px"><span class="mock-nav-btn">Mis Reservas</span><span class="mock-nav-btn" style="background:transparent;color:#93c5fd;border:1px solid #93c5fd">Cerrar sesión</span></div>
+    </div>
+    <div class="mock-body">
+      <div style="font-size:14px;font-weight:700;margin-bottom:10px">📋 Mis Reservas</div>
+      <!-- Filtros -->
+      <div class="mock-filters">
+        <div class="mock-field" style="flex:2;min-width:120px">🔍 Buscar reserva...</div>
+        <div class="mock-field" style="min-width:100px">▼ Estado</div>
+        <div class="mock-field" style="min-width:100px">📅 Desde</div>
+        <div class="mock-field" style="min-width:100px">📅 Hasta</div>
+      </div>
+      <!-- Reserva card 1 -->
+      <div class="mock-reserva-card">
+        <div>
+          <div style="font-size:11px;color:#6b7280">#TH-20260601 · <span class="mock-badge mock-badge-yellow">Pendiente</span></div>
+          <div style="font-size:12px;font-weight:600">Suite Deluxe — Hotel XYZ</div>
+          <div style="font-size:11px;color:#4b5563">📅 01 Jun → 05 Jun · 👥 2 huésp.</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:4px">$ 1.666.000</div>
+          <div style="display:flex;gap:4px">
+            <span class="mock-btn" style="background:#6b7280;font-size:9px">📋</span>
+            <span class="mock-btn" style="font-size:9px">💳 Pagar</span>
+            <span class="mock-btn mock-btn-yellow" style="font-size:9px">✏️</span>
+            <span class="mock-btn mock-btn-red" style="font-size:9px">❌</span>
+          </div>
+        </div>
+      </div>
+      <!-- Reserva card 2 -->
+      <div class="mock-reserva-card">
+        <div>
+          <div style="font-size:11px;color:#6b7280">#TH-20260510 · <span class="mock-badge mock-badge-green">Confirmada</span></div>
+          <div style="font-size:12px;font-weight:600">Doble Estándar — Hotel ABC</div>
+          <div style="font-size:11px;color:#4b5563">📅 10 May → 12 May · 👥 1 huésp.</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:4px">$ 476.000</div>
+          <div style="display:flex;gap:4px">
+            <span class="mock-btn" style="background:#6b7280;font-size:9px">📋</span>
+            <span class="mock-btn mock-btn-red" style="font-size:9px">❌</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Accede desde el botón <strong>"Mis Reservas"</strong> en la navegación superior.</p>
+
+<h3>Acciones disponibles por reserva:</h3>
+<table>
+  <tr><th>Acción</th><th>Ícono</th><th>Cuándo está disponible</th></tr>
+  <tr><td>Ver detalle</td><td>📋</td><td>Siempre — expande información completa</td></tr>
+  <tr><td>Pagar</td><td>💳</td><td>Solo reservas en estado Pendiente</td></tr>
+  <tr><td>Editar</td><td>✏️</td><td>Reservas activas — modifica fechas y notas</td></tr>
+  <tr><td>Cancelar</td><td>❌</td><td>Reservas no completadas ni canceladas</td></tr>
+</table>
+
+<h3>Filtros disponibles:</h3>
+<ul>
+  <li>Búsqueda por texto: código, nombre de habitación, hotel</li>
+  <li>Filtro por estado: <span class="badge badge-yellow">Pendiente</span> <span class="badge badge-green">Confirmada</span> <span class="badge badge-red">Cancelada</span></li>
+  <li>Rango de fechas: Desde / Hasta</li>
+</ul>
+
+<h3 id="cancel">5.7 Cancelación de Reserva</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Cancelar Reserva</div>
+  <div class="screen-url">URL: /cancel-booking</div>
+  <div class="mock">
+    <div class="mock-nav"><span class="mock-nav-logo">🌐 TravelHub</span></div>
+    <div class="mock-body">
+      <div style="max-width:480px;margin:0 auto">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">❌ Cancelar Reserva</div>
+        <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:12px;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:4px">Reserva #TH-20260601</div>
+          <div style="font-size:11px;color:#4b5563;margin-bottom:2px">Suite Deluxe — Hotel XYZ</div>
+          <div style="font-size:11px;color:#4b5563;margin-bottom:2px">📅 01 Jun → 05 Jun 2026</div>
+          <div style="font-size:12px;font-weight:700;color:#1e40af;margin-top:6px">Devolución: $ 1.666.000 (100%)</div>
+        </div>
+        <div style="margin-bottom:8px"><div class="mock-label">Motivo de cancelación *</div><div class="mock-field" style="height:50px">Escribe el motivo de la cancelación...</div></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <span class="mock-btn" style="background:#6b7280">Volver</span>
+          <span class="mock-btn mock-btn-red">Confirmar Cancelación</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>Desde "Mis Reservas", haz clic en <strong>❌</strong> en la reserva a cancelar.</div>
+<div class="step"><span class="step-number">2</span>Revisa el detalle de la reserva y el monto de devolución (100%).</div>
+<div class="step"><span class="step-number">3</span>Ingresa el motivo de cancelación (obligatorio).</div>
+<div class="step"><span class="step-number">4</span>Haz clic en <strong>"Confirmar Cancelación"</strong>.</div>
+<div class="warning">Una vez cancelada, la reserva no puede reactivarse. La habitación se libera automáticamente.</div>
+
+<!-- 6. MÓDULO HOTEL -->
+<h2 id="hotel">6. Módulo Hotel</h2>
+
+<h3 id="hotel-home">6.1 Panel de Reservas (Hotel Home)</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Hotel Home — Panel de Reservas</div>
+  <div class="screen-url">URL: /hotel-home</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links">
+        <span class="mock-nav-link active">Inicio</span>
+        <span class="mock-nav-link">Dashboard</span>
+        <span class="mock-nav-link">Habitaciones</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <span style="background:#f0f9ff;color:#1e40af;font-size:11px;padding:3px 10px;border-radius:4px">🏨 Hotel XYZ</span>
+        <span class="mock-nav-btn" style="background:transparent;color:#93c5fd;border:1px solid #93c5fd">Cerrar sesión</span>
+      </div>
+    </div>
+    <div class="mock-body">
+      <div class="mock-sidebar">
+        <div class="mock-aside">
+          <h5>Gestión</h5>
+          <div class="mock-menu-item">📋 Ver Reservas</div>
+          <div class="mock-menu-item">✅ Pendientes</div>
+          <div class="mock-menu-item">📊 Estadísticas</div>
+          <div style="margin-top:10px;border-top:1px solid #e5e7eb;padding-top:8px">
+            <div class="mock-stat"><span>Pendientes</span><span style="color:#d97706;font-weight:700">3</span></div>
+            <div class="mock-stat"><span>Confirmadas</span><span style="color:#16a34a;font-weight:700">12</span></div>
+            <div class="mock-stat"><span>Rechazadas</span><span style="color:#dc2626;font-weight:700">1</span></div>
+          </div>
+        </div>
+        <div class="mock-main">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px">Reservas de Hotel XYZ</div>
+          <div class="mock-reserva-card" style="flex-direction:column;align-items:flex-start;gap:6px">
+            <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+              <div>
+                <div style="font-size:11px;color:#6b7280">#TH-001 · <span class="mock-badge mock-badge-yellow">Pendiente</span></div>
+                <div style="font-size:12px;font-weight:600">María García</div>
+                <div style="font-size:11px;color:#4b5563">Suite Deluxe · 2 huésp.</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:11px;color:#4b5563">Check-in: 01 Jun</div>
+                <div style="font-size:11px;color:#4b5563">Check-out: 05 Jun</div>
+                <div style="font-size:12px;font-weight:700;color:#1e40af">$ 1.400.000</div>
+              </div>
+              <div style="display:flex;gap:4px">
+                <span class="mock-btn" style="background:#6b7280;font-size:9px">📋</span>
+                <span class="mock-btn mock-btn-green" style="font-size:9px">✅ Aprobar</span>
+                <span class="mock-btn mock-btn-red" style="font-size:9px">❌ Rechazar</span>
+              </div>
+            </div>
+          </div>
+          <div class="mock-reserva-card">
+            <div>
+              <div style="font-size:11px;color:#6b7280">#TH-002 · <span class="mock-badge mock-badge-green">Confirmada</span></div>
+              <div style="font-size:12px;font-weight:600">Carlos López</div>
+              <div style="font-size:11px;color:#4b5563">Doble · 1 huésp.</div>
+            </div>
+            <div><span class="mock-btn" style="background:#6b7280;font-size:9px">📋</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Funcionalidades del panel:</h3>
+<table>
+  <tr><th>Acción</th><th>Descripción</th></tr>
+  <tr><td>📋 Ver detalle</td><td>Expande información completa del viajero y la reserva</td></tr>
+  <tr><td>✅ Aprobar</td><td>Confirma la reserva (solo reservas Pendientes)</td></tr>
+  <tr><td>❌ Rechazar</td><td>Rechaza con motivo obligatorio — libera la habitación</td></tr>
+</table>
+
+<h3>Sidebar de estadísticas rápidas:</h3>
+<table>
+  <tr><th>Indicador</th><th>Color</th><th>Descripción</th></tr>
+  <tr><td><span class="badge badge-yellow">Pendientes</span></td><td>Amarillo</td><td>Reservas esperando aprobación del hotel</td></tr>
+  <tr><td><span class="badge badge-green">Confirmadas</span></td><td>Verde</td><td>Reservas aprobadas por el hotel</td></tr>
+  <tr><td><span class="badge badge-red">Rechazadas</span></td><td>Rojo</td><td>Reservas rechazadas por el hotel</td></tr>
+</table>
+
+<h3>Flujo de aprobación:</h3>
+<div class="step"><span class="step-number">1</span>Identifica una reserva con estado <span class="badge badge-yellow">Pendiente</span>.</div>
+<div class="step"><span class="step-number">2</span>Haz clic en <strong>"📋"</strong> para ver el detalle completo del viajero.</div>
+<div class="step"><span class="step-number">3</span>Haz clic en <strong>"✅ Aprobar"</strong> para confirmar, o <strong>"❌ Rechazar"</strong> para rechazar.</div>
+<div class="step"><span class="step-number">4</span>Si rechazas, ingresa el motivo (obligatorio) y confirma. La habitación se libera automáticamente.</div>
+
+<h3 id="manage-rooms">6.2 Gestión de Habitaciones</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Gestionar Habitaciones</div>
+  <div class="screen-url">URL: /manage-rooms</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links">
+        <span class="mock-nav-link">Inicio</span>
+        <span class="mock-nav-link">Dashboard</span>
+        <span class="mock-nav-link active">Habitaciones</span>
+      </div>
+      <span class="mock-nav-btn" style="background:transparent;color:#93c5fd;border:1px solid #93c5fd">Cerrar sesión</span>
+    </div>
+    <div class="mock-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div><div style="font-size:14px;font-weight:700">Gestionar Habitaciones</div><div style="font-size:11px;color:#6b7280">Administra el inventario de tu hotel</div></div>
+        <div style="display:flex;gap:6px">
+          <span class="mock-btn" style="background:#6b7280">💰 Tarifas</span>
+          <span class="mock-btn mock-btn-green">+ Nueva Habitación</span>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:2px solid #e5e7eb">
+        <div style="padding:6px 16px;font-size:12px;font-weight:600;color:#1e40af;border-bottom:2px solid #1e40af;margin-bottom:-2px">🏨 Habitaciones</div>
+        <div style="padding:6px 16px;font-size:12px;color:#6b7280">🖼️ Galería</div>
+      </div>
+      <div class="mock-grid">
+        <div class="mock-card">
+          <div class="mock-card-img">🏨</div>
+          <div class="mock-card-body">
+            <div style="display:flex;justify-content:space-between"><div class="mock-card-title">Suite 101</div><span class="mock-badge mock-badge-blue" style="font-size:9px">suite</span></div>
+            <div style="font-size:10px;color:#4b5563;margin-top:4px">💰 $ 350.000/noche</div>
+            <div style="font-size:10px;color:#4b5563">👥 3 · 🛏️ 2 camas · 📐 35m²</div>
+            <div style="font-size:10px;color:#4b5563">WiFi, AC, Minibar</div>
+            <div style="display:flex;gap:4px;margin-top:6px">
+              <span class="mock-btn mock-btn-yellow" style="font-size:9px">✏️ Editar</span>
+              <span class="mock-btn" style="background:#6b7280;font-size:9px">📷 Fotos</span>
+              <span class="mock-btn mock-btn-red" style="font-size:9px">🗑️</span>
+            </div>
+          </div>
+        </div>
+        <div class="mock-card">
+          <div class="mock-card-img">🛏️</div>
+          <div class="mock-card-body">
+            <div style="display:flex;justify-content:space-between"><div class="mock-card-title">Doble 201</div><span class="mock-badge mock-badge-green" style="font-size:9px">doble</span></div>
+            <div style="font-size:10px;color:#4b5563;margin-top:4px">💰 $ 200.000/noche</div>
+            <div style="font-size:10px;color:#4b5563">👥 2 · 🛏️ 1 cama · 📐 25m²</div>
+            <div style="display:flex;gap:4px;margin-top:6px">
+              <span class="mock-btn mock-btn-yellow" style="font-size:9px">✏️ Editar</span>
+              <span class="mock-btn" style="background:#6b7280;font-size:9px">📷 Fotos</span>
+              <span class="mock-btn mock-btn-red" style="font-size:9px">🗑️</span>
+            </div>
+          </div>
+        </div>
+        <div class="mock-card">
+          <div class="mock-card-img">🌅</div>
+          <div class="mock-card-body">
+            <div style="display:flex;justify-content:space-between"><div class="mock-card-title">Individual 301</div><span class="mock-badge" style="font-size:9px;background:#fef9c3;color:#854d0e">individual</span></div>
+            <div style="font-size:10px;color:#4b5563;margin-top:4px">💰 $ 150.000/noche</div>
+            <div style="font-size:10px;color:#4b5563">👥 1 · 🛏️ 1 cama · 📐 18m²</div>
+            <div style="display:flex;gap:4px;margin-top:6px">
+              <span class="mock-btn mock-btn-yellow" style="font-size:9px">✏️ Editar</span>
+              <span class="mock-btn" style="background:#6b7280;font-size:9px">📷 Fotos</span>
+              <span class="mock-btn mock-btn-red" style="font-size:9px">🗑️</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Pestaña Galería:</h3>
+<div class="screen">
+  <div class="screen-title">Pantalla: Galería de Imágenes</div>
+  <div class="screen-url">URL: /manage-rooms → pestaña Galería</div>
+  <div class="mock">
+    <div class="mock-body">
+      <div style="font-size:12px;font-weight:600;margin-bottom:8px">Selecciona una habitación para subir imágenes:</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto">
+        <div style="background:#e0e7ff;border-radius:6px;padding:8px 12px;font-size:11px;border:2px solid #2563eb;min-width:100px"><strong>Suite 101</strong><div style="color:#6b7280">suite · 2 fotos</div></div>
+        <div style="background:#f9fafb;border-radius:6px;padding:8px 12px;font-size:11px;border:1px solid #e5e7eb;min-width:100px">Doble 201<div style="color:#6b7280">doble · 0 fotos</div></div>
+      </div>
+      <div style="border:2px dashed #93c5fd;border-radius:8px;padding:20px;text-align:center;background:#f0f9ff;margin-bottom:12px">
+        <div style="font-size:20px">📁</div>
+        <div style="font-size:12px;font-weight:600">Arrastra imágenes aquí para "Suite 101"</div>
+        <div style="font-size:10px;color:#6b7280">JPG, PNG o WebP — máx 5MB</div>
+        <span class="mock-btn" style="display:inline-block;margin-top:8px">Seleccionar archivos</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="background:#dbeafe;border-radius:6px;height:70px;display:flex;align-items:center;justify-content:center;position:relative"><span style="font-size:20px">🖼️</span><span style="position:absolute;bottom:4px;right:4px;background:#dc2626;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px">🗑️</span></div>
+        <div style="background:#dcfce7;border-radius:6px;height:70px;display:flex;align-items:center;justify-content:center;position:relative"><span style="font-size:20px">🖼️</span><span style="position:absolute;bottom:4px;right:4px;background:#dc2626;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px">🗑️</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Crear habitación:</h3>
+<div class="step"><span class="step-number">1</span>Haz clic en <strong>"+ Nueva Habitación"</strong>.</div>
+<div class="step"><span class="step-number">2</span>Completa el formulario: nombre, destino, tipo (individual/doble/suite), precio/noche, capacidad, camas, tamaño m², amenidades.</div>
+<div class="step"><span class="step-number">3</span>Haz clic en <strong>"Crear"</strong>.</div>
+
+<h3>Gestión de imágenes (Galería):</h3>
+<div class="step"><span class="step-number">1</span>Ve a la pestaña <strong>"🖼️ Galería"</strong>.</div>
+<div class="step"><span class="step-number">2</span>Selecciona la habitación en la fila de tarjetas.</div>
+<div class="step"><span class="step-number">3</span>Arrastra imágenes a la zona de drop o haz clic en <strong>"Seleccionar archivos"</strong>.</div>
+<div class="step"><span class="step-number">4</span>Haz clic en <strong>"⬆️ Subir todos"</strong> para confirmar la subida.</div>
+<div class="step"><span class="step-number">5</span>Elimina imágenes con el botón 🗑️ sobre cada foto.</div>
+<div class="tip">Formatos aceptados: JPG, PNG, WebP. Tamaño máximo: 5MB por imagen.</div>
+
+<h3>Tarifas:</h3>
+<div class="step"><span class="step-number">1</span>Haz clic en <strong>"💰 Tarifas"</strong>.</div>
+<div class="step"><span class="step-number">2</span>Selecciona tipo de habitación, temporada (Base/Alta/Baja) y precio base.</div>
+<div class="step"><span class="step-number">3</span>Haz clic en <strong>"Crear"</strong>. Todas las habitaciones del mismo tipo se actualizan automáticamente.</div>
+<div class="tip">Las tarifas actualizan el precio de <strong>todas</strong> las habitaciones del mismo tipo en tu hotel.</div>
+
+<h3 id="hotel-dashboard">6.3 Dashboard Analítico</h3>
+
+<div class="screen">
+  <div class="screen-title">Pantalla: Dashboard del Hotel</div>
+  <div class="screen-url">URL: /hotel-dashboard</div>
+  <div class="mock">
+    <div class="mock-nav">
+      <span class="mock-nav-logo">🌐 TravelHub</span>
+      <div class="mock-nav-links">
+        <span class="mock-nav-link">Inicio</span>
+        <span class="mock-nav-link active">Dashboard</span>
+        <span class="mock-nav-link">Habitaciones</span>
+      </div>
+      <span style="background:#f0f9ff;color:#1e40af;font-size:11px;padding:3px 10px;border-radius:4px">🏨 Hotel XYZ</span>
+    </div>
+    <div class="mock-body">
+      <!-- Periodo selector -->
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:12px;font-weight:600;color:#374151">Período:</span>
+        <span class="mock-btn" style="background:#1e40af;font-size:10px">Hoy</span>
+        <span class="mock-btn" style="background:#6b7280;font-size:10px">7 días</span>
+        <span class="mock-btn" style="background:#6b7280;font-size:10px">Mes</span>
+        <span class="mock-btn" style="background:#6b7280;font-size:10px">Año</span>
+        <span class="mock-btn" style="background:#6b7280;font-size:10px">Personalizado</span>
+        <span class="mock-btn mock-btn-green" style="margin-left:auto;font-size:10px">📄 Generar Reporte</span>
+      </div>
+      <!-- KPIs -->
+      <div class="mock-kpi-grid">
+        <div class="mock-kpi"><div class="mock-kpi-val">$ 8.4M</div><div class="mock-kpi-label">💰 Ingresos Brutos</div><div class="mock-kpi-change">↑ +12%</div></div>
+        <div class="mock-kpi"><div class="mock-kpi-val">78%</div><div class="mock-kpi-label">🏨 Ocupación</div><div class="mock-kpi-change">↑ +5%</div></div>
+        <div class="mock-kpi"><div class="mock-kpi-val">$ 245K</div><div class="mock-kpi-label">📊 ADR</div><div class="mock-kpi-change" style="color:#dc2626">↓ -2%</div></div>
+        <div class="mock-kpi"><div class="mock-kpi-val">$ 191K</div><div class="mock-kpi-label">📈 RevPAR</div><div class="mock-kpi-change">↑ +8%</div></div>
+      </div>
+      <!-- Chart -->
+      <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:4px">Tendencia de reservas</div>
+      <div class="mock-chart">
+        <div class="mock-bar-chart" style="height:40%"></div>
+        <div class="mock-bar-chart" style="height:60%"></div>
+        <div class="mock-bar-chart" style="height:80%"></div>
+        <div class="mock-bar-chart" style="height:55%"></div>
+        <div class="mock-bar-chart" style="height:90%"></div>
+        <div class="mock-bar-chart" style="height:70%"></div>
+        <div class="mock-bar-chart" style="height:100%"></div>
+      </div>
+      <!-- Popular rooms -->
+      <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:6px">Habitaciones más populares</div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px"><span style="width:60px">Suite</span><div style="flex:1;background:#dbeafe;border-radius:4px;height:10px"><div style="width:80%;background:#2563eb;border-radius:4px;height:10px"></div></div><span>24 res. · $8.4M</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px"><span style="width:60px">Doble</span><div style="flex:1;background:#dbeafe;border-radius:4px;height:10px"><div style="width:55%;background:#2563eb;border-radius:4px;height:10px"></div></div><span>16 res. · $3.2M</span></div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="width:60px">Individual</span><div style="flex:1;background:#dbeafe;border-radius:4px;height:10px"><div style="width:30%;background:#2563eb;border-radius:4px;height:10px"></div></div><span>9 res. · $1.4M</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>KPIs principales:</h3>
+<table>
+  <tr><th>KPI</th><th>Descripción</th></tr>
+  <tr><td>💰 Ingresos Brutos/Netos</td><td>Total de ingresos con y sin impuestos</td></tr>
+  <tr><td>🏨 Tasa de Ocupación</td><td>Porcentaje de noches ocupadas vs disponibles</td></tr>
+  <tr><td>📊 ADR</td><td>Tarifa Diaria Promedio (Average Daily Rate)</td></tr>
+  <tr><td>📈 RevPAR</td><td>Ingreso por habitación disponible</td></tr>
+</table>
+
+<h3>Filtros de periodo:</h3>
+<ul>
+  <li><strong>Hoy:</strong> Solo datos del día actual</li>
+  <li><strong>7 días:</strong> Última semana</li>
+  <li><strong>Mes:</strong> Mes actual</li>
+  <li><strong>Año:</strong> Año completo</li>
+  <li><strong>Personalizado:</strong> Rango de fechas específico</li>
+</ul>
+<p>Cada KPI muestra una flecha <strong>↑↓</strong> y porcentaje comparando con el periodo anterior.</p>
+
+<h3 id="reportes">6.4 Generación de Reportes</h3>
+
+<div class="screen">
+  <div class="screen-title">Modal: Generador de Reportes</div>
+  <div class="mock">
+    <div class="mock-body">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;max-width:500px;margin:0 auto">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📄 Generar Reporte</div>
+        <div class="mock-form-row">
+          <div><div class="mock-label">Desde *</div><div class="mock-field">📅 2026-05-01</div></div>
+          <div><div class="mock-label">Hasta *</div><div class="mock-field">📅 2026-05-15</div></div>
+        </div>
+        <div class="mock-form-row" style="margin-top:6px">
+          <div><div class="mock-label">Agrupación</div><div class="mock-field">▼ Diario</div></div>
+          <div><div class="mock-label">Tipo habitación</div><div class="mock-field">▼ Todas</div></div>
+        </div>
+        <div style="text-align:center;margin-top:10px"><span class="mock-btn" style="padding:6px 20px">Generar Reporte</span></div>
+        <!-- Resultados -->
+        <div style="margin-top:12px;background:#f0f9ff;border-radius:8px;padding:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <div style="background:#fff;border-radius:6px;padding:8px;flex:1;text-align:center;font-size:11px"><div style="font-weight:700;font-size:14px;color:#1e40af">$ 12.5M</div>Ingresos</div>
+            <div style="background:#fff;border-radius:6px;padding:8px;flex:1;text-align:center;font-size:11px"><div style="font-weight:700;font-size:14px;color:#1e40af">42</div>Reservas</div>
+            <div style="background:#fff;border-radius:6px;padding:8px;flex:1;text-align:center;font-size:11px"><div style="font-weight:700;font-size:14px;color:#16a34a">+15%</div>vs anterior</div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center">
+            <span class="mock-btn" style="background:#dc2626;font-size:10px">📥 Descargar PDF</span>
+            <span class="mock-btn mock-btn-green" style="font-size:10px">📊 Descargar Excel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step"><span class="step-number">1</span>En el Dashboard, haz clic en <strong>"📄 Generar Reporte"</strong>.</div>
+<div class="step"><span class="step-number">2</span>Configura los parámetros:
+  <ul>
+    <li><strong>Desde / Hasta:</strong> Rango de fechas del reporte</li>
+    <li><strong>Agrupación:</strong> Diario, Semanal o Mensual</li>
+    <li><strong>Tipo de habitación:</strong> Todas o un tipo específico</li>
+  </ul>
+</div>
+<div class="step"><span class="step-number">3</span>Haz clic en <strong>"Generar Reporte"</strong>.</div>
+<div class="step"><span class="step-number">4</span>Revisa: total ingresos, reservas, promedio/reserva, comparación con periodo anterior.</div>
+<div class="step"><span class="step-number">5</span>Exporta el reporte:
+  <ul>
+    <li><strong>📥 Descargar PDF:</strong> Abre ventana de impresión del navegador → Guardar como PDF</li>
+    <li><strong>📊 Descargar Excel:</strong> Descarga archivo CSV compatible con Excel</li>
+  </ul>
+</div>
+<div class="tip">Los reportes incluyen automáticamente la fecha de generación y el email del usuario autenticado.</div>
+
+<!-- 7. FAQ -->
+<h2 id="faq">7. Preguntas Frecuentes</h2>
+
+<h3>¿Puedo cambiar mi tipo de cuenta?</h3>
+<p>No. Debes crear una cuenta nueva con el rol deseado (Viajero o Administrador de hotel).</p>
+
+<h3>¿Qué pasa si el hotel rechaza mi reserva?</h3>
+<p>La habitación se libera automáticamente y puedes buscar otra opción. No se realiza ningún cobro.</p>
+
+<h3>¿Puedo editar una reserva después de pagarla?</h3>
+<p>Sí. Desde "Mis Reservas" → ✏️ puedes modificar las fechas y notas especiales.</p>
+
+<h3>¿Cómo cambio el precio de mis habitaciones?</h3>
+<p>Desde "Habitaciones" → "💰 Tarifas". Al crear una tarifa, todas las habitaciones del mismo tipo se actualizan automáticamente.</p>
+
+<h3>¿Los pagos son reales?</h3>
+<p>No. El sistema simula el proceso de pago con validación Luhn. No se realizan cobros reales.</p>
+
+<h3>¿Puedo exportar mis datos?</h3>
+<p>Sí. Desde el Dashboard → "📄 Generar Reporte" puedes exportar a PDF o Excel (CSV).</p>
+
+<h3>¿Cuál es el tamaño máximo de imágenes?</h3>
+<p>5MB por imagen. Formatos aceptados: JPG, PNG y WebP.</p>
+
+<h3>¿Qué navegadores son compatibles?</h3>
+<p>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+.</p>
+
+<h3>¿Qué es el ADR y el RevPAR?</h3>
+<p><strong>ADR</strong> (Average Daily Rate) es la tarifa promedio cobrada por noche ocupada. <strong>RevPAR</strong> (Revenue per Available Room) es el ingreso generado por habitación disponible, ocupada o no.</p>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>TravelHub © 2026 — KubeSquad UniAndes</p>
+  <p>Documento generado automáticamente. Para soporte técnico contacte al equipo de desarrollo.</p>
+</div>
+
+</body>
+</html>
