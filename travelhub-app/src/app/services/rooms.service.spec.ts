@@ -35,12 +35,14 @@ describe('RoomsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('list should GET rooms', () => {
-    service.list().subscribe(rooms => {
+  it('search should GET rooms from search endpoint', () => {
+    service.search({ checkin: '2026-05-14', checkout: '2026-07-14' }).subscribe(rooms => {
       expect(rooms.length).toBe(1);
       expect(rooms[0].name).toBe('Habitación 101');
     });
-    const req = httpMock.expectOne(r => r.url.includes('/rooms') && r.method === 'GET');
+    const req = httpMock.expectOne(r => r.url.includes('/rooms/search') && r.method === 'GET');
+    expect(req.request.params.get('checkin')).toBe('2026-05-14');
+    expect(req.request.params.get('checkout')).toBe('2026-07-14');
     req.flush([mockRoom]);
   });
 
