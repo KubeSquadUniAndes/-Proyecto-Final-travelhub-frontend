@@ -10,7 +10,7 @@ describe('Galería Multimedia', () => {
   ];
 
   beforeEach(() => {
-    cy.intercept('GET', '**/hospedajes/api/v1/rooms', mockRooms).as('getRooms');
+    cy.intercept('GET', '**/hospedajes/api/v1/rooms**', mockRooms).as('getRooms');
     cy.intercept('GET', '**/hospedajes/api/v1/rooms/room-1/images', mockImages).as('getImagesRoom1');
     cy.intercept('GET', '**/hospedajes/api/v1/rooms/room-2/images', []).as('getImagesRoom2');
     cy.intercept('POST', '**/hospedajes/api/v1/rooms/*/images', { statusCode: 201, body: { id: 'img-new', room_id: 'room-1', url: 'https://via.placeholder.com/302', created_at: new Date().toISOString() } }).as('uploadImage');
