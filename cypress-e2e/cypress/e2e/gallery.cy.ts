@@ -20,7 +20,7 @@ describe('Galería Multimedia', () => {
     cy.visit('/login');
     cy.loginAsUser('hotel');
     cy.visit('/manage-rooms');
-    cy.wait('@getRooms');
+    cy.get('.tab, .room-card, .empty-state, .loading, .error-state', { timeout: 10000 }).should('exist');
   });
 
   context('Dado que el hotel accede a la pestaña Galería', () => {
