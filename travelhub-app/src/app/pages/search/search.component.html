@@ -47,6 +47,7 @@
           <input id="f-huespedes" type="number" [ngModel]="huespedes()" (ngModelChange)="huespedes.set($event)" name="huespedes" min="1" max="20" />
         </div>
       </div>
+      <button class="btn-search" (click)="loadRooms()">🔍 Buscar</button>
       @if (hasFilters()) {
         <button class="btn-clear" (click)="clearFilters()">Limpiar filtros</button>
       }

@@ -24,6 +24,8 @@ nav a:hover, nav a.active { color: #155dfc; border-bottom-color: #155dfc; }
 .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
 .input-wrapper input { width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #d1d5dc; border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; box-sizing: border-box; }
 .input-wrapper input:focus { outline: none; border-color: #155dfc; }
+.btn-search { width: 100%; padding: 10px; background: #155dfc; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; font-family: 'Inter', sans-serif; }
+.btn-search:hover { background: #193cb8; }
 .btn-clear { width: 100%; padding: 10px; background: transparent; color: #155dfc; border: 1px solid #155dfc; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; font-family: 'Inter', sans-serif; }
 .btn-clear:hover { background: #155dfc; color: #fff; }
 
