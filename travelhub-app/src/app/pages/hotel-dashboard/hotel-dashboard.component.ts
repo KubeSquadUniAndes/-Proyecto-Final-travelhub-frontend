@@ -59,7 +59,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
   // KPIs
   kpis = computed(() => {
     const current = this.periodBookings();
-    const confirmed = current.filter(b => ['confirmed', 'completed'].includes(b.status ?? ''));
+    const confirmed = current.filter(b => ['confirmed', 'completed', 'checked_in'].includes(b.status ?? ''));
     const grossRevenue = confirmed.reduce((sum, b) => sum + (parseFloat(b.final_price ?? '0') || Number(b.price_per_night) || 0), 0);
     const netRevenue = Math.round(grossRevenue * 0.81); // After 19% tax
     const totalNights = confirmed.reduce((sum, b) => sum + (b.total_nights ?? 1), 0);
@@ -75,7 +75,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
   // Previous KPIs for comparison
   prevKpis = computed(() => {
     const prev = this.prevPeriodBookings();
-    const confirmed = prev.filter(b => ['confirmed', 'completed'].includes(b.status ?? ''));
+    const confirmed = prev.filter(b => ['confirmed', 'completed', 'checked_in'].includes(b.status ?? ''));
     const grossRevenue = confirmed.reduce((sum, b) => sum + (parseFloat(b.final_price ?? '0') || Number(b.price_per_night) || 0), 0);
     const totalNights = confirmed.reduce((sum, b) => sum + (b.total_nights ?? 1), 0);
     const adr = confirmed.length > 0 ? grossRevenue / totalNights : 0;
@@ -99,7 +99,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
 
   // Room type distribution for pie chart
   roomTypeDistribution = computed(() => {
-    const bookings = this.periodBookings().filter(b => ['confirmed', 'completed', 'pending'].includes(b.status ?? ''));
+    const bookings = this.periodBookings().filter(b => ['confirmed', 'completed', 'checked_in', 'pending'].includes(b.status ?? ''));
     const map: Record<string, number> = {};
     bookings.forEach(b => { map[b.room_type] = (map[b.room_type] || 0) + 1; });
     return Object.entries(map).map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count);
@@ -107,7 +107,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
 
   // Popular rooms
   popularRooms = computed(() => {
-    const bookings = this.periodBookings().filter(b => ['confirmed', 'completed', 'pending'].includes(b.status ?? ''));
+    const bookings = this.periodBookings().filter(b => ['confirmed', 'completed', 'checked_in', 'pending'].includes(b.status ?? ''));
     const map: Record<string, { name: string; type: string; count: number; revenue: number }> = {};
     bookings.forEach(b => {
       const key = b.room_type;
@@ -313,7 +313,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
     const roomType = this.reportRoomType();
     let bookings = this.allBookings().filter(b => {
       const d = b.created_at?.substring(0, 10) ?? b.start_time.substring(0, 10);
-      return d >= from && d <= to && ['confirmed', 'completed', 'pending'].includes(b.status ?? '');
+      return d >= from && d <= to && ['confirmed', 'completed', 'checked_in', 'pending'].includes(b.status ?? '');
     });
     if (roomType !== 'all') {
       bookings = bookings.filter(b => b.room_type === roomType);
@@ -339,7 +339,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
     const fmt = (dt: Date) => dt.toISOString().substring(0, 10);
     let prevBookings = this.allBookings().filter(b => {
       const d2 = b.created_at?.substring(0, 10) ?? b.start_time.substring(0, 10);
-      return d2 >= fmt(prevFrom) && d2 <= fmt(prevTo) && ['confirmed', 'completed', 'pending'].includes(b.status ?? '');
+      return d2 >= fmt(prevFrom) && d2 <= fmt(prevTo) && ['confirmed', 'completed', 'checked_in', 'pending'].includes(b.status ?? '');
     });
     if (roomType !== 'all') prevBookings = prevBookings.filter(b => b.room_type === roomType);
     const prevRevenue = prevBookings.reduce((s, b) => s + (parseFloat(b.final_price ?? '0') || Number(b.price_per_night) || 0), 0);

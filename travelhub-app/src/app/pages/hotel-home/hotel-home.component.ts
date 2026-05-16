@@ -32,6 +32,8 @@ export class HotelHomeComponent implements OnInit {
 
   pendingCount = computed(() => this.reservas().filter(r => r.status === 'pending').length);
   confirmedCount = computed(() => this.reservas().filter(r => r.status === 'confirmed').length);
+  checkedInCount = computed(() => this.reservas().filter(r => r.status === 'checked_in').length);
+  completedCount = computed(() => this.reservas().filter(r => r.status === 'completed').length);
   rejectedCount = computed(() => this.reservas().filter(r => r.status === 'cancelled').length);
 
   menuItems = [
@@ -128,6 +130,7 @@ export class HotelHomeComponent implements OnInit {
     const map: Record<string, string> = {
       pending: 'status-pending', confirmed: 'status-confirmed',
       completed: 'status-completed', cancelled: 'status-cancelled',
+      checked_in: 'status-checkedin',
     };
     return map[estado ?? ''] ?? '';
   }

@@ -62,6 +62,9 @@ nav a:hover, nav a.active { color: #2563eb; }
 .status-ongoing { background: #dbeafe; color: #1447e6; }
 .status-completed { background: #f0fdf4; color: #008236; border: 1px solid #dcfce7; }
 .status-cancelled { background: #fee2e2; color: #c10007; }
+.status-checkedin { background: #dbeafe; color: #1e40af; }
+.mini-value.checkedin { color: #1e40af; }
+.mini-value.completed { color: #008236; }
 
 /* Empty state */
 .empty-state { text-align: center; padding: 80px 24px; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
