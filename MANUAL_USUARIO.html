@@ -131,6 +131,7 @@
         <li><a href="#reportes">Generación de Reportes</a></li>
       </ol>
     </li>
+    <li><a href="#checkin-qr">Check-In con QR</a></li>
     <li><a href="#faq">Preguntas Frecuentes</a></li>
   </ol>
 </div>
@@ -935,6 +936,31 @@
   </ul>
 </div>
 <div class="tip">Los reportes incluyen automáticamente la fecha de generación y el email del usuario autenticado.</div>
+
+<!-- 6.6 CHECK-IN QR -->
+<h3>6.6 Check-In con QR</h3>
+<p>Accede desde <strong>"Check-In"</strong> en la navegación del hotel. Esta funcionalidad permite registrar la llegada de un viajero escaneando el código QR que muestra en su teléfono.</p>
+
+<div class="step"><span class="step-number">1</span>Navega a <strong>"/checkin"</strong> desde el menú del hotel.</div>
+<div class="step"><span class="step-number">2</span>La cámara del computador se activará automáticamente.</div>
+<div class="step"><span class="step-number">3</span>Pide al viajero que muestre el <strong>código QR</strong> de su reserva en su teléfono.</div>
+<div class="step"><span class="step-number">4</span>Apunta la cámara al QR — el sistema lo lee automáticamente.</div>
+<div class="step"><span class="step-number">5</span>Si el check-in es exitoso, verás los datos del huésped: código, nombre, habitación, fechas, huéspedes.</div>
+<div class="step"><span class="step-number">6</span>Toca <strong>"Siguiente viajero →"</strong> para escanear otro QR.</div>
+
+<div class="tip">El navegador pedirá permiso para usar la cámara la primera vez. Acéptalo para que funcione el escáner.</div>
+
+<h3>Posibles errores:</h3>
+<table>
+  <tr><th>Error</th><th>Causa</th><th>Solución</th></tr>
+  <tr><td>"El código QR no es válido o está dañado"</td><td>QR no contiene datos de reserva</td><td>Verificar que el viajero muestre el QR correcto</td></tr>
+  <tr><td>"El check-in aún no está disponible"</td><td>La fecha de llegada es futura</td><td>Esperar al día del check-in</td></tr>
+  <tr><td>"El código QR ha expirado"</td><td>La fecha de check-in ya pasó</td><td>Contactar soporte</td></tr>
+  <tr><td>"La reserva fue cancelada"</td><td>El viajero canceló la reserva</td><td>No se puede hacer check-in</td></tr>
+  <tr><td>"El check-in ya fue registrado"</td><td>Ya se hizo check-in previamente</td><td>El viajero ya está registrado</td></tr>
+</table>
+
+<div class="warning">El check-in solo funciona el día de la fecha de llegada (start_time) de la reserva. Si hay diferencia de zona horaria, puede fallar cerca de medianoche.</div>
 
 <!-- 7. FAQ -->
 <h2 id="faq">7. Preguntas Frecuentes</h2>
