@@ -61,6 +61,8 @@ export class CheckinScannerComponent {
       booking_code: payload.booking_code,
       booking_id: payload.booking_id,
       device: navigator.userAgent,
+    }, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     }).subscribe({
       next: (res) => {
         this.result.set(res);
