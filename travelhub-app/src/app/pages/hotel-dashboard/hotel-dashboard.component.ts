@@ -144,7 +144,7 @@ export class HotelDashboardComponent implements OnInit, AfterViewInit {
     this.bookingsService.listByHotel(userId).subscribe({
       next: (bookings) => {
         this.allBookings.set(bookings);
-        this.roomsService.search({}).subscribe({
+        this.roomsService.list().subscribe({
           next: (rooms: Room[]) => {
             const hotelRooms = rooms.filter((r: Room) => r.hotel_id === userId);
             this.allRooms.set(hotelRooms);
