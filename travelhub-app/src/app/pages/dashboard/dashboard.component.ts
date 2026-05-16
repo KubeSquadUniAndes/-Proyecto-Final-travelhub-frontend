@@ -297,12 +297,12 @@ export class DashboardComponent implements OnInit {
   }
 
   estadoClass(estado: string | undefined): string {
-    const map: Record<string, string> = { 'pending': 'status-pending', 'confirmed': 'status-confirmed', 'cancelled': 'status-cancelled', 'completed': 'status-completed' };
+    const map: Record<string, string> = { 'pending': 'status-pending', 'confirmed': 'status-confirmed', 'cancelled': 'status-cancelled', 'completed': 'status-completed', 'checked_in': 'status-checkedin' };
     return map[estado ?? ''] ?? '';
   }
 
   estadoLabel(estado: string | undefined): string {
-    const map: Record<string, string> = { 'pending': 'Pendiente', 'confirmed': 'Confirmada', 'cancelled': 'Cancelada', 'completed': 'Completada' };
+    const map: Record<string, string> = { 'pending': 'Pendiente', 'confirmed': 'Confirmada', 'cancelled': 'Cancelada', 'completed': 'Completada', 'checked_in': 'Check-In realizado' };
     return map[estado ?? ''] ?? estado ?? '';
   }
 
