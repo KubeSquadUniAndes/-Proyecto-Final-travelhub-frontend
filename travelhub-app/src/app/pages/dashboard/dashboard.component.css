@@ -52,6 +52,7 @@ tr:hover { background: #f9fafb; }
 .status-confirmed { background: #dcfce7; color: #008236; }
 .status-cancelled { background: #fee2e2; color: #c10007; }
 .status-completed { background: #dbeafe; color: #1447e6; }
+.status-checkedin { background: #dbeafe; color: #1e40af; }
 
 .pay-pending { background: #f3f4f6; color: #4a5565; }
 .pay-processing { background: #fef9c2; color: #a66f00; }

@@ -25,7 +25,7 @@ describe('Hotel Home', () => {
     it('Entonces debe ver el sidebar con estadísticas', () => {
       cy.contains('Pendientes').should('be.visible');
       cy.contains('Confirmadas').should('be.visible');
-      cy.contains('Rechazadas').should('be.visible');
+      cy.contains('Canceladas').should('be.visible');
     });
 
     it('Entonces debe mostrar contenido (reservas, vacío o error)', () => {
