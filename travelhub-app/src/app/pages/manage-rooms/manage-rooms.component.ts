@@ -228,7 +228,7 @@ export class ManageRoomsComponent implements OnInit {
     this.isLoading.set(true);
     this.hasError.set(false);
     const hotelId = this.authService.currentUser()?.id ?? '';
-    this.roomsService.search({ checkin: this.defaultCheckin(), checkout: this.defaultCheckout() }).subscribe({
+    this.roomsService.list().subscribe({
       next: (allRooms) => {
         const rooms = hotelId ? allRooms.filter(r => r.hotel_id === hotelId) : allRooms;
         this.rooms.set(rooms);

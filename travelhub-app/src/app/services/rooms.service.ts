@@ -31,6 +31,10 @@ export class RoomsService {
   private http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/hospedajes/api/v1/rooms`;
 
+  list(): Observable<Room[]> {
+    return this.http.get<Room[]>(this.baseUrl);
+  }
+
   search(filters: { checkin?: string; checkout?: string; destination?: string; guests?: number }): Observable<Room[]> {
     let params = new HttpParams();
     if (filters.checkin) params = params.set('checkin', filters.checkin);
