@@ -1,0 +1,73 @@
+<div class="checkin-page">
+  <header>
+    <div class="header-content">
+      <a class="logo" (click)="navigate('/hotel-home')" (keydown.enter)="navigate('/hotel-home')" tabindex="0">
+        <div class="logo-icon">TH</div><span>TravelHub</span>
+      </a>
+      <nav>
+        <a (click)="navigate('/hotel-home')" (keydown.enter)="navigate('/hotel-home')" tabindex="0">Inicio</a>
+        <a (click)="navigate('/hotel-dashboard')" (keydown.enter)="navigate('/hotel-dashboard')" tabindex="0">Dashboard</a>
+        <a (click)="navigate('/manage-rooms')" (keydown.enter)="navigate('/manage-rooms')" tabindex="0">Habitaciones</a>
+        <a class="active">Check-In</a>
+      </nav>
+      <a class="btn-link" (click)="logout()" (keydown.enter)="logout()" tabindex="0">Cerrar sesión</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>📷 Check-In con QR</h1>
+      <p>Escanea el código QR del viajero para registrar su llegada</p>
+    </div>
+
+    <!-- Scanner activo -->
+    @if (scanning() && !loading() && !result()) {
+      <div class="scanner-card">
+        <zxing-scanner
+          [formats]="allowedFormats"
+          (scanSuccess)="onQrScanned($event)">
+        </zxing-scanner>
+        <p class="hint">Apunte la cámara al código QR del teléfono del viajero</p>
+      </div>
+    }
+
+    <!-- Procesando -->
+    @if (loading()) {
+      <div class="status-card loading-card">
+        <div class="spinner"></div>
+        <p>Procesando check-in...</p>
+      </div>
+    }
+
+    <!-- Check-in exitoso -->
+    @if (result()) {
+      <div class="status-card success-card">
+        <div class="status-icon">✅</div>
+        <h2>Check-In Registrado</h2>
+        <div class="result-grid">
+          <div class="result-row"><span>Código</span><strong>{{ result()!.booking_code }}</strong></div>
+          <div class="result-row"><span>Huésped</span><strong>{{ result()!.traveler_name }}</strong></div>
+          <div class="result-row"><span>Habitación</span><strong>{{ result()!.room_type }}</strong></div>
+          <div class="result-row"><span>Check-in</span><strong>{{ result()!.start_time | date:'dd/MM/yyyy' }}</strong></div>
+          <div class="result-row"><span>Check-out</span><strong>{{ result()!.end_time | date:'dd/MM/yyyy' }}</strong></div>
+          <div class="result-row"><span>Huéspedes</span><strong>{{ result()!.num_guests }}</strong></div>
+          @if (result()!.special_requests) {
+            <div class="result-row"><span>Solicitudes</span><strong>{{ result()!.special_requests }}</strong></div>
+          }
+          <div class="result-row"><span>Registrado</span><strong>{{ result()!.checked_in_at | date:'HH:mm:ss' }}</strong></div>
+        </div>
+        <button class="btn-next" (click)="reset()">Siguiente viajero →</button>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (error()) {
+      <div class="status-card error-card">
+        <div class="status-icon">⚠️</div>
+        <h2>No se pudo registrar el check-in</h2>
+        <p class="error-msg">{{ error() }}</p>
+        <button class="btn-retry" (click)="reset()">Reintentar</button>
+      </div>
+    }
+  </main>
+</div>

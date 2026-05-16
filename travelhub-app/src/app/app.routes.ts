@@ -21,6 +21,7 @@ export const routes: Routes = [
   { path: 'hotel-home', loadComponent: () => import('./pages/hotel-home/hotel-home.component').then(m => m.HotelHomeComponent), canActivate: [hotelAdminGuard] },
   { path: 'hotel-dashboard', loadComponent: () => import('./pages/hotel-dashboard/hotel-dashboard.component').then(m => m.HotelDashboardComponent), canActivate: [hotelAdminGuard] },
   { path: 'manage-rooms', loadComponent: () => import('./pages/manage-rooms/manage-rooms.component').then(m => m.ManageRoomsComponent), canActivate: [hotelAdminGuard] },
+  { path: 'checkin', loadComponent: () => import('./pages/checkin-scanner/checkin-scanner.component').then(m => m.CheckinScannerComponent), canActivate: [hotelAdminGuard] },
   { path: 'booking-requests', loadComponent: () => import('./pages/booking-requests/booking-requests.component').then(m => m.BookingRequestsComponent), canActivate: [hotelAdminGuard] },
   { path: 'cancel-booking', loadComponent: () => import('./pages/cancel-booking/cancel-booking.component').then(m => m.CancelBookingComponent), canActivate: [hotelAdminGuard] },
 ];
