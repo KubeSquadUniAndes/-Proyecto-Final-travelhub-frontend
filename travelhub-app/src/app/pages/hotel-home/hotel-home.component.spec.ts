@@ -145,7 +145,7 @@ describe('HotelHomeComponent', () => {
     httpMock.expectOne(r => r.url.includes('/bookings')).flush(mockBookings);
     fixture.detectChanges();
     const navLinks = fixture.nativeElement.querySelectorAll('nav a');
-    expect(navLinks.length).toBe(3);
+    expect(navLinks.length).toBe(4);
   });
 
   it('should render sidebar stats', () => {
