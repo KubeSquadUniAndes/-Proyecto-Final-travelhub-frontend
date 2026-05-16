@@ -164,6 +164,26 @@ resource "aws_cloudfront_distribution" "frontend" {
     max_ttl     = 0
   }
 
+  # Behavior: /pagos/* → ELB
+  ordered_cache_behavior {
+    path_pattern           = "/pagos/*"
+    target_origin_id       = "ELB-backend"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization", "Content-Type", "Accept"]
+      cookies { forward = "none" }
+    }
+
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
+  }
+
   # Behavior por defecto: S3 para el frontend
   default_cache_behavior {
     target_origin_id       = "S3-${aws_s3_bucket.frontend.id}"
